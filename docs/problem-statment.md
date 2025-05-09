@@ -1,18 +1,19 @@
 # Mentorship Platform Problem Statement
 
-## Core Functionality
-Connect mentees with mentors through structured, ongoing mentorship relationships that foster growth and learning.
+## What is the main functionality?
+Connect mentees with mentors through structured,
+ongoing mentorship relationships that foster growth and learning.
 
-## Who Are Our Users?
+## Who are the intended users?
 - **Mentees**: Ambitious individuals seeking professional guidance but facing limited access to mentorship
 - **Mentors**: Experienced professionals willing to share knowledge and guide others
 - **Administrators**: Platform moderators ensuring quality and safety
 
-## AI Integration Opportunities
+## How will you integrate GenAI meaningfully?
 - Finding similar mentors
 - Summarize and paraphrase the mentee’s message to the mentor when applying for mentorship.
 
-## User Stories
+## Describe some scenarios how your app will function?
 1. As a mentee, I want to search for mentors based on category, skills, job title, or location so that I can find a suitable mentor.
 2. As a mentee, I want to view a mentor's profile so that I can learn about their background and skills.
 3. As a mentee, I want to book sessions with my mentor so that I can schedule time for guidance.
