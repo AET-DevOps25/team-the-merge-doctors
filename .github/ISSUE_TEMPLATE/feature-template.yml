@@ -7,7 +7,8 @@ body:
   - type: textarea
     attributes:
       label: Description
-      description: Provide a detailed description of
+      description: Provide a detailed description of the feature.
+      placeholder: A brief description of what this feature does, how it benefits the user, and why it matters.
     validations:
       required: true
   - type: textarea
