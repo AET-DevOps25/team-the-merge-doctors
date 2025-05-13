@@ -1,5 +1,5 @@
 name: Feature
-description: Sample description
+description: Issue template for a feature request
 type: Feature
 projects:
   - team-the-merge-doctors
