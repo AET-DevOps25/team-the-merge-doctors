@@ -1,0 +1,51 @@
+name: Feature
+description: Sample description
+type: Feature
+projects:
+  - team-the-merge-doctors
+body:
+  - type: textarea
+    attributes:
+      label: Description
+      description: Provide a detailed description of
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: User Story
+      placeholder: As a user, I want to ..., so that ...
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Acceptance Criteria
+      description: Define the conditions that must be true to consider this complete.
+      placeholder: |
+        - [ ] The API returns expected data
+        - [ ] The UI reflects changes without reload
+        - [ ] Error handling is in place for edge cases
+    validations:
+      required: true
+  - type: textarea
+    attributes: 
+      label: Tasks
+      description: Define the subtasks that need to be completed.
+      placeholder: |
+        - [ ] Implement backend logic
+        - [ ] Write unit tests
+    validations:
+      required: true      
+  - type: dropdown
+    id: story_points
+    attributes:
+      label: Story Points
+      description: Estimate the effort using story points
+      options:
+        - "1"
+        - "2"
+        - "3"
+        - "5"
+        - "8"
+        - "13"
+        - "21"
+      default: 3
