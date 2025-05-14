@@ -16,7 +16,7 @@ body:
       label: User Story
       placeholder: As a user, I want to ..., so that ...
     validations:
-      required: true
+      required: false
   - type: textarea
     attributes:
       label: Acceptance Criteria
@@ -26,16 +26,7 @@ body:
         - [ ] The UI reflects changes without reload
         - [ ] Error handling is in place for edge cases
     validations:
-      required: true
-  - type: textarea
-    attributes: 
-      label: Tasks
-      description: Define the subtasks that need to be completed.
-      placeholder: |
-        - [ ] Implement backend logic
-        - [ ] Write unit tests
-    validations:
-      required: true      
+      required: true  
   - type: dropdown
     id: story_points
     attributes:
