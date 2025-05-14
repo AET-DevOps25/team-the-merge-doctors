@@ -19,6 +19,15 @@ body:
       required: false
   - type: textarea
     attributes:
+      label: Tasks
+      description: Define the subtasks that need to be completed.
+      placeholder: |
+        - [ ] Implement backend logic
+        - [ ] Write unit tests
+    validations:
+      required: true
+  - type: textarea
+    attributes:
       label: Acceptance Criteria
       description: Define the conditions that must be true to consider this complete.
       placeholder: |
@@ -26,7 +35,7 @@ body:
         - [ ] The UI reflects changes without reload
         - [ ] Error handling is in place for edge cases
     validations:
-      required: true  
+      required: true
   - type: dropdown
     id: story_points
     attributes:
