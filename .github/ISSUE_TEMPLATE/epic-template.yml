@@ -1,6 +1,7 @@
 name: Epic
 description: Template for an epic
 type: Feature
+labels: ["EPIC"]
 projects:
   - team-the-merge-doctors
 body:
