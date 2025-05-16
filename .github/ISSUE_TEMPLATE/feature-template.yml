@@ -13,12 +13,6 @@ body:
       required: true
   - type: textarea
     attributes:
-      label: User Story
-      placeholder: As a user, I want to ..., so that ...
-    validations:
-      required: false
-  - type: textarea
-    attributes:
       label: Tasks
       description: Define the subtasks that need to be completed.
       placeholder: |

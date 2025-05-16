@@ -1,0 +1,21 @@
+name: Epic
+description: Template for an epic
+type: Feature
+projects:
+  - team-the-merge-doctors
+body:
+  - type: textarea
+    attributes:
+      label: User Story
+      description: User story for this Epic.
+      placeholder: As a user, I want to ..., so that ...
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Description
+      description: Provide a detailed description of the epic.
+      placeholder: A brief description of what this epic is, how it benefits the user, and why it matters.
+    validations:
+      required: true
+  
