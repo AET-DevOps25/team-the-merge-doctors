@@ -15,3 +15,5 @@ To run the container:
 ```
 docker run -d --name mentor-pulse-client-container -p 80:80 mentor-pulse-client-image
 ```
+
+Or use the docker compose file in the root directory to build the entire application including server services.
