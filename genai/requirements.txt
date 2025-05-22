@@ -1,0 +1,17 @@
+flask
+flask_sqlalchemy
+psycopg2-binary
+python-dotenv
+langchain
+langchain-community
+langchain-openai
+openai
+gunicorn
+flask
+flask_sqlalchemy
+psycopg2-binary
+python-dotenv
+langchain
+langchain-community
+langchain-openai
+openai
