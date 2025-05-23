@@ -18,5 +18,4 @@ COPY . /app/
 
 EXPOSE 5001
 
-# TODO: update the host later
 CMD ["gunicorn", "-b", "0.0.0.0:5001", "app:app"]
