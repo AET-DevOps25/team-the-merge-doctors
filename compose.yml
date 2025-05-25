@@ -5,3 +5,12 @@ services:
       dockerfile: Dockerfile
     ports:
       - 3000:80
+
+  user-service:
+    build:
+      context: ./server/user
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8080
+
+  # TODO: Add database for user service
