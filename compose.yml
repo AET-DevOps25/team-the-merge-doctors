@@ -34,7 +34,7 @@ services:
     ports:
       - "5001:5001"
     environment:
-    - POSTGRES_HOST=db
+    - POSTGRES_HOST=postgres-db
     env_file:
       - ./docker/backend_config_files/.env
     depends_on:
