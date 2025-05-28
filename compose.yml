@@ -13,4 +13,32 @@ services:
     ports:
       - 8000:8080
 
-  # TODO: Add database for user service
+  postgres-db:
+    image: postgres:15
+    ports:
+      - "127.0.0.1:5432:5432"
+    env_file:
+      - ./docker/backend_config_files/.env
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./docker/backend_config_files/postgres-init.sh:/docker-entrypoint-initdb.d/init.sh:ro
+      - ./docker/backend_config_files/pg-hba.conf:/etc/postgresql/pg_hba.conf:ro
+
+  genai:
+    build:
+      context: ./genai
+      dockerfile: ./Dockerfile
+    command: gunicorn -b 0.0.0.0:5001 app:app
+    volumes:
+      - ./genai:/app
+    ports:
+      - "5001:5001"
+    environment:
+    - POSTGRES_HOST=postgres-db
+    env_file:
+      - ./docker/backend_config_files/.env
+    depends_on:
+      - postgres-db
+
+volumes:
+  db_data:
