@@ -1,7 +1,12 @@
+import { createFileRoute } from '@tanstack/react-router';
 import { Button, notification } from 'antd';
-import './App.css';
+import './index.css';
 
-function App() {
+export const Route = createFileRoute('/')({
+  component: Index,
+});
+
+function Index() {
   const [api, contextHolder] = notification.useNotification();
 
   const openNotification = () => {
@@ -21,5 +26,3 @@ function App() {
     </>
   );
 }
-
-export default App;
