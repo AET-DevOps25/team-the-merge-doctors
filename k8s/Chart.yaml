@@ -1,0 +1,6 @@
+apiVersion: v2
+name: mentor-pulse
+description: Helm chart for the mentor pulse application
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
