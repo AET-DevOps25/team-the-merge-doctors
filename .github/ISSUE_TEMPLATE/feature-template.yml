@@ -10,7 +10,7 @@ body:
       description: Provide a detailed description of the feature.
       placeholder: A brief description of what this feature does, how it benefits the user, and why it matters.
     validations:
-      required: true
+      required: false
   - type: textarea
     attributes:
       label: Tasks
@@ -19,7 +19,7 @@ body:
         - [ ] Implement backend logic
         - [ ] Write unit tests
     validations:
-      required: true
+      required: false
   - type: textarea
     attributes:
       label: Acceptance Criteria
@@ -29,7 +29,7 @@ body:
         - [ ] The UI reflects changes without reload
         - [ ] Error handling is in place for edge cases
     validations:
-      required: true
+      required: false
   - type: dropdown
     id: story_points
     attributes:
