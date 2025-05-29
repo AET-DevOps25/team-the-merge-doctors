@@ -11,7 +11,7 @@ services:
       context: ./server/user
       dockerfile: Dockerfile
     ports:
-      - 8000:8080
+      - 8080:8000
 
   postgres-db:
     image: postgres:15
@@ -34,7 +34,7 @@ services:
     ports:
       - "5001:5001"
     environment:
-    - POSTGRES_HOST=postgres-db
+      - POSTGRES_HOST=postgres-db
     env_file:
       - ./docker/backend_config_files/.env
     depends_on:
