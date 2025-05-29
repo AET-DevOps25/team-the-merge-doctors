@@ -1,0 +1,51 @@
+name: Manual Aws Ec2 deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      private_key:
+        description: 'aws ssh key in a pem file'
+        required: true
+      AWS_ACCESS_KEY_ID:
+        description: 'aws access key id'
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        description: 'aws secret key'
+        required: true
+      AWS_SESSION_TOKEN:
+        description: 'running aws session token'
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # prevent secrets from being outputted later in the workflow.
+      - name: Mask all secrets
+        run: |
+          echo "::add-mask::${{ github.event.inputs.private_key }}"
+          echo "::add-mask::${{ github.event.inputs.AWS_ACCESS_KEY_ID }}"
+          echo "::add-mask::${{ github.event.inputs.AWS_SECRET_ACCESS_KEY }}"
+          echo "::add-mask::${{ github.event.inputs.AWS_SESSION_TOKEN }}"
+
+      - name: Write ssh key to infra/priv.pem
+        run: |
+          echo "${{ github.event.inputs.private_key }}" > infra/priv.pem
+          chmod 400 infra/priv.pem
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.12.1
+
+      - name: Create EC2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ github.event.inputs.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ github.event.inputs.AWS_SECRET_ACCESS_KEY }}
+          AWS_SESSION_TOKEN: ${{ github.event.inputs.AWS_SESSION_TOKEN }}
+        run: |
+          cd infra
+          make deploy
