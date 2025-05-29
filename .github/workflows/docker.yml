@@ -2,7 +2,7 @@ name: CI – Build & Publish
 
 on:
   push:
-    branches: [main]
+    branches: [main, config/publish-docker-images]
   pull_request:
   workflow_call:
 
