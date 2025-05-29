@@ -8,7 +8,7 @@ on:
 permissions: write-all
 
 jobs:
-  build:
+  publish-docker-images:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
