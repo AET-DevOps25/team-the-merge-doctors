@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: genai-microservice-deployment
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.client.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.genaiMicroservice.selector }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.genaiMicroservice.selector }}
+    spec:
+      containers:
+        - name: genai-microservice-container
+          image: "{{ .Values.genaiMicroservice.image.repository }}:{{ .Values.genaiMicroservice.image.tag }}"
+          imagePullPolicy: {{ .Values.genaiMicroservice.image.pullPolicy }}
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+            requests:
+              cpu: "50m"
+              memory: "50Mi"
+          ports:
+            - containerPort:
+                {{ .Values.genaiMicroservice.service.targetPort }}
+          env:
+            - name: FLASK_ENV
+              value: production
+            - name: FLASK_APP
+              value: app.py
+            - name:
+              value: 

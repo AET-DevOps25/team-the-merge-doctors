@@ -1,6 +1,6 @@
 namespace: team-the-merge-doctors
 
-user-microservice:
+userMicroservice:
   image:
     repository: ghcr.io/aet-devops25/team-the-merge-doctors/server/user-service
     tag: latest
@@ -12,7 +12,7 @@ user-microservice:
   selector: user-microservice-selector
   replicaCount: 1
 
-genai-microservice:
+genaiMicroservice:
   image:
     repository: ghcr.io/aet-devops25/team-the-merge-doctors/genai
     tag: latest
@@ -23,6 +23,8 @@ genai-microservice:
     targetPort: 5001
   selector: genai-microservice-selector
   replicaCount: 1
+  env:
+    # TODO: set environment variables
 
 client:
   image:
