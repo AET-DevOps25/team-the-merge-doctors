@@ -15,6 +15,9 @@ on:
       AWS_SESSION_TOKEN:
         description: 'running aws session token'
         required: true
+      GHCR_TOKEN:
+        description: 'Personal Access Token for the GHCR'
+        required: true
 
 jobs:
   deploy:
@@ -30,6 +33,8 @@ jobs:
           echo "::add-mask::${{ github.event.inputs.AWS_ACCESS_KEY_ID }}"
           echo "::add-mask::${{ github.event.inputs.AWS_SECRET_ACCESS_KEY }}"
           echo "::add-mask::${{ github.event.inputs.AWS_SESSION_TOKEN }}"
+          echo "::add-mask::${{ github.event.inputs.GHCR_TOKEN }}"
+
 
       - name: Write ssh key to infra/priv.pem
         run: |
@@ -41,6 +46,11 @@ jobs:
         with:
           terraform_version: 1.12.1
 
+      - name: Install Ansible
+        uses: alex-oleshkevich/setup-ansible@v1.0.1
+        with:
+          version: "11.6.0"
+
       - name: Create EC2
         env:
           AWS_ACCESS_KEY_ID: ${{ github.event.inputs.AWS_ACCESS_KEY_ID }}
@@ -49,3 +59,28 @@ jobs:
         run: |
           cd infra
           make deploy
+
+      - name: Wait for EC2 to be ready
+        run: |
+          cd infra
+          IP=$(terraform output -raw ip)
+          echo "Waiting for SSH on $IP..."
+          for i in {1..5}; do
+            nc -z -v -w5 $IP 22 && echo "SSH is ready!" && exit 0
+            echo "Retry $i: SSH not up yet"
+            sleep 10
+          done
+          echo "SSH never became available"
+          exit 1
+          
+      - name: Provision EC2
+        run: |
+          cd infra
+          echo "cr_username: ${{ github.actor }}" >> token.yml
+          echo "token: ${{ github.event.inputs.GHCR_TOKEN }}" >> token.yml
+          make ansible
+          
+      - name: Provision EC2
+        run: |
+          cd infra
+          make ansible
