@@ -2,29 +2,31 @@ namespace: team-the-merge-doctors
 
 user-microservice:
   image:
-    repository:
+    repository: ghcr.io/aet-devops25/team-the-merge-doctors/server/user-service
     tag: latest
     pullPolicy: Always
   service:
     type: ClusterIP
     port: 8080
     targetPort: 8000
+  selector: user-microservice-selector
   replicaCount: 1
 
 genai-microservice:
   image:
-    repository:
+    repository: ghcr.io/aet-devops25/team-the-merge-doctors/genai
     tag: latest
     pullPolicy: Always
   service:
     type: ClusterIP
     port: 5001
     targetPort: 5001
+  selector: genai-microservice-selector
   replicaCount: 1
 
 client:
   image:
-    repository:
+    repository: ghcr.io/aet-devops25/team-the-merge-doctors/client
     tag: latest
     pullPolicy: Always
   service:

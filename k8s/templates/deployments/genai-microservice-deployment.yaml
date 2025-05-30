@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mentor-pulse-genai-microservice
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.client.replicaCount }}
+  selector: 
+    matchLabels:
+      app: {{ .Values.genai-microservice.selector }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.genai-microservice.selector }}
+    spec:
+      containers:
+        - name: genai-microservice
+          image: "{{ .Values.genai-microservice.image.repository }}:{{ .Values.genai-microservice.image.tag }}"
+          imagePullPolicy: {{ .Values.genai-microservice.image.pullPolicy }}
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+            requests:
+              cpu: "50m"
+              memory: "50Mi"
+          ports:
+            - containerPort: {{ .Values.genai-microservice.service.targetPort }}
