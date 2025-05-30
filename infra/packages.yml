@@ -1,0 +1,9 @@
+packages:
+  - ca-certificates
+  - apt-transport-https
+  - curl
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
+  - docker-buildx-plugin
+  - docker-compose-plugin
