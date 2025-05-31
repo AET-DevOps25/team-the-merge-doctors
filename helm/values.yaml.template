@@ -23,8 +23,6 @@ genaiMicroservice:
     targetPort: 5001
   selector: genai-microservice-selector
   replicaCount: 1
-  env:
-    # TODO: set environment variables
 
 client:
   image:
@@ -37,3 +35,11 @@ client:
     targetPort: 80
   replicaCount: 1
   selector: client-selector
+
+secrets:
+  openAPIKey: <TODO:your api key here>
+  postgresUser: postgres
+  postgresPassword: postgres_password
+
+backendEnvironmentConfigMapName: backend-environment-config-map
+secretsName: secrets

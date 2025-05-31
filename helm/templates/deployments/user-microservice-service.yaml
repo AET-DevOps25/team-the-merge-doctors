@@ -26,3 +26,8 @@ spec:
               memory: "50Mi"
           ports:
             - containerPort: {{ .Values.userMicroservice.service.targetPort }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.backendEnvironmentConfigMapName }}
+            - secretRef:
+                name: {{ .Values.secretsName }}

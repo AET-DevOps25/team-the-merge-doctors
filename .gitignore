@@ -290,7 +290,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-secrets.env
+.secrets.env
 .env
 .venv
 env/

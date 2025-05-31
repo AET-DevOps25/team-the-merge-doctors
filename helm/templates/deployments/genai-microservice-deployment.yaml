@@ -27,10 +27,8 @@ spec:
           ports:
             - containerPort:
                 {{ .Values.genaiMicroservice.service.targetPort }}
-          env:
-            - name: FLASK_ENV
-              value: production
-            - name: FLASK_APP
-              value: app.py
-            - name:
-              value: 
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.backendEnvironmentConfigMapName }}
+            - secretRef:
+                name: {{ .Values.secretsName }}
