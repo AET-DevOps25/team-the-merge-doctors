@@ -102,7 +102,7 @@ jobs:
           echo "Key file content (first line):"
           head -n 1 priv.pem
           echo "Attempting SSH connection..."
-          ssh -v -o StrictHostKeyChecking=no -i priv.pem admin@$IP 'echo "SSH connection successful!"'
+          ssh -v -o StrictHostKeyChecking=no -i priv.pem ubuntu@$IP 'echo "SSH connection successful!"'
 
       - name: Provision EC2
         run: |
