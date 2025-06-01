@@ -11,7 +11,7 @@ deploy: init
 	terraform apply -input=false --auto-approve
 
 ansible:
-	ansible-playbook -i inventory.ini $(PLAYBOOK)
+	ansible-playbook -i inventory.ini $(PLAYBOOK) -vvv
 
 teardown:
 	terraform destroy -input=false --auto-approve
