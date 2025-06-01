@@ -1,12 +1,10 @@
 services:
   client:
-    build:
-      image: ghcr.io/aet-devops25/team-the-merge-doctors/client:latest
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/client:latest
     ports:
       - 3000:80
 
   user-service:
-    build:
-      image: ghcr.io/aet-devops25/team-the-merge-doctors/server/user-service:latest
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/user-service:latest
     ports:
       - 8000:8080
