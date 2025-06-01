@@ -80,14 +80,15 @@ jobs:
           ip=$(cat instance_ip.txt)
           sed -i "s|\${ip}|$ip|g" inventory.ini
 
-      - name: Test ssh connection
-        run: |
-          echo "${{ github.event.inputs.private_key }}" > infra/priv.pem
-          chmod 400 infra/priv.pem
-          ssh -o StrictHostKeyChecking=no -i infra/priv.pem admin@$(cat instance_ip.txt) 'echo SSH connection successful'
+      # - name: Test ssh connection
+      #   run: |
+      #     echo "${{ github.event.inputs.private_key }}" > infra/priv.pem
+      #     chmod 400 infra/priv.pem
+      #     ssh -o StrictHostKeyChecking=no -i infra/priv.pem admin@$(cat instance_ip.txt) 'echo SSH connection successful'
 
       - name: Test SSH connection with debugging
         run: |
+          ls -la infra/
           cd infra
           IP=$(terraform output -raw ip)
           echo "Testing SSH connection to $IP..."
