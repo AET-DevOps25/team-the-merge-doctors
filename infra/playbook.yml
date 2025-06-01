@@ -3,7 +3,7 @@
   hosts: all # Target all hosts in the inventory file for this playbook run.
   become: true # Elevate privilege using sudo or the appropriate privilege escalation method.
   vars:
-    vm_user: admin
+    vm_user: ubuntu
   vars_files:
     - packages.yml
     - keys.yml
@@ -45,9 +45,9 @@
     - name: Copy compose file to remote
       ansible.builtin.copy:
         src: ./compose.yml
-        dest: /home/admin/docker-compose.yml
-        owner: admin
-        group: admin
+        dest: /home/ubuntu/docker-compose.yml
+        owner: ubuntu
+        group: ubuntu
         mode: '0644'
 
     - name: Clean images
@@ -60,5 +60,5 @@
 
     - name: Run application
       community.docker.docker_compose_v2:
-        project_src: /home/admin/app
+        project_src: /home/ubuntu/app
         state: present
