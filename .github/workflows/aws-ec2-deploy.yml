@@ -3,8 +3,8 @@ name: Manual Aws Ec2 deployment
 on:
   workflow_dispatch:
     inputs:
-      private_key:
-        description: 'aws ssh key in a pem file'
+      SSH_PRIVATE_KEY_B64:
+        description: "Base64-encoded private SSH key"
         required: true
       AWS_ACCESS_KEY_ID:
         description: 'aws access key id'
@@ -25,15 +25,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
-      - name: Write ssh key to infra/priv.pem
-        run: |
-          echo -e "${{ github.event.inputs.private_key }}" > infra/priv.pem
-          chmod 400 infra/priv.pem
-          echo "Key file first line:"
-          head -n 1 infra/priv.pem
-          echo "Key file last line:"
-          tail -n 1 infra/priv.pem
 
       # prevent secrets from being outputted later in the workflow.
       - name: Mask all secrets
@@ -49,7 +40,11 @@ jobs:
       #   run: |
       #     echo "${{ github.event.inputs.private_key }}" > infra/priv.pem
       #     chmod 400 infra/priv.pem
-
+      - name: Decode and write SSH private key
+        run: |
+          mkdir -p infra
+          echo "${{ github.event.inputs.SSH_PRIVATE_KEY_B64 }}" | base64 -d > infra/priv.pem
+          chmod 400 infra/priv.pem
 
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v3
