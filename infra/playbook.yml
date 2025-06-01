@@ -60,5 +60,5 @@
 
     - name: Run application
       community.docker.docker_compose_v2:
-        project_src: /home/ubuntu/app
+        project_src: .
         state: present
