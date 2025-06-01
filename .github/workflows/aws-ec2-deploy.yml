@@ -29,7 +29,6 @@ jobs:
       # prevent secrets from being outputted later in the workflow.
       - name: Mask all secrets
         run: |
-          echo "::add-mask::${{ github.event.inputs.private_key }}"
           echo "::add-mask::${{ github.event.inputs.AWS_ACCESS_KEY_ID }}"
           echo "::add-mask::${{ github.event.inputs.AWS_SECRET_ACCESS_KEY }}"
           echo "::add-mask::${{ github.event.inputs.AWS_SESSION_TOKEN }}"
