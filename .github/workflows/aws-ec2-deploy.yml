@@ -64,6 +64,7 @@ jobs:
         run: |
           cd infra
           IP=$(terraform output -raw ip)
+          echo "$IP" > instance_ip.txt
           echo "Waiting for SSH on $IP..."
           for i in {1..5}; do
             nc -z -v -w5 $IP 22 && echo "SSH is ready!" && exit 0
@@ -78,7 +79,7 @@ jobs:
           cd infra
           ip=$(cat instance_ip.txt)
           sed -i "s|\${ip}|$ip|g" inventory.ini
-          
+
       - name: Provision EC2
         run: |
           cd infra
