@@ -25,6 +25,15 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        
+      - name: Write ssh key to infra/priv.pem
+        run: |
+          echo -e "${{ github.event.inputs.private_key }}" > infra/priv.pem
+          chmod 400 infra/priv.pem
+          echo "Key file first line:"
+          head -n 1 infra/priv.pem
+          echo "Key file last line:"
+          tail -n 1 infra/priv.pem
 
       # prevent secrets from being outputted later in the workflow.
       - name: Mask all secrets
@@ -36,10 +45,11 @@ jobs:
           echo "::add-mask::${{ github.event.inputs.GHCR_TOKEN }}"
 
 
-      - name: Write ssh key to infra/priv.pem
-        run: |
-          echo "${{ github.event.inputs.private_key }}" > infra/priv.pem
-          chmod 400 infra/priv.pem
+      # - name: Write ssh key to infra/priv.pem
+      #   run: |
+      #     echo "${{ github.event.inputs.private_key }}" > infra/priv.pem
+      #     chmod 400 infra/priv.pem
+
 
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v3
