@@ -6,21 +6,6 @@ provider "aws" {
   region = var.aws_region
 }
 
-data "aws_ami" "debian" {
-  most_recent = true
-  owners      = ["amazon"]
-
-  filter {
-    name   = "architecture"
-    values = ["x86_64"]
-  }
-
-  filter {
-    name   = "name"
-    values = ["debian-12-amd64*"]
-  }
-}
-
 
 resource "aws_security_group" "ssh" {
   name        = "allow-ssh"
@@ -40,7 +25,7 @@ resource "aws_security_group" "ssh" {
 }
 
 resource "aws_instance" "debian" {
-  ami           = data.aws_ami.debian.id
+  ami           = "ami-0c7217cdde317cfec"
   instance_type = var.instance_type
 
   # the key and security group are automatically generated when starting a lab
