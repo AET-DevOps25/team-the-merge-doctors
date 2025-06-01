@@ -86,14 +86,21 @@ jobs:
           chmod 400 infra/priv.pem
           ssh -o StrictHostKeyChecking=no -i infra/priv.pem admin@$(cat instance_ip.txt) 'echo SSH connection successful'
 
+      - name: Test SSH connection with debugging
+        run: |
+          cd infra
+          IP=$(terraform output -raw ip)
+          echo "Testing SSH connection to $IP..."
+          echo "Key file permissions:"
+          ls -l priv.pem
+          echo "Key file content (first line):"
+          head -n 1 priv.pem
+          echo "Attempting SSH connection..."
+          ssh -v -o StrictHostKeyChecking=no -i priv.pem admin@$IP 'echo "SSH connection successful!"'
+
       - name: Provision EC2
         run: |
           cd infra
           echo "cr_username: ${{ github.actor }}" >> token.yml
           echo "token: ${{ github.event.inputs.GHCR_TOKEN }}" >> token.yml
-          make ansible
-          
-      - name: Provision EC2
-        run: |
-          cd infra
           make ansible
