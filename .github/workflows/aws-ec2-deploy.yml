@@ -73,6 +73,12 @@ jobs:
           echo "SSH never became available"
           exit 1
           
+      - name: Inject IP into Ansible inventory
+        run: |
+          cd infra
+          ip=$(cat instance_ip.txt)
+          sed -i "s|\${ip}|$ip|g" inventory.ini
+          
       - name: Provision EC2
         run: |
           cd infra
