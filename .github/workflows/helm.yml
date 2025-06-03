@@ -45,3 +45,4 @@ jobs:
           helm upgrade --install mentor-pulse ./helm/ \
             --namespace default \
             --create-namespace \
+            --kube-context student
