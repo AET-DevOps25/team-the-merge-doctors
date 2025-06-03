@@ -40,7 +40,7 @@ jobs:
 
       - name: Show kubeconfig summary
         run: |
-          kubectl config view
+          ls -la
 
       # TODO: we are currently just using the latest containers without building them beforehand. Maybe add deployment as step of the pipeline on commits on the main branch
       - name: Replace OPEN API key
