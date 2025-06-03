@@ -34,6 +34,12 @@ jobs:
           echo "${{ secrets.STUDENTKUBECONFIG }}" > $HOME/.kube/config
           chmod 600 $HOME/.kube/config
 
+      - name: Show kubeconfig summary
+        run: |
+          kubectl config current-context
+          kubectl config get-contexts
+          kubectl config view
+
       # TODO: we are currently just using the latest containers without building them beforehand. Maybe add deployment as step of the pipeline on commits on the main branch
       - name: Replace OPEN API key
         run: |
@@ -42,7 +48,6 @@ jobs:
 
       - name: Deploy using Helm
         run: |
-          kubectl config current-context
           helm upgrade --install mentor-pulse ./helm/ \
             --namespace default \
             --create-namespace \
