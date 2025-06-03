@@ -36,8 +36,6 @@ jobs:
 
       - name: Show kubeconfig summary
         run: |
-          kubectl config current-context
-          kubectl config get-contexts
           kubectl config view
 
       # TODO: we are currently just using the latest containers without building them beforehand. Maybe add deployment as step of the pipeline on commits on the main branch
