@@ -34,6 +34,10 @@ jobs:
           echo "${{ secrets.STUDENTKUBECONFIG }}" > $HOME/.kube/config
           chmod 600 $HOME/.kube/config
 
+      - name: Test
+        run: |
+          echo "${{ secrets.STUDENTKUBECONFIG }}"
+
       - name: Show kubeconfig summary
         run: |
           kubectl config view
