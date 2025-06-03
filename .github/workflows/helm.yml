@@ -1,11 +1,11 @@
 name: Manual k8s (Helm) deployment
 
 on:
-  workflow_dispatch:
-    inputs:
-      open_api_key:
-        description: "Your Open API key"
-        required: true
+  pull_request:
+    # inputs:
+    #   open_api_key:
+    #     description: "Your Open API key"
+    #     required: true
 
 jobs:
   kubernetes_deployment:
@@ -29,14 +29,14 @@ jobs:
 
       - name: Set up kubeconfig
         run: |
-          echo "${{ secrets.KUBECONFIG }}" > $HOME/.kube/config
+          echo "${{ secrets.STUDENTKUBECONFIG }}" > $HOME/.kube/config
           chmod 600 $HOME/.kube/config
 
       # TODO: we are currently just using the latest containers without building them beforehand. Maybe add deployment as step of the pipeline on commits on the main branch
       - name: Replace OPEN API key
         run: |
           cp ./helm/values.yaml.template ./helm/values.yaml
-          sed -i 's/<YOUR_OPEN_API_KEY>/${{ github.event.inputs.open_api_key }}/g' ./helm/values.yaml
+          sed -i 's/<YOUR_OPEN_API_KEY>/test/g' ./helm/values.yaml
 
       - name: Deploy using Helm
         run: |
