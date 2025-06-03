@@ -46,7 +46,5 @@ jobs:
 
       - name: Deploy using Helm
         run: |
-          cd helm
           helm upgrade --install mentor-pulse ./helm/ \
             --namespace team-the-merge-doctors \
-            --create-namespace \
