@@ -29,6 +29,7 @@ jobs:
 
       - name: Set up kubeconfig
         run: |
+          mkdir $HOME/.kube
           touch $HOME/.kube/config
           echo "${{ secrets.STUDENTKUBECONFIG }}" > $HOME/.kube/config
           chmod 600 $HOME/.kube/config
