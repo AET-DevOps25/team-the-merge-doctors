@@ -42,6 +42,7 @@ jobs:
 
       - name: Deploy using Helm
         run: |
+          kubectl config current-context
           helm upgrade --install mentor-pulse ./helm/ \
             --namespace default \
             --create-namespace \
