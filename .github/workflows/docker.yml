@@ -44,6 +44,6 @@ jobs:
       - name: Build & push User Service image
         uses: docker/build-push-action@v4
         with:
-          context: ./server/user
+          context: ./server/userservice
           push: true
           tags: ghcr.io/aet-devops25/team-the-merge-doctors/server/user-service:latest
