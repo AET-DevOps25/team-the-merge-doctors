@@ -30,13 +30,12 @@ jobs:
       - name: Set up kubeconfig
         run: |
           mkdir $HOME/.kube
-          touch $HOME/.kube/config
-          echo "${{ secrets.STUDENTKUBECONFIG }}" > $HOME/.kube/config
+          printf '%s' "${{ secrets.STUDENTKUBECONFIG }}" > $HOME/.kube/config
           chmod 600 $HOME/.kube/config
 
       - name: Show kubeconfig summary
         run: |
-          ls -la
+          echo $HOME/.kube/config
 
       # TODO: we are currently just using the latest containers without building them beforehand. Maybe add deployment as step of the pipeline on commits on the main branch
       - name: Replace OPEN API key
