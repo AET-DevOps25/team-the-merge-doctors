@@ -6,15 +6,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - 3000:80
-
-  user-service:
-    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/user:latest
-    build:
-      context: server/user
-      dockerfile: Dockerfile
-    ports:
-      - 8000:8080
-
+  
   postgres-db:
     image: postgres:15
     ports:
@@ -25,6 +17,16 @@ services:
       - db_data:/var/lib/postgresql/data
       - ./docker/backend_config_files/postgres-init.sh:/docker-entrypoint-initdb.d/init.sh:ro
       - ./docker/backend_config_files/pg-hba.conf:/etc/postgresql/pg_hba.conf:ro
+
+  user-service:
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/userservice:latest
+    build:
+      context: server/userservice
+      dockerfile: Dockerfile
+    ports:
+      - 8210:8210
+    depends_on:
+      - postgres-db
 
   genai:
     image: ghcr.io/aet-devops25/team-the-merge-doctors/genai:latest

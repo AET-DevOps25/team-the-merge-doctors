@@ -1,0 +1,6 @@
+package com.mentorpulse.userservice.dto;
+
+import com.mentorpulse.userservice.models.User;
+
+public record DeleteUserResponse (User user) {
+}

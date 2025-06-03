@@ -15,7 +15,7 @@ COPY src ./src
 RUN gradle bootJar --no-daemon
 
 # Stage 2: Run the application
-FROM gcr.io/distroless/java21-debian12
+FROM openjdk:21-jdk-slim
 
 WORKDIR /app
 
@@ -23,7 +23,7 @@ WORKDIR /app
 COPY --from=build /app/build/libs/*.jar app.jar
 
 # Expose the port the app runs on
-EXPOSE 8000
+EXPOSE 8210
 
 # Command to run the application
-CMD ["app.jar"]
+ENTRYPOINT sh -c 'java -jar app.jar'
