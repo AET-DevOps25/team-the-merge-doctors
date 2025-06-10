@@ -11,6 +11,9 @@ psql -v ON_ERROR_STOP=1 <<-EOSQL
     CREATE USER merge_doctor_backend WITH PASSWORD 'qweasdzxc';
     CREATE DATABASE genai_backend WITH OWNER merge_doctor_backend;
     CREATE DATABASE user_backend WITH OWNER merge_doctor_backend;
+    CREATE DATABASE rating_backend WITH OWNER merge_doctor_backend;
+    CREATE DATABASE appointment_backend WITH OWNER merge_doctor_backend;
+    CREATE DATABASE mentorship_backend WITH OWNER merge_doctor_backend;
     GRANT ALL PRIVILEGES ON DATABASE genai_backend TO merge_doctor_backend;
     \c genai_backend
 
