@@ -1,19 +1,8 @@
 services:
   client:
     image: ghcr.io/aet-devops25/team-the-merge-doctors/client:latest
-    build:
-      context: ./client
-      dockerfile: Dockerfile
     ports:
       - 3000:80
-
-  user-service:
-    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/user:latest
-    build:
-      context: server/user
-      dockerfile: Dockerfile
-    ports:
-      - 8000:8080
 
   postgres-db:
     image: postgres:15
@@ -26,11 +15,18 @@ services:
       - ./docker/backend_config_files/postgres-init.sh:/docker-entrypoint-initdb.d/init.sh:ro
       - ./docker/backend_config_files/pg-hba.conf:/etc/postgresql/pg_hba.conf:ro
 
+  user-service:
+     image: ghcr.io/aet-devops25/team-the-merge-doctors/server/user-service:latest
+     ports:
+       - 8210:8210
+     volumes:
+       - $HOME/mentorpulse-certificates/jwt-secret.key:/home/cnf/mentorpulse-certificates/jwt-secret.key:ro
+     depends_on:
+       - postgres-db
+     restart: on-failure:3
+
   genai:
     image: ghcr.io/aet-devops25/team-the-merge-doctors/genai:latest
-    build:
-      context: genai
-      dockerfile: Dockerfile
     command: gunicorn -b 0.0.0.0:5001 app:app
     volumes:
       - ./genai:/app
@@ -42,35 +38,31 @@ services:
       - ./docker/backend_config_files/.env
     depends_on:
       - postgres-db
+    restart: always
 
   mentorship-service:
     image: ghcr.io/aet-devops25/team-the-merge-doctors/server/mentorship-service:latest
-    build:
-      context: server/mentorshipservice
-      dockerfile: Dockerfile
     ports:
       - 8310:8310
     depends_on:
       - postgres-db
+    restart: on-failure:3
+
   rating-service:
     image: ghcr.io/aet-devops25/team-the-merge-doctors/server/rating-service:latest
-    build:
-      context: server/ratingservice
-      dockerfile: Dockerfile
     ports:
       - 8410:8410
     depends_on:
       - postgres-db
+    restart: on-failure:3
 
   appointment-service:
     image: ghcr.io/aet-devops25/team-the-merge-doctors/server/appointment-service:latest
-    build:
-      context: server/appointmentservice
-      dockerfile: Dockerfile
     ports:
       - 8510:8510
     depends_on:
       - postgres-db
+    restart: on-failure:3
 
 volumes:
   db_data:
