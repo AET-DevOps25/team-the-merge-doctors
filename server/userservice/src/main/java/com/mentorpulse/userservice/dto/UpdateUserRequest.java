@@ -1,4 +1,5 @@
 package com.mentorpulse.userservice.dto;
 
-public record UpdateUserRequest() {
-}
+import com.mentorpulse.userservice.models.*;
+
+public record UpdateUserRequest(User user) { }

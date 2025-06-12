@@ -20,9 +20,9 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/createUser")
-    public ResponseEntity<User> createUser(@RequestBody @Valid CreateUserRequest request) {
+    public ResponseEntity<CreateUserResponse> createUser(@RequestBody @Valid CreateUserRequest request) {
         try {
-            User created = userService.createUser(request);
+            CreateUserResponse created = userService.createUser(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(created);
         } catch (InvalidAttributeValueException ex) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
@@ -49,6 +49,16 @@ public class UserController {
         }
     }
 
+    @PatchMapping("/updateUser")
+    public ResponseEntity<UpdateUserResponse> updateUser(@RequestBody @Valid UpdateUserRequest request) {
+        try {
+            UpdateUserResponse response = userService.updateUser(request);
+            return ResponseEntity.ok(response);
+        } catch (InvalidAttributeValueException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
+        }
+    }
+
     @GetMapping("/getUser")
     public ResponseEntity<GetUserResponse> getUser(@RequestBody @Valid GetUserRequest req) {
         try {
@@ -60,7 +70,7 @@ public class UserController {
     }
 
     @GetMapping("/listUsers")
-    public ResponseEntity<ListUsersResponse> listUsers(@ModelAttribute ListUsersRequest request) {
+    public ResponseEntity<ListUsersResponse> listUsers(@RequestBody @Valid ListUsersRequest request) {
         ListUsersResponse rsp = userService.listUsers(request);
         return ResponseEntity.ok(rsp);
     }

@@ -17,7 +17,7 @@ public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificat
     Optional<User> findByUserName(String userName);
 
     static Specification<User> createUserSpecification(ListUsersRequest request) {
-        Specification<User> specification = Specification.where(null);
+        Specification<User> specification = Specification.allOf();
         if (request.roleType() != RoleType.NONE) {
             specification = specification.and(roleTypeEquals(request.roleType()));
         }
