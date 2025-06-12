@@ -2,8 +2,6 @@ package com.mentorpulse.userservice.repositories;
 
 import com.mentorpulse.userservice.dto.ListUsersRequest;
 import com.mentorpulse.userservice.models.*;
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -25,9 +23,6 @@ public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificat
     }
 
     static Specification<User> roleTypeEquals(RoleType roleType) {
-        return (root, query, cb) -> {
-            Join<User, Role> userJoin = root.join(User_.role, JoinType.LEFT);
-            return cb.equal(userJoin.get(Role_.roleType), roleType);
-        };
+        return (root, query, cb) -> cb.equal(root.get(User_.roleType), roleType);
     }
 }

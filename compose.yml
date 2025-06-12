@@ -23,6 +23,7 @@ services:
        - $HOME/mentorpulse-certificates/jwt-secret.key:/home/cnf/mentorpulse-certificates/jwt-secret.key:ro
      depends_on:
        - postgres-db
+     restart: on-failure:3
 
   genai:
     image: ghcr.io/aet-devops25/team-the-merge-doctors/genai:latest
@@ -37,35 +38,31 @@ services:
       - ./docker/backend_config_files/.env
     depends_on:
       - postgres-db
+    restart: always
 
   mentorship-service:
     image: ghcr.io/aet-devops25/team-the-merge-doctors/server/mentorship-service:latest
-    build:
-      context: server/mentorshipservice
-      dockerfile: Dockerfile
     ports:
       - 8310:8310
     depends_on:
       - postgres-db
+    restart: on-failure:3
+
   rating-service:
     image: ghcr.io/aet-devops25/team-the-merge-doctors/server/rating-service:latest
-    build:
-      context: server/ratingservice
-      dockerfile: Dockerfile
     ports:
       - 8410:8410
     depends_on:
       - postgres-db
+    restart: on-failure:3
 
   appointment-service:
     image: ghcr.io/aet-devops25/team-the-merge-doctors/server/appointment-service:latest
-    build:
-      context: server/appointmentservice
-      dockerfile: Dockerfile
     ports:
       - 8510:8510
     depends_on:
       - postgres-db
+    restart: on-failure:3
 
 volumes:
   db_data:

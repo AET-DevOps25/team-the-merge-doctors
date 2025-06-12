@@ -1,17 +1,13 @@
 package com.mentorpulse.userservice.services;
 
 import com.mentorpulse.userservice.dto.*;
-import com.mentorpulse.userservice.models.Role;
 import com.mentorpulse.userservice.models.User;
-import com.mentorpulse.userservice.repositories.RoleRepository;
 import com.mentorpulse.userservice.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,8 +25,6 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    private final RoleRepository roleRepository;
-
     private final PasswordEncoder passwordEncoder;
 
     private final AuthenticationService authenticationService;
@@ -41,9 +35,6 @@ public class UserService implements UserDetailsService {
         if (existingUser.isPresent()) {
             throw new InvalidAttributeValueException("Username: " + request.userName() +" is exist in our system.");
         }
-        // TODO: Role type will be fixed later by adding administrative data using python script
-//        Role role = roleRepository.findByRoleType(request.roleType())
-//                .orElseThrow(() -> new InvalidAttributeValueException("Role Type `" + request.roleType().name()+ "` doesn't exist"));
 
         User newUser = User.builder()
                 .name(request.name())
@@ -51,21 +42,23 @@ public class UserService implements UserDetailsService {
                 .address(request.address())
                 .contact(request.contact())
                 .passwordHash(passwordEncoder.encode(request.password()))
-                .role(Role.builder().roleType(request.roleType()).build())
+                .roleType(request.roleType())
                 .createdAt(Instant.now())
                 .lastLoginAt(Instant.now())
                 .build();
         newUser = userRepository.save(newUser);
-        String token = authenticationService.generateToken(newUser.getUsername(), newUser.getId(), newUser.getRole().getRoleType());
+        String token = authenticationService.generateToken(newUser.getUsername(), newUser.getId(), newUser.getRoleType());
         return new CreateUserResponse(newUser.getId(), token);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public LoginUserResponse loginUser(LoginUserRequest request) throws InvalidAttributeValueException {
         User existingUser = userRepository.findByUserName(request.userName())
                 .orElseThrow(() -> new InvalidAttributeValueException("Username: " + request.userName() +" doesn't exist in our system."));
-        boolean authenticated = passwordEncoder.encode(request.password()).equals(existingUser.getPasswordHash());
-        String token = authenticated ? authenticationService.generateToken(existingUser.getUsername(), existingUser.getId(), existingUser.getRole().getRoleType()) : "";
+        existingUser.updateLastLogin();
+
+        boolean authenticated = passwordEncoder.matches(request.password(), existingUser.getPasswordHash());
+        String token = authenticated ? authenticationService.generateToken(existingUser.getUsername(), existingUser.getId(), existingUser.getRoleType()) : "";
         return new LoginUserResponse(authenticated, token);
     }
 

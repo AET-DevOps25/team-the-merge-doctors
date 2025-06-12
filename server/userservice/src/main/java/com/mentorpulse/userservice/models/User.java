@@ -41,8 +41,7 @@ public class User implements UserDetails {
     @Embedded
     private Contact contact;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Role role;
+    private RoleType roleType;
 
     private Instant createdAt;
 
@@ -51,10 +50,10 @@ public class User implements UserDetails {
     @SneakyThrows
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (role == null) {
+        if (roleType == null || roleType == RoleType.NONE) {
             throw new PermissionDeniedException("There is no role for user: " + (userName == null ? "" : userName));
         }
-        return List.of(new SimpleGrantedAuthority(role.getRoleType().name()));
+        return List.of(new SimpleGrantedAuthority(roleType.name()));
     }
 
     @Override
@@ -68,6 +67,10 @@ public class User implements UserDetails {
     }
 
     public UserDto toUserDto() {
-        return new UserDto(id, userName, address, role, createdAt, lastLoginAt);
+        return new UserDto(id, userName, address, roleType, createdAt, lastLoginAt);
+    }
+
+    public void updateLastLogin() {
+        lastLoginAt = Instant.now();
     }
 }
