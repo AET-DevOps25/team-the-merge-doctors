@@ -26,4 +26,4 @@ spring:
 
 jwt:
   secret:
-    file: ${JWT_SECRET_DIR:${user.home}/mentorpulse-certificates}/jwt-secret.key
+    file: ${JWT_SECRET_DIR:/home/cnf/mentorpulse-certificates}/jwt-secret.key

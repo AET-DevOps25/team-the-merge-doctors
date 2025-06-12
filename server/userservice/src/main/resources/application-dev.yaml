@@ -5,3 +5,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+
+
+jwt:
+  secret:
+    file: ${JWT_SECRET_DIR:${user.home}/mentorpulse-certificates}/jwt-secret.key

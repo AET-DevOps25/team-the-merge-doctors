@@ -16,9 +16,11 @@ services:
       - ./docker/backend_config_files/pg-hba.conf:/etc/postgresql/pg_hba.conf:ro
 
   user-service:
-     image: ghcr.io/aet-devops25/team-the-merge-doctors/server/userservice:latest
+     image: ghcr.io/aet-devops25/team-the-merge-doctors/server/user-service:latest
      ports:
        - 8210:8210
+     volumes:
+       - $HOME/mentorpulse-certificates/jwt-secret.key:/home/cnf/mentorpulse-certificates/jwt-secret.key:ro
      depends_on:
        - postgres-db
 
