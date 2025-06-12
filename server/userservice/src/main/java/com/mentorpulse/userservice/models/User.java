@@ -1,13 +1,17 @@
 package com.mentorpulse.userservice.models;
 
 
+import com.mentorpulse.userservice.dto.UserDto;
+import com.mentorpulse.userservice.exceptions.PermissionDeniedException;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -16,7 +20,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Table(name = "user_table")
-public class User {
+public class User implements UserDetails {
 
     @GeneratedValue
     @Id
@@ -43,4 +47,27 @@ public class User {
     private Instant createdAt;
 
     private Instant lastLoginAt;
+
+    @SneakyThrows
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (role == null) {
+            throw new PermissionDeniedException("There is no role for user: " + (userName == null ? "" : userName));
+        }
+        return List.of(new SimpleGrantedAuthority(role.getRoleType().name()));
+    }
+
+    @Override
+    public String getPassword() {
+        return passwordHash;
+    }
+
+    @Override
+    public String getUsername() {
+        return userName;
+    }
+
+    public UserDto toUserDto() {
+        return new UserDto(id, userName, address, role, createdAt, lastLoginAt);
+    }
 }

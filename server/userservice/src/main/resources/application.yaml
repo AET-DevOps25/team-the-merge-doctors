@@ -23,3 +23,7 @@ spring:
   sql:
     init:
       platform: postgres
+
+jwt:
+  secret:
+    file: ${JWT_SECRET_DIR:${user.home}/mentorpulse-certificates}/jwt-secret.key
