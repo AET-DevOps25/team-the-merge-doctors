@@ -1,0 +1,80 @@
+services:
+  reverse-proxy:
+    image: traefik:v3.4
+    command:
+      - "--api.insecure=true"  # Add this for debugging
+      - "--providers.docker=true"
+      - "--providers.docker.exposedByDefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.letsencrypt.acme.email=ge85zef@mytum.de"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+      # Remove this line for production.
+      - "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080" # For traefik dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./letsencrypt:/letsencrypt
+    networks:
+      - frontend
+
+
+  client:
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/client:latest
+    platform: linux/amd64
+    environment:
+      - CLIENT_HOST=mentor-pulse.local.com
+    # Traefik configuration labels
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.client.rule=Host(`mentor-pulse.local.com`)"
+      - "traefik.http.services.client.loadbalancer.server.port=80"
+      - "traefik.http.routers.client.entrypoints=websecure"
+      - "traefik.http.routers.client.tls.certresolver=letsencrypt"
+      - "traefik.http.middlewares.client-compress.compress=true"
+      - "traefik.http.routers.client.middlewares=client-compress"
+      - "traefik.http.routers.client.priority=1"
+    networks:
+      - frontend
+
+  user-service:
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/user-service:latest
+    platform: linux/amd64
+    ports:
+      - 8000:8080
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.user-service.rule=Host(`mentor-pulse.local.com`) && PathPrefix(`/api/v1/user`)"
+      - "traefik.http.services.user-service.loadbalancer.server.port=8080"
+      - "traefik.http.routers.user-service.entrypoints=websecure"
+      - "traefik.http.routers.user-service.tls.certresolver=letsencrypt"
+      # Add higher priority than client (which has priority=1)
+      - "traefik.http.routers.user-service.priority=10"
+    networks:
+      - frontend
+    
+networks:
+  frontend:
+    driver: bridge
+volumes:
+  letsencrypt:
+
+  # server:
+  #   image: ghcr.io/aet-devops25/w05-template/server:latest
+  #   environment:
+  #     - SPRING_PROFILES_ACTIVE=docker
+  #   restart: unless-stopped
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.server.rule=Host(`${SERVER_HOST}`)"
+  #     - "traefik.http.services.server.loadbalancer.server.port=8080"
+  #     - "traefik.http.routers.server.entrypoints=websecure"
+  #     - "traefik.http.routers.server.tls.certresolver=letsencrypt"# Use -k flag to skip SSL certificate verification
