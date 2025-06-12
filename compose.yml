@@ -1,12 +1,9 @@
 services:
   client:
     image: ghcr.io/aet-devops25/team-the-merge-doctors/client:latest
-    build:
-      context: ./client
-      dockerfile: Dockerfile
     ports:
       - 3000:80
-  
+
   postgres-db:
     image: postgres:15
     ports:
@@ -19,20 +16,14 @@ services:
       - ./docker/backend_config_files/pg-hba.conf:/etc/postgresql/pg_hba.conf:ro
 
   user-service:
-    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/userservice:latest
-    build:
-      context: server/userservice
-      dockerfile: Dockerfile
-    ports:
-      - 8210:8210
-    depends_on:
-      - postgres-db
+     image: ghcr.io/aet-devops25/team-the-merge-doctors/server/userservice:latest
+     ports:
+       - 8210:8210
+     depends_on:
+       - postgres-db
 
   genai:
     image: ghcr.io/aet-devops25/team-the-merge-doctors/genai:latest
-    build:
-      context: genai
-      dockerfile: Dockerfile
     command: gunicorn -b 0.0.0.0:5001 app:app
     volumes:
       - ./genai:/app
