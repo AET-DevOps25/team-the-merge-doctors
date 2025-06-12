@@ -43,5 +43,34 @@ services:
     depends_on:
       - postgres-db
 
+  mentorship-service:
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/mentorship-service:latest
+    build:
+      context: server/mentorshipservice
+      dockerfile: Dockerfile
+    ports:
+      - 8310:8310
+    depends_on:
+      - postgres-db
+  rating-service:
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/rating-service:latest
+    build:
+      context: server/ratingservice
+      dockerfile: Dockerfile
+    ports:
+      - 8410:8410
+    depends_on:
+      - postgres-db
+
+  appointment-service:
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/appointment-service:latest
+    build:
+      context: server/appointmentservice
+      dockerfile: Dockerfile
+    ports:
+      - 8510:8510
+    depends_on:
+      - postgres-db
+
 volumes:
   db_data:
