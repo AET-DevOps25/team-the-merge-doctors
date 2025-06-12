@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-microservice-deployment
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.userMicroservice.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.userMicroservice.selector }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.userMicroservice.selector }}
+    spec:
+      containers:
+        - name: user-microservice-container
+          image: "{{ .Values.userMicroservice.image.repository }}:{{ .Values.userMicroservice.image.tag }}"
+          imagePullPolicy: {{ .Values.userMicroservice.image.pullPolicy }}
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+            requests:
+              cpu: "50m"
+              memory: "50Mi"
+          ports:
+            - containerPort: {{ .Values.userMicroservice.service.targetPort }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.backendEnvironmentConfigMapName }}
+            - secretRef:
+                name: {{ .Values.secretsName }}
