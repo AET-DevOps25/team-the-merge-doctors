@@ -1,10 +1,12 @@
 services:
   client:
+    platform: linux/amd64
     image: ghcr.io/aet-devops25/team-the-merge-doctors/client:latest
     ports:
       - 3000:80
 
   postgres-db:
+    platform: linux/amd64
     image: postgres:15
     ports:
       - "5432:5432"
@@ -16,9 +18,13 @@ services:
       - ./docker/backend_config_files/pg-hba.conf:/etc/postgresql/pg_hba.conf:ro
 
   user-service:
+     platform: linux/amd64
      image: ghcr.io/aet-devops25/team-the-merge-doctors/server/user-service:latest
      ports:
        - 8210:8210
+     build:
+       context: server/userservice
+       dockerfile: Dockerfile
      volumes:
        - $HOME/mentorpulse-certificates/jwt-secret.key:/home/cnf/mentorpulse-certificates/jwt-secret.key:ro
      depends_on:
@@ -26,7 +32,11 @@ services:
      restart: on-failure:3
 
   genai:
+    platform: linux/amd64
     image: ghcr.io/aet-devops25/team-the-merge-doctors/genai:latest
+    build:
+      context: genai
+      dockerfile: Dockerfile
     command: gunicorn -b 0.0.0.0:5001 app:app
     volumes:
       - ./genai:/app
@@ -41,7 +51,11 @@ services:
     restart: always
 
   mentorship-service:
+    platform: linux/amd64
     image: ghcr.io/aet-devops25/team-the-merge-doctors/server/mentorship-service:latest
+    build:
+      context: server/mentorshipservice
+      dockerfile: Dockerfile
     ports:
       - 8310:8310
     depends_on:
@@ -49,7 +63,11 @@ services:
     restart: on-failure:3
 
   rating-service:
+    platform: linux/amd64
     image: ghcr.io/aet-devops25/team-the-merge-doctors/server/rating-service:latest
+    build:
+      context: server/ratingservice
+      dockerfile: Dockerfile
     ports:
       - 8410:8410
     depends_on:
@@ -57,7 +75,11 @@ services:
     restart: on-failure:3
 
   appointment-service:
+    platform: linux/amd64
     image: ghcr.io/aet-devops25/team-the-merge-doctors/server/appointment-service:latest
+    build:
+      context: server/appointmentservice
+      dockerfile: Dockerfile
     ports:
       - 8510:8510
     depends_on:

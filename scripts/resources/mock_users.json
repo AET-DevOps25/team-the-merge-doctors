@@ -1,0 +1,202 @@
+[
+  {
+    "userName": "slong",
+    "password": "r0LVLjfc(t",
+    "name": {
+      "title": "Ms.",
+      "firstName": "Sara",
+      "middleName": "Patrick",
+      "lastName": "Benton"
+    },
+    "contact": {
+      "email": "robert95@example.org",
+      "phoneNumber": "(571)465-5569x7571",
+      "mobileNumber": "6847535592"
+    },
+    "address": {
+      "city": "Stanleyfort",
+      "country": "North Macedonia"
+    },
+    "roleType": "MENTOR"
+  },
+  {
+    "userName": "gwilson",
+    "password": "s5YAo&7v@n",
+    "name": {
+      "title": "Mr.",
+      "firstName": "Sandra",
+      "middleName": "Chris",
+      "lastName": "Blanchard"
+    },
+    "contact": {
+      "email": "jdeleon@example.org",
+      "phoneNumber": "7139975545",
+      "mobileNumber": "001-566-685-8483"
+    },
+    "address": {
+      "city": "West Megan",
+      "country": "Bangladesh"
+    },
+    "roleType": "MENTEE"
+  },
+  {
+    "userName": "spencertaylor",
+    "password": "wFOwbnMe^4",
+    "name": {
+      "title": "Prof.",
+      "firstName": "Julie",
+      "middleName": "Crystal",
+      "lastName": "Cox"
+    },
+    "contact": {
+      "email": "jeffrey11@example.com",
+      "phoneNumber": "001-299-692-5606x624",
+      "mobileNumber": "(724)693-8966x9147"
+    },
+    "address": {
+      "city": "Robertville",
+      "country": "Papua New Guinea"
+    },
+    "roleType": "MENTOR"
+  },
+  {
+    "userName": "rmcmahon",
+    "password": "(29B14tvli",
+    "name": {
+      "title": "Dr.",
+      "firstName": "Gregory",
+      "middleName": "Eric",
+      "lastName": "Smith"
+    },
+    "contact": {
+      "email": "lintimothy@example.org",
+      "phoneNumber": "955-393-2243",
+      "mobileNumber": "001-549-867-6770"
+    },
+    "address": {
+      "city": "East Williamport",
+      "country": "San Marino"
+    },
+    "roleType": "MENTEE"
+  },
+  {
+    "userName": "mramirez",
+    "password": "(GtWpFPB4f",
+    "name": {
+      "title": "Mrs.",
+      "firstName": "Kimberly",
+      "middleName": "Daniel",
+      "lastName": "Anderson"
+    },
+    "contact": {
+      "email": "daltongloria@example.org",
+      "phoneNumber": "(248)768-1797x69683",
+      "mobileNumber": "001-536-668-6329x35739"
+    },
+    "address": {
+      "city": "Kyleview",
+      "country": "Micronesia"
+    },
+    "roleType": "MENTOR"
+  },
+  {
+    "userName": "burgessroy",
+    "password": "Vzo6Ak1EL*",
+    "name": {
+      "title": "Dr.",
+      "firstName": "Ashley",
+      "middleName": "Philip",
+      "lastName": "Marks"
+    },
+    "contact": {
+      "email": "michael00@example.com",
+      "phoneNumber": "+1-955-212-4318x5137",
+      "mobileNumber": "240-874-9558x35761"
+    },
+    "address": {
+      "city": "Gillespiebury",
+      "country": "Malawi"
+    },
+    "roleType": "MENTEE"
+  },
+  {
+    "userName": "mariereynolds",
+    "password": "$b9ZmBEm0v",
+    "name": {
+      "title": "Dr.",
+      "firstName": "Robert",
+      "middleName": "Shannon",
+      "lastName": "Weaver"
+    },
+    "contact": {
+      "email": "andersonroberta@example.com",
+      "phoneNumber": "927-305-1007x7228",
+      "mobileNumber": "496.860.4376"
+    },
+    "address": {
+      "city": "Lake Scott",
+      "country": "Nigeria"
+    },
+    "roleType": "MENTOR"
+  },
+  {
+    "userName": "rbrooks",
+    "password": "0edqsV6d!9",
+    "name": {
+      "title": "Mrs.",
+      "firstName": "Jacqueline",
+      "middleName": "Ryan",
+      "lastName": "Lee"
+    },
+    "contact": {
+      "email": "karlhunt@example.com",
+      "phoneNumber": "599-716-3240x1419",
+      "mobileNumber": "4702880354"
+    },
+    "address": {
+      "city": "Robinsonberg",
+      "country": "Uganda"
+    },
+    "roleType": "MENTEE"
+  },
+  {
+    "userName": "meganrussell",
+    "password": "Zx9SdcRU&8",
+    "name": {
+      "title": "Mr.",
+      "firstName": "Jessica",
+      "middleName": "Timothy",
+      "lastName": "Jordan"
+    },
+    "contact": {
+      "email": "beverly94@example.net",
+      "phoneNumber": "(471)553-4111x6141",
+      "mobileNumber": "9077979107"
+    },
+    "address": {
+      "city": "New Emily",
+      "country": "Montserrat"
+    },
+    "roleType": "MENTOR"
+  },
+  {
+    "userName": "rachel77",
+    "password": "+5m0V^qMw7",
+    "name": {
+      "title": "Ms.",
+      "firstName": "Diane",
+      "middleName": "Christopher",
+      "lastName": "Curtis"
+    },
+    "contact": {
+      "email": "matthewsalas@example.com",
+      "phoneNumber": "548-722-8467",
+      "mobileNumber": "(826)444-4206x92356"
+    },
+    "address": {
+      "city": "Justinshire",
+      "country": "Saint Barthelemy"
+    },
+    "roleType": "MENTEE"
+  }
+]
