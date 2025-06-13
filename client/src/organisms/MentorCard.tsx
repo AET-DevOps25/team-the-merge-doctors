@@ -1,5 +1,5 @@
 import { Button, Card, Divider, Tag } from 'antd';
-import type { Mentor, MentorCategory, Skill, User } from '../types';
+import type { Mentor, MentorCategory, Skill, User } from '../types/types';
 import './MentorCard.css';
 
 const mentor: Mentor = {

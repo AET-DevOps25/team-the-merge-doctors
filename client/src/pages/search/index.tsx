@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { Card, Col, Row } from 'antd';
-import { MentorCard } from '../../components/MentorCard';
+import { MentorCard } from '../../organisms/MentorCard';
 
 export const Route = createFileRoute('/search/')({
   component: Search,
