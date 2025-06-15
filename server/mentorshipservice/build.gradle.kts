@@ -2,6 +2,7 @@ plugins {
 	java
 	id("org.springframework.boot") version "3.5.0"
 	id("io.spring.dependency-management") version "1.1.7"
+	id("org.springdoc.openapi-gradle-plugin") version "1.7.0"
 }
 
 group = "com.mentorpulse"
@@ -18,12 +19,41 @@ repositories {
 }
 
 dependencies {
+	implementation("io.jsonwebtoken:jjwt-api:0.12.6")
+	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
+	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
+	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("org.springframework.boot:spring-boot-starter")
-	runtimeOnly("org.postgresql:postgresql:42.6.0")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-validation")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
+
+	annotationProcessor("org.hibernate.orm:hibernate-jpamodelgen")
+	runtimeOnly("org.postgresql:postgresql:42.7.7")
+
+	compileOnly("org.projectlombok:lombok")
+	annotationProcessor("org.projectlombok:lombok")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.security:spring-security-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+// TODO: The openAPI schema generation should be handled in the gateway service
+val downloadOpenApiSpec by tasks.registering(Exec::class) {
+	val outputFile = "$buildDir/openapi.yaml"
+	val url = "http://localhost:8310/v3/api-docs.yaml"
+
+
+	commandLine("bash", "-c", "curl -o $outputFile $url")
+
+}
+
+openApi {
+	apiDocsUrl.set("http://localhost:8310/v3/api-docs.yaml")
+	outputDir.set(file("$buildDir/openapi"))
+	outputFileName.set("openapi.yaml")
 }
 
 tasks.withType<Test> {
