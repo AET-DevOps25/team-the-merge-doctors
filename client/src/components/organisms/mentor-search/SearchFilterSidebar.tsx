@@ -1,3 +1,7 @@
+import { SearchCategory } from '@/components/molecules/SearchCategory';
+import { SearchSkills } from '@/components/molecules/SearchSkills';
+import { Divider } from 'antd';
+
 export function SearchFilterSidebar() {
   // TODO:
   // General Search?
@@ -8,4 +12,11 @@ export function SearchFilterSidebar() {
   // searchMentors(categories: [category id], yearsOfExperience: [int], skills: [skill ids]): [mentorId]
   // searchCategories(input: string): [Category]
   // searchSkills(input: string): [Skill]
+  return (
+    <>
+      <SearchSkills />
+      <Divider />
+      <SearchCategory />
+    </>
+  );
 }

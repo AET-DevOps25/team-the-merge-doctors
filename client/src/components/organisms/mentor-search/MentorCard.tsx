@@ -1,6 +1,6 @@
 import { Button, Card, Col, Divider, Row, Space, Tag } from 'antd';
-import type { Mentor, MentorCategory, Skill, User } from '../../types/types';
-import './MentorCard.css';
+import type { Mentor, MentorCategory, Skill, User } from '@/types/types';
+import '@/components/organisms/mentor-search/MentorCard.css';
 import { useNavigate } from '@tanstack/react-router';
 
 const mentor: Mentor = {
@@ -81,7 +81,7 @@ function MentorSkills({ skills }: MentorSkillsProps) {
   return (
     <div>
       <div style={{ fontWeight: 'bold' }}>Skills</div>
-      {mentor.skills.map((skill) => (
+      {skills.map((skill) => (
         <SkillPill key={skill.id} skill={skill} />
       ))}
     </div>
