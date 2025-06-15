@@ -17,7 +17,10 @@ export const Route = createRootRoute({
           className="[&.active]:font-bold"
         >
           Mentor
-        </Link>
+        </Link>{' '}
+        <Link to="/search" className="[&.active]:font-bold">
+          Search
+        </Link>{' '}
       </div>
       <hr />
       <Outlet />

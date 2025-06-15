@@ -1,6 +1,7 @@
-import { Button, Card, Divider, Tag } from 'antd';
+import { Button, Card, Col, Divider, Row, Space, Tag } from 'antd';
 import type { Mentor, MentorCategory, Skill, User } from '../../types/types';
 import './MentorCard.css';
+import { useNavigate } from '@tanstack/react-router';
 
 const mentor: Mentor = {
   id: '123',
@@ -42,20 +43,19 @@ export function MentorCard() {
     <Card
       style={{ width: 400 }}
       title={
-        <>
-          {user.name}{' '}
-          <MentorCategoryPill category={mentor.mentorCategory} />{' '}
-        </>
+        <Row>
+          <Col span={24}>{user.name} </Col>
+          <Col span={24}>
+            <MentorCategoryPill category={mentor.mentorCategory} />
+          </Col>
+        </Row>
       }
     >
-      <MentorBio bioText={mentor.bio} />
-      <p>
-        Skills:{' '}
-        {mentor.skills.map((skill) => (
-          <SkillPill key={skill.id} skill={skill} />
-        ))}
-      </p>
-      <ViewProfileButton mentor={mentor} />
+      <Space direction="vertical">
+        <MentorBio bioText={mentor.bio} />
+        <MentorSkills skills={mentor.skills} />
+        <ViewProfileButton mentor={mentor} />
+      </Space>
     </Card>
   );
 }
@@ -65,7 +65,27 @@ interface MentorBioProps {
 }
 
 function MentorBio({ bioText }: MentorBioProps) {
-  return <div className="mentorBio">{bioText}</div>;
+  return (
+    <div>
+      <div style={{ fontWeight: 'bold' }}>About</div>
+      <div className="mentorBio">{bioText}</div>
+    </div>
+  );
+}
+
+interface MentorSkillsProps {
+  skills: Skill[];
+}
+
+function MentorSkills({ skills }: MentorSkillsProps) {
+  return (
+    <div>
+      <div style={{ fontWeight: 'bold' }}>Skills</div>
+      {mentor.skills.map((skill) => (
+        <SkillPill key={skill.id} skill={skill} />
+      ))}
+    </div>
+  );
 }
 
 interface MentorCategoryPillProps {
@@ -95,14 +115,19 @@ interface ViewProfileButtonProps {
 }
 
 function ViewProfileButton({ mentor }: ViewProfileButtonProps) {
+  const navigate = useNavigate();
+
   return (
-    <Button
-      onClick={() => {
-        /*TODO: link to mentor profile*/
-        console.log(mentor.mentorId);
-      }}
-    >
-      View Profile
-    </Button>
+    <div style={{ textAlign: 'right' }}>
+      <Button
+        type="primary"
+        onClick={() => {
+          /*TODO: remove static link*/
+          navigate({ to: '/mentor/$mentorId', params: { mentorId: '123' } });
+        }}
+      >
+        View Profile
+      </Button>
+    </div>
   );
 }
