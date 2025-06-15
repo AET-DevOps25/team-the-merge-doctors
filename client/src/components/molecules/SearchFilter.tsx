@@ -1,66 +1,68 @@
-// import { Input, Space } from 'antd';
-// import { useState } from 'react';
+import { Checkbox, Input, Space } from 'antd';
+import { useState } from 'react';
 
-// interface SearchFilterProps<T> {
-//   placeholder: string;
-//   items: T[];
-  
-// }
+interface SearchFilterProps<T extends ItemType> {
+  placeholder: string;
+  title: string;
+  items: T[];
+}
 
-// export function SearchFilter<T>() {}
+interface ItemType {
+  id: string;
+  name: string;
+}
 
-// export function SearchSkills({}: SearchSkillsProps) {
-//   const skills: Skill[] = [
-//     { id: '1', name: 'Testing' },
-//     { id: '2', name: 'Swift' },
-//     { id: '3', name: 'Java' },
-//     { id: '4', name: 'C++' },
-//     { id: '5', name: 'C' },
-//   ];
+export function SearchFilter<T extends ItemType>({
+  placeholder,
+  items,
+  title,
+}: SearchFilterProps<T>) {
+  const [filterInput, setFilterInput] = useState<string>('');
+  const [selectedItems, setSelectedItems] = useState<T[]>([]);
 
-//   const [filterInput, setFilterInput] = useState<string>('');
-//   const [selectedSkills, setSelectedSkills] = useState<Skill[]>([]);
+  const filteredItems = filterItems(items, filterInput, selectedItems).slice(
+    0,
+    10,
+  );
 
-//   const filteredSkills = filterSkills(skills, filterInput, selectedSkills);
+  return (
+    <Space direction="vertical">
+      <div style={{ fontWeight: 'bold' }}>{title}</div>
+      <Input
+        placeholder={placeholder}
+        value={filterInput}
+        onChange={(e) => setFilterInput(e.target.value)}
+      />
+      {filteredItems.map((item) => (
+        <Checkbox
+          key={item.id}
+          onChange={(e) => {
+            if (e.target.checked) {
+              setSelectedItems([...selectedItems, item]);
+            } else {
+              setSelectedItems(
+                selectedItems.filter(
+                  (selectedSkill) => selectedSkill.id !== item.id,
+                ),
+              );
+            }
+          }}
+        >
+          {item.name}
+        </Checkbox>
+      ))}
+    </Space>
+  );
+}
 
-//   return (
-//     <Space direction="vertical">
-//       <div style={{ fontWeight: 'bold' }}>Skills</div>
-//       <Input
-//         placeholder="Search for skills"
-//         value={filterInput}
-//         onChange={(e) => setFilterInput(e.target.value)}
-//       />
-//       {filteredSkills.map((skill) => (
-//         <Checkbox
-//           key={skill.id}
-//           onChange={(e) => {
-//             if (e.target.checked) {
-//               setSelectedSkills([...selectedSkills, skill]);
-//             } else {
-//               setSelectedSkills(
-//                 selectedSkills.filter(
-//                   (selectedSkill) => selectedSkill.id !== skill.id,
-//                 ),
-//               );
-//             }
-//           }}
-//         >
-//           {skill.name}
-//         </Checkbox>
-//       ))}
-//     </Space>
-//   );
-// }
-
-// function filterSkills(
-//   skills: Skill[],
-//   input: string,
-//   selectedSkills: Skill[],
-// ): Skill[] {
-//   return skills.filter(
-//     (skill) =>
-//       skill.name.toLowerCase().includes(input.toLowerCase()) ||
-//       selectedSkills.some((selectedSkill) => selectedSkill.id == skill.id),
-//   );
-// }
+function filterItems<T extends ItemType>(
+  items: T[],
+  input: string,
+  selectedItems: T[],
+): T[] {
+  return items.filter(
+    (item) =>
+      item.name.toLowerCase().includes(input.toLowerCase()) ||
+      selectedItems.some((selectedItem) => selectedItem.id == item.id),
+  );
+}
