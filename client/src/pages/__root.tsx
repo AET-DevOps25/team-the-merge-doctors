@@ -10,6 +10,13 @@ export const Route = createRootRoute({
         </Link>{' '}
         <Link to="/test" className="[&.active]:font-bold">
           Test
+        </Link>{' '}
+        <Link
+          to="/mentor/$mentorId"
+          params={{ mentorId: '123' }}
+          className="[&.active]:font-bold"
+        >
+          Mentor
         </Link>
       </div>
       <hr />

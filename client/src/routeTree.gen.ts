@@ -13,6 +13,7 @@
 import { Route as rootRoute } from './pages/__root'
 import { Route as TestImport } from './pages/test'
 import { Route as IndexImport } from './pages/index'
+import { Route as MentorMentorIdImport } from './pages/mentor.$mentorId'
 
 // Create/Update Routes
 
@@ -27,6 +28,12 @@ const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
+
+const MentorMentorIdRoute = MentorMentorIdImport.update({
+  id: '/mentor/$mentorId',
+  path: '/mentor/$mentorId',
+  getParentRoute: () => rootRoute,
+})
 
 // Populate the FileRoutesByPath interface
 
@@ -46,6 +53,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TestImport
       parentRoute: typeof rootRoute
     }
+    '/mentor/$mentorId': {
+      id: '/mentor/$mentorId'
+      path: '/mentor/$mentorId'
+      fullPath: '/mentor/$mentorId'
+      preLoaderRoute: typeof MentorMentorIdImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -54,36 +68,41 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/test': typeof TestRoute
+  '/mentor/$mentorId': typeof MentorMentorIdRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/test': typeof TestRoute
+  '/mentor/$mentorId': typeof MentorMentorIdRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/test': typeof TestRoute
+  '/mentor/$mentorId': typeof MentorMentorIdRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/test'
+  fullPaths: '/' | '/test' | '/mentor/$mentorId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/test'
-  id: '__root__' | '/' | '/test'
+  to: '/' | '/test' | '/mentor/$mentorId'
+  id: '__root__' | '/' | '/test' | '/mentor/$mentorId'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   TestRoute: typeof TestRoute
+  MentorMentorIdRoute: typeof MentorMentorIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   TestRoute: TestRoute,
+  MentorMentorIdRoute: MentorMentorIdRoute,
 }
 
 export const routeTree = rootRoute
@@ -97,7 +116,8 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/test"
+        "/test",
+        "/mentor/$mentorId"
       ]
     },
     "/": {
@@ -105,6 +125,9 @@ export const routeTree = rootRoute
     },
     "/test": {
       "filePath": "test.tsx"
+    },
+    "/mentor/$mentorId": {
+      "filePath": "mentor.$mentorId.tsx"
     }
   }
 }
