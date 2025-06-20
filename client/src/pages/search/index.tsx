@@ -241,9 +241,19 @@ export function Search() {
     });
 
   return (
-    <Layout style={{ minHeight: '100vh', padding: 24, background: '#fff' }}>
-      <Row gutter={24}>
-        <Col xs={24} sm={6} md={6} lg={5}>
+    <Layout style={{ height: '100vh', padding: 24, overflow: 'hidden' }}>
+      <Row gutter={24} style={{ height: '100%', overflow: 'hidden' }}>
+        <Col
+          xs={24}
+          sm={6}
+          md={6}
+          lg={5}
+          style={{
+            height: '100%',
+            overflowY: 'auto',
+            paddingRight: 16,
+          }}
+        >
           {listCategoriesDataLoading || listSkillsDataLoading ? (
             <Spin />
           ) : (
@@ -268,10 +278,21 @@ export function Search() {
                 selectedExperienceFilter={selectedExperienceFilter}
                 setSelectedExperienceFilter={setSelectedExperienceFilter}
               />
+              <div style={{ height: 50 }} />
             </>
           )}
         </Col>
-        <Col xs={24} sm={18} md={18} lg={19}>
+        <Col
+          xs={24}
+          sm={18}
+          md={18}
+          lg={19}
+          style={{
+            height: '100%',
+            overflowY: 'auto',
+            paddingLeft: 16,
+          }}
+        >
           {listMentorsIsLoading ? (
             <Spin />
           ) : (
@@ -281,6 +302,7 @@ export function Search() {
               ))}
             </Space>
           )}
+          <div style={{ height: 50 }} />
         </Col>
       </Row>
     </Layout>

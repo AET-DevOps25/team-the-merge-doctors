@@ -35,7 +35,6 @@ export function MentorCard({ mentor }: MentorCardProps) {
           <div className="mentorBio">{mentor.bio}</div>
         </div>
         {mentor.skills !== undefined && <MentorSkills skills={mentor.skills} />}
-
         <ViewProfileButton mentor={mentor} />
       </Space>
     </Card>
