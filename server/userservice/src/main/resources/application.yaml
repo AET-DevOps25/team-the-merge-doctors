@@ -5,6 +5,17 @@ postgres:
   port: 5432
   db-name: user_backend
 
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+info:
+  title: User Service API
+  description: API documentation for Mentorship microservice
+  version: 1.0.0
+
 spring:
   application:
     name: user-service

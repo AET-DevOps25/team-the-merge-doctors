@@ -4,6 +4,7 @@ import com.mentorpulse.userservice.dto.*;
 import com.mentorpulse.userservice.models.User;
 import com.mentorpulse.userservice.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,6 +17,7 @@ import javax.management.InvalidAttributeValueException;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static com.mentorpulse.userservice.utils.PatchUpdater.patchUpdate;
 
@@ -37,6 +39,7 @@ public class UserService implements UserDetailsService {
         }
 
         User newUser = User.builder()
+                .id(ObjectUtils.isEmpty(request.id()) ? UUID.randomUUID() : UUID.fromString(request.id()))
                 .name(request.name())
                 .userName(request.userName())
                 .address(request.address())

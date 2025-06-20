@@ -40,20 +40,15 @@ dependencies {
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
-// TODO: The openAPI schema generation should be handled in the gateway service
-val downloadOpenApiSpec by tasks.registering(Exec::class) {
-	val outputFile = "$buildDir/openapi.yaml"
-	val url = "http://localhost:8310/v3/api-docs.yaml"
-
-
-	commandLine("bash", "-c", "curl -o $outputFile $url")
-
-}
-
+// Used for local development only
 openApi {
-	apiDocsUrl.set("http://localhost:8310/v3/api-docs.yaml")
-	outputDir.set(file("$buildDir/openapi"))
-	outputFileName.set("openapi.yaml")
+	apiDocsUrl.set("http://localhost:8310/v3/api-docs")
+	outputDir.set(file("$projectDir/schema"))
+	outputFileName.set("mentorship-service-schema.yaml")
+
+	customBootRun {
+		environment = mapOf("SPRING_PROFILES_ACTIVE" to "dev")
+	}
 }
 
 tasks.withType<Test> {

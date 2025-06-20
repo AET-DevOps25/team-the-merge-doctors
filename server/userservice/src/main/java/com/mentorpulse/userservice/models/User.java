@@ -22,7 +22,7 @@ import java.util.UUID;
 @Table(name = "user_table")
 public class User implements UserDetails {
 
-    @GeneratedValue
+//    @GeneratedValue
     @Id
     private UUID id;
 
