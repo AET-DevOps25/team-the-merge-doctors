@@ -89,7 +89,6 @@ function ViewProfileButton({ mentor }: ViewProfileButtonProps) {
       <Button
         type="primary"
         onClick={() => {
-          /*TODO: remove static link*/
           if (mentor.id !== undefined) {
             navigate({
               to: '/mentor/$mentorId',
