@@ -10,7 +10,7 @@ module.exports = {
       target: 'src/api/user.ts',
     },
     input: {
-      target: '../server/user/user.yaml',
+      target: '../server/userservice/user-openapi.yaml',
     },
   },
   rating: {
@@ -19,7 +19,7 @@ module.exports = {
       target: 'src/api/rating.ts',
     },
     input: {
-      target: '../server/user/rating.yaml',
+      target: '../server/ratingservice/rating-openapi.yaml',
     },
   },
   appointment: {
@@ -28,7 +28,7 @@ module.exports = {
       target: 'src/api/appointment.ts',
     },
     input: {
-      target: '../server/user/appointment.yaml',
+      target: '../server/appointmentservice/appointment-openapi.yaml',
     },
   },
   mentor: {
@@ -37,7 +37,7 @@ module.exports = {
       target: 'src/api/mentor.ts',
     },
     input: {
-      target: '../server/user/mentor.yaml',
+      target: '../server/mentorshipservice/mentor-openapi.yaml',
     },
   },
 };
