@@ -11,14 +11,15 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
-
-import static com.mentorpulse.mentorshipservice.dto.ComparisonOperator.*;
 
 @Repository
 public interface MentorProfileRepository extends CrudRepository<MentorProfile, UUID>, JpaSpecificationExecutor<MentorProfile> {
 
     Boolean existsMentorProfileByMentorId(UUID mentorId);
+
+    Optional<MentorProfile> findByMentorId(UUID mentorId);
 
     static Specification<MentorProfile> createMentorProfileSpecification(ListMentorProfileRequest request) {
         return Specification.allOf(

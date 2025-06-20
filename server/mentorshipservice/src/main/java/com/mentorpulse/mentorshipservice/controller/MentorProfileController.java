@@ -3,6 +3,7 @@ package com.mentorpulse.mentorshipservice.controller;
 import com.mentorpulse.mentorshipservice.dto.*;
 import com.mentorpulse.mentorshipservice.exceptions.AlreadyExistsException;
 import com.mentorpulse.mentorshipservice.exceptions.InvalidArgumentsException;
+import com.mentorpulse.mentorshipservice.exceptions.NotFoundException;
 import com.mentorpulse.mentorshipservice.services.MentorProfileService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -62,6 +63,15 @@ public class MentorProfileController {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(mentorProfileService.updateMentorProfile(request));
         } catch (InvalidAttributeValueException | InvalidArgumentsException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
+        }
+    }
+
+    @GetMapping("/getMentorProfile")
+    public ResponseEntity<GetMentorProfileResponse> getMentorProfile(@RequestBody @Valid GetMentorProfileRequest request) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(mentorProfileService.getMentorProfile(request));
+        } catch (InvalidArgumentsException | NotFoundException ex) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
         }
     }

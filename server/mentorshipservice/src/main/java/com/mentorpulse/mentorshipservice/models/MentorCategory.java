@@ -2,14 +2,16 @@ package com.mentorpulse.mentorshipservice.models;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import lombok.Data;
+import lombok.Getter;
 
 @Embeddable
 @Data
+@Getter
 public class MentorCategory {
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne(cascade = CascadeType.ALL)
     Category category;
 
     Integer yearsOfExperience;

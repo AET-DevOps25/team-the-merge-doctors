@@ -3,18 +3,18 @@ package com.mentorpulse.mentorshipservice.services;
 import com.mentorpulse.mentorshipservice.dto.*;
 import com.mentorpulse.mentorshipservice.exceptions.AlreadyExistsException;
 import com.mentorpulse.mentorshipservice.exceptions.InvalidArgumentsException;
+import com.mentorpulse.mentorshipservice.exceptions.NotFoundException;
 import com.mentorpulse.mentorshipservice.models.Category;
 import com.mentorpulse.mentorshipservice.models.MentorProfile;
 import com.mentorpulse.mentorshipservice.models.Skill;
 import com.mentorpulse.mentorshipservice.repositories.CategoryRepository;
 import com.mentorpulse.mentorshipservice.repositories.MentorProfileRepository;
 import com.mentorpulse.mentorshipservice.repositories.SkillRepository;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.management.InvalidAttributeValueException;
 import java.util.List;
@@ -30,7 +30,7 @@ public class MentorProfileService {
     private final SkillRepository skillRepository;
 
     @Transactional
-    public CreateSkillResponse createSkill(@RequestBody @Valid CreateSkillRequest request) throws InvalidArgumentsException, AlreadyExistsException {
+    public CreateSkillResponse createSkill(CreateSkillRequest request) throws InvalidArgumentsException, AlreadyExistsException {
         String skillName = request.skill() == null ? null : request.skill().trim();
         if (skillName == null || skillName.trim().isEmpty()) {
             throw new InvalidArgumentsException("skill");
@@ -38,7 +38,10 @@ public class MentorProfileService {
         if (skillRepository.existsSkillByName(skillName)) {
             throw new AlreadyExistsException("skill", skillName);
         }
-        Skill skill = Skill.builder().name(skillName).build();
+        Skill skill = Skill.builder()
+                .id(ObjectUtils.isEmpty(request.id()) ? UUID.randomUUID() : UUID.fromString(request.id()))
+                .name(skillName)
+                .build();
         skill = skillRepository.save(skill);
         return new CreateSkillResponse(skill);
     }
@@ -58,7 +61,10 @@ public class MentorProfileService {
         if (skillRepository.existsSkillByName(categoryName)) {
             throw new AlreadyExistsException("category", categoryName);
         }
-        Category category = Category.builder().name(categoryName).build();
+        Category category = Category.builder()
+                .id(ObjectUtils.isEmpty(request.id()) ? UUID.randomUUID() : UUID.fromString(request.id()))
+                .name(categoryName)
+                .build();
         category = categoryRepository.save(category);
         return new CreateCategoryResponse(category);
     }
@@ -78,8 +84,11 @@ public class MentorProfileService {
         if (mentorProfileRepository.existsMentorProfileByMentorId(mentorId)) {
             throw new AlreadyExistsException("mentorId", mentorId);
         }
-
-        MentorProfile mentorProfile = mentorProfileRepository.save(request.mentorProfile());
+        MentorProfile mentorProfile = request.mentorProfile();
+        if (ObjectUtils.isEmpty(mentorProfile.getId())) {
+            mentorProfile.setId(UUID.randomUUID());
+        }
+        mentorProfile = mentorProfileRepository.save(mentorProfile);
         return new CreateMentorProfileResponse(mentorProfile);
     }
 
@@ -102,6 +111,19 @@ public class MentorProfileService {
         mentorProfileRepository.delete(existingProfile);
         return new DeleteMentorProfileResponse(existingProfile);
     }
+
+    @Transactional(readOnly = true)
+    public GetMentorProfileResponse getMentorProfile(GetMentorProfileRequest request) throws InvalidArgumentsException, NotFoundException {
+        UUID mentorId = request.mentorId();
+        if (mentorId == null) {
+            throw new InvalidArgumentsException("mentorId");
+        }
+        MentorProfile mentorProfile = mentorProfileRepository.findByMentorId(mentorId)
+                .orElseThrow(() -> new NotFoundException("mentorProfile"));
+
+        return new GetMentorProfileResponse(mentorProfile);
+    }
+
     @Transactional(readOnly = true)
     public ListMentorProfileResponse listMentorProfiles(ListMentorProfileRequest request) {
         Specification<MentorProfile> mentorProfileSpecification = MentorProfileRepository.createMentorProfileSpecification(request);

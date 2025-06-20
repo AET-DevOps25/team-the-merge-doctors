@@ -3,7 +3,7 @@ package com.mentorpulse.mentorshipservice.models;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -15,7 +15,7 @@ import java.util.UUID;
 public class MentorProfile {
 
     @Id
-    @GeneratedValue
+//    @GeneratedValue
     UUID id;
 
     @Column(unique = true, nullable = false)
@@ -23,8 +23,8 @@ public class MentorProfile {
 
     String bio;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Skill> skills;
+    @ManyToMany
+    Set<Skill> skills;
 
     Boolean isAvailable;
 
