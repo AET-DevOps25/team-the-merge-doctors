@@ -2,6 +2,9 @@ services:
   client:
     platform: linux/amd64
     image: ghcr.io/aet-devops25/team-the-merge-doctors/client:latest
+    build:
+      context: ./client
+      dockerfile: Dockerfile
     ports:
       - 3000:80
 
