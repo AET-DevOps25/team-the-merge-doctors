@@ -1,0 +1,29 @@
+server:
+  port: 8210
+postgres:
+  ip: postgres-db
+  port: 5432
+  db-name: user_backend
+
+spring:
+  application:
+    name: user-service
+  datasource:
+    password: qweasdzxc
+    username: merge_doctor_backend
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${postgres.ip}:${postgres.port}/${postgres.db-name}
+  jpa:
+    generate-ddl: true
+    database: POSTGRESQL
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  driver-class-name: org.postgresql.Driver
+  sql:
+    init:
+      platform: postgres
+
+jwt:
+  secret:
+    file: ${JWT_SECRET_DIR:/home/cnf/mentorpulse-certificates}/jwt-secret.key
