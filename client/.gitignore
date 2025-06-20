@@ -24,4 +24,4 @@ dist-ssr
 *.sw?
 
 # Generated
-src/api
+src/api/*

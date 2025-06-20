@@ -1,49 +1,44 @@
 import { Button, Card, Col, Divider, Row, Space, Tag } from 'antd';
-import type { Mentor, MentorCategory, Skill, User } from '@/types/types';
 import '@/components/organisms/mentor-search/MentorCard.css';
 import { useNavigate } from '@tanstack/react-router';
+import type { MentorCategory, MentorProfile, Skill } from '@/api/mentor';
+import { useGetUser } from '@/api/user';
 
 interface MentorCardProps {
-  mentor: Mentor;
-  user: User;
+  mentor: MentorProfile;
 }
 
-export function MentorCard({ mentor, user }: MentorCardProps) {
+export function MentorCard({ mentor }: MentorCardProps) {
   // getAverageRating(mentorId)
   // getNumberOfReviews(mentorId)
   // getMentor(mentorId): should include categories, skills, bio, etc.
 
+  const { data: userData } = useGetUser({ req: { userId: mentor.id } });
+
   return (
     <Card
-      // style={{ width: 500 }}
       title={
         <Row>
-          <Col span={24}>{user.name} </Col>
-          <Col span={24}>
-            <MentorCategoryPill category={mentor.mentorCategory} />
-          </Col>
+          {/* TODO: add name once its updated in schema */}
+          {/* <Col span={24}>{user.name?.}</Col> */}
+          {mentor.mentorCategory !== undefined && (
+            <Col span={24}>
+              <MentorCategoryPill category={mentor.mentorCategory} />
+            </Col>
+          )}
         </Row>
       }
     >
       <Space direction="vertical">
-        <MentorBio bioText={mentor.bio} />
-        <MentorSkills skills={mentor.skills} />
+        <div>
+          <div style={{ fontWeight: 'bold' }}>About</div>
+          <div className="mentorBio">{mentor.bio}</div>
+        </div>
+        {mentor.skills !== undefined && <MentorSkills skills={mentor.skills} />}
+
         <ViewProfileButton mentor={mentor} />
       </Space>
     </Card>
-  );
-}
-
-interface MentorBioProps {
-  bioText: string;
-}
-
-function MentorBio({ bioText }: MentorBioProps) {
-  return (
-    <div>
-      <div style={{ fontWeight: 'bold' }}>About</div>
-      <div className="mentorBio">{bioText}</div>
-    </div>
   );
 }
 
@@ -55,9 +50,7 @@ function MentorSkills({ skills }: MentorSkillsProps) {
   return (
     <div>
       <div style={{ fontWeight: 'bold' }}>Skills</div>
-      {skills.map((skill) => (
-        <SkillPill key={skill.id} skill={skill} />
-      ))}
+      {skills?.map((skill) => <SkillPill key={skill?.id} skill={skill} />)}
     </div>
   );
 }
@@ -69,7 +62,7 @@ interface MentorCategoryPillProps {
 function MentorCategoryPill({ category }: MentorCategoryPillProps) {
   return (
     <Tag>
-      {category.category.name}
+      {category.category?.name}
       <Divider type="vertical" size="large" />
       {category.yearsOfExperience} years
     </Tag>
@@ -85,7 +78,7 @@ function SkillPill({ skill }: SkillPillProps) {
 }
 
 interface ViewProfileButtonProps {
-  mentor: Mentor;
+  mentor: MentorProfile;
 }
 
 function ViewProfileButton({ mentor }: ViewProfileButtonProps) {
@@ -97,7 +90,12 @@ function ViewProfileButton({ mentor }: ViewProfileButtonProps) {
         type="primary"
         onClick={() => {
           /*TODO: remove static link*/
-          navigate({ to: '/mentor/$mentorId', params: { mentorId: '123' } });
+          if (mentor.id !== undefined) {
+            navigate({
+              to: '/mentor/$mentorId',
+              params: { mentorId: mentor.id },
+            });
+          }
         }}
       >
         View Profile
