@@ -36,6 +36,7 @@ export function SearchFilter<T extends ItemType>({
         placeholder={placeholder}
         value={filterInput}
         onChange={(e) => setFilterInput(e.target.value)}
+        allowClear
       />
       {filteredItems.map((item) => (
         <Checkbox
@@ -64,9 +65,11 @@ function filterItems<T extends ItemType>(
   input: string,
   selectedItems: T[],
 ): T[] {
-  return items.filter(
+  const unselected = items.filter(
     (item) =>
-      item.name?.toLowerCase().includes(input.toLowerCase()) ||
-      selectedItems.some((selectedItem) => selectedItem.id == item.id),
+      item.name?.toLowerCase().includes(input.toLowerCase()) &&
+      !selectedItems.some((selectedItem) => selectedItem.id == item.id),
   );
+
+  return [...selectedItems, ...unselected];
 }

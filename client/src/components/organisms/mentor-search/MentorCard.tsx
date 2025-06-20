@@ -20,7 +20,7 @@ export function MentorCard({ mentor }: MentorCardProps) {
       title={
         <Row>
           {/* TODO: add name once its updated in schema */}
-          {/* <Col span={24}>{user.name?.}</Col> */}
+          {/* <Col span={24}>{userData?.data.user}</Col> */}
           {mentor.mentorCategory !== undefined && (
             <Col span={24}>
               <MentorCategoryPill category={mentor.mentorCategory} />
