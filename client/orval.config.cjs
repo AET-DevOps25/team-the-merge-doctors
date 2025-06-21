@@ -1,5 +1,8 @@
 const SHARED_CONFIG = {
   client: 'react-query',
+  baseUrl: {
+    getBaseUrlFromSpecification: true,
+  },
   mock: false,
 };
 
@@ -37,7 +40,8 @@ module.exports = {
       target: 'src/api/mentor.ts',
     },
     input: {
-      target: '../server/mentorshipservice/schema/mentorship-service-schema.yaml',
+      target:
+        '../server/mentorshipservice/schema/mentorship-service-schema.yaml',
     },
   },
 };

@@ -5,39 +5,23 @@
  * API documentation for the Mentorship microservice
  * OpenAPI spec version: 1.0.0
  */
-import {
-  useMutation,
-  useQuery
-} from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
   MutationFunction,
   QueryClient,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
   UseMutationOptions,
   UseMutationResult,
-  UseQueryOptions,
-  UseQueryResult
 } from '@tanstack/react-query';
 
 import * as axios from 'axios';
-import type {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
+import type { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
-export interface CreateSkillRequest {
-  id?: string;
-  skill?: string;
+export interface ListSkillRequest {
+  [key: string]: unknown;
 }
 
-export interface CreateSkillResponse {
-  skill?: Skill;
+export interface ListSkillResponse {
+  skills?: Skill[];
 }
 
 export interface Skill {
@@ -45,13 +29,36 @@ export interface Skill {
   name?: string;
 }
 
+export type ComparisonFilterOperator =
+  (typeof ComparisonFilterOperator)[keyof typeof ComparisonFilterOperator];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ComparisonFilterOperator = {
+  GREATER_THAN: 'GREATER_THAN',
+  GREATER_THAN_OR_EQUAL: 'GREATER_THAN_OR_EQUAL',
+  LESS_THAN: 'LESS_THAN',
+  LESS_THAN_OR_EQUAL: 'LESS_THAN_OR_EQUAL',
+  EQUAL: 'EQUAL',
+} as const;
+
+export interface ComparisonFilter {
+  operator?: ComparisonFilterOperator;
+  value?: number;
+}
+
+export interface ListMentorProfileRequest {
+  categoryIds?: string[];
+  skillIds?: string[];
+  yearsOfExperienceFilter?: ComparisonFilter;
+}
+
 export interface Category {
   id?: string;
   name?: string;
 }
 
-export interface CreateMentorProfileRequest {
-  mentorProfile?: MentorProfile;
+export interface ListMentorProfileResponse {
+  mentorProfile?: MentorProfile[];
 }
 
 export interface MentorCategory {
@@ -66,6 +73,35 @@ export interface MentorProfile {
   skills?: Skill[];
   isAvailable?: boolean;
   mentorCategory?: MentorCategory;
+}
+
+export interface ListCategoryRequest {
+  [key: string]: unknown;
+}
+
+export interface ListCategoryResponse {
+  categories?: Category[];
+}
+
+export interface GetMentorProfileRequest {
+  mentorId?: string;
+}
+
+export interface GetMentorProfileResponse {
+  profile?: MentorProfile;
+}
+
+export interface CreateSkillRequest {
+  id?: string;
+  skill?: string;
+}
+
+export interface CreateSkillResponse {
+  skill?: Skill;
+}
+
+export interface CreateMentorProfileRequest {
+  mentorProfile?: MentorProfile;
 }
 
 export interface CreateMentorProfileResponse {
@@ -89,53 +125,6 @@ export interface UpdateMentorProfileResponse {
   mentorProfile?: MentorProfile;
 }
 
-export interface ListSkillRequest { [key: string]: unknown }
-
-export interface ListSkillResponse {
-  skills?: Skill[];
-}
-
-export type ComparisonFilterOperator = typeof ComparisonFilterOperator[keyof typeof ComparisonFilterOperator];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const ComparisonFilterOperator = {
-  GREATER_THAN: 'GREATER_THAN',
-  GREATER_THAN_OR_EQUAL: 'GREATER_THAN_OR_EQUAL',
-  LESS_THAN: 'LESS_THAN',
-  LESS_THAN_OR_EQUAL: 'LESS_THAN_OR_EQUAL',
-  EQUAL: 'EQUAL',
-} as const;
-
-export interface ComparisonFilter {
-  operator?: ComparisonFilterOperator;
-  value?: number;
-}
-
-export interface ListMentorProfileRequest {
-  categoryIds?: string[];
-  skillIds?: string[];
-  yearsOfExperienceFilter?: ComparisonFilter;
-}
-
-export interface ListMentorProfileResponse {
-  mentorProfile?: MentorProfile[];
-}
-
-export interface ListCategoryRequest { [key: string]: unknown }
-
-export interface ListCategoryResponse {
-  categories?: Category[];
-}
-
-export interface GetMentorProfileRequest {
-  mentorId?: string;
-}
-
-export interface GetMentorProfileResponse {
-  profile?: MentorProfile;
-}
-
 export interface DeleteMentorProfileRequest {
   profileId?: string;
 }
@@ -144,626 +133,718 @@ export interface DeleteMentorProfileResponse {
   mentorProfile?: MentorProfile;
 }
 
-export type ListSkillsParams = {
-request: ListSkillRequest;
+export const listSkills = (
+  listSkillRequest: ListSkillRequest,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<ListSkillResponse>> => {
+  return axios.default.post(
+    `http://localhost:8310/api/mentorship/listSkills`,
+    listSkillRequest,
+    options,
+  );
 };
 
-export type ListMentorProfilesParams = {
-request: ListMentorProfileRequest;
+export const getListSkillsMutationOptions = <
+  TError = AxiosError<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof listSkills>>,
+    TError,
+    { data: ListSkillRequest },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof listSkills>>,
+  TError,
+  { data: ListSkillRequest },
+  TContext
+> => {
+  const mutationKey = ['listSkills'];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof listSkills>>,
+    { data: ListSkillRequest }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return listSkills(data, axiosOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
 };
 
-export type ListCategoriesParams = {
-request: ListCategoryRequest;
+export type ListSkillsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof listSkills>>
+>;
+export type ListSkillsMutationBody = ListSkillRequest;
+export type ListSkillsMutationError = AxiosError<unknown>;
+
+export const useListSkills = <TError = AxiosError<unknown>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof listSkills>>,
+      TError,
+      { data: ListSkillRequest },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof listSkills>>,
+  TError,
+  { data: ListSkillRequest },
+  TContext
+> => {
+  const mutationOptions = getListSkillsMutationOptions(options);
+
+  return useMutation(mutationOptions, queryClient);
 };
 
-export type GetMentorProfileParams = {
-request: GetMentorProfileRequest;
+export const listMentorProfiles = (
+  listMentorProfileRequest: ListMentorProfileRequest,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<ListMentorProfileResponse>> => {
+  return axios.default.post(
+    `http://localhost:8310/api/mentorship/listMentorProfile`,
+    listMentorProfileRequest,
+    options,
+  );
+};
+
+export const getListMentorProfilesMutationOptions = <
+  TError = AxiosError<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof listMentorProfiles>>,
+    TError,
+    { data: ListMentorProfileRequest },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof listMentorProfiles>>,
+  TError,
+  { data: ListMentorProfileRequest },
+  TContext
+> => {
+  const mutationKey = ['listMentorProfiles'];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof listMentorProfiles>>,
+    { data: ListMentorProfileRequest }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return listMentorProfiles(data, axiosOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type ListMentorProfilesMutationResult = NonNullable<
+  Awaited<ReturnType<typeof listMentorProfiles>>
+>;
+export type ListMentorProfilesMutationBody = ListMentorProfileRequest;
+export type ListMentorProfilesMutationError = AxiosError<unknown>;
+
+export const useListMentorProfiles = <
+  TError = AxiosError<unknown>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof listMentorProfiles>>,
+      TError,
+      { data: ListMentorProfileRequest },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof listMentorProfiles>>,
+  TError,
+  { data: ListMentorProfileRequest },
+  TContext
+> => {
+  const mutationOptions = getListMentorProfilesMutationOptions(options);
+
+  return useMutation(mutationOptions, queryClient);
+};
+
+export const listCategories = (
+  listCategoryRequest: ListCategoryRequest,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<ListCategoryResponse>> => {
+  return axios.default.post(
+    `http://localhost:8310/api/mentorship/listCategories`,
+    listCategoryRequest,
+    options,
+  );
+};
+
+export const getListCategoriesMutationOptions = <
+  TError = AxiosError<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof listCategories>>,
+    TError,
+    { data: ListCategoryRequest },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof listCategories>>,
+  TError,
+  { data: ListCategoryRequest },
+  TContext
+> => {
+  const mutationKey = ['listCategories'];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof listCategories>>,
+    { data: ListCategoryRequest }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return listCategories(data, axiosOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type ListCategoriesMutationResult = NonNullable<
+  Awaited<ReturnType<typeof listCategories>>
+>;
+export type ListCategoriesMutationBody = ListCategoryRequest;
+export type ListCategoriesMutationError = AxiosError<unknown>;
+
+export const useListCategories = <
+  TError = AxiosError<unknown>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof listCategories>>,
+      TError,
+      { data: ListCategoryRequest },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof listCategories>>,
+  TError,
+  { data: ListCategoryRequest },
+  TContext
+> => {
+  const mutationOptions = getListCategoriesMutationOptions(options);
+
+  return useMutation(mutationOptions, queryClient);
+};
+
+export const getMentorProfile = (
+  getMentorProfileRequest: GetMentorProfileRequest,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<GetMentorProfileResponse>> => {
+  return axios.default.post(
+    `http://localhost:8310/api/mentorship/getMentorProfile`,
+    getMentorProfileRequest,
+    options,
+  );
+};
+
+export const getGetMentorProfileMutationOptions = <
+  TError = AxiosError<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof getMentorProfile>>,
+    TError,
+    { data: GetMentorProfileRequest },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof getMentorProfile>>,
+  TError,
+  { data: GetMentorProfileRequest },
+  TContext
+> => {
+  const mutationKey = ['getMentorProfile'];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof getMentorProfile>>,
+    { data: GetMentorProfileRequest }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return getMentorProfile(data, axiosOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type GetMentorProfileMutationResult = NonNullable<
+  Awaited<ReturnType<typeof getMentorProfile>>
+>;
+export type GetMentorProfileMutationBody = GetMentorProfileRequest;
+export type GetMentorProfileMutationError = AxiosError<unknown>;
+
+export const useGetMentorProfile = <
+  TError = AxiosError<unknown>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof getMentorProfile>>,
+      TError,
+      { data: GetMentorProfileRequest },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof getMentorProfile>>,
+  TError,
+  { data: GetMentorProfileRequest },
+  TContext
+> => {
+  const mutationOptions = getGetMentorProfileMutationOptions(options);
+
+  return useMutation(mutationOptions, queryClient);
 };
 
 export const createSkill = (
-    createSkillRequest: CreateSkillRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<CreateSkillResponse>> => {
-    
-    
-    return axios.default.post(
-      `/api/mentorship/createSkill`,
-      createSkillRequest,options
-    );
-  }
+  createSkillRequest: CreateSkillRequest,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<CreateSkillResponse>> => {
+  return axios.default.post(
+    `http://localhost:8310/api/mentorship/createSkill`,
+    createSkillRequest,
+    options,
+  );
+};
 
+export const getCreateSkillMutationOptions = <
+  TError = AxiosError<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createSkill>>,
+    TError,
+    { data: CreateSkillRequest },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createSkill>>,
+  TError,
+  { data: CreateSkillRequest },
+  TContext
+> => {
+  const mutationKey = ['createSkill'];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
 
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createSkill>>,
+    { data: CreateSkillRequest }
+  > = (props) => {
+    const { data } = props ?? {};
 
-export const getCreateSkillMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSkill>>, TError,{data: CreateSkillRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof createSkill>>, TError,{data: CreateSkillRequest}, TContext> => {
+    return createSkill(data, axiosOptions);
+  };
 
-const mutationKey = ['createSkill'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+  return { mutationFn, ...mutationOptions };
+};
 
-      
+export type CreateSkillMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createSkill>>
+>;
+export type CreateSkillMutationBody = CreateSkillRequest;
+export type CreateSkillMutationError = AxiosError<unknown>;
 
+export const useCreateSkill = <
+  TError = AxiosError<unknown>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof createSkill>>,
+      TError,
+      { data: CreateSkillRequest },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof createSkill>>,
+  TError,
+  { data: CreateSkillRequest },
+  TContext
+> => {
+  const mutationOptions = getCreateSkillMutationOptions(options);
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createSkill>>, {data: CreateSkillRequest}> = (props) => {
-          const {data} = props ?? {};
+  return useMutation(mutationOptions, queryClient);
+};
 
-          return  createSkill(data,axiosOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateSkillMutationResult = NonNullable<Awaited<ReturnType<typeof createSkill>>>
-    export type CreateSkillMutationBody = CreateSkillRequest
-    export type CreateSkillMutationError = AxiosError<unknown>
-
-    export const useCreateSkill = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createSkill>>, TError,{data: CreateSkillRequest}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof createSkill>>,
-        TError,
-        {data: CreateSkillRequest},
-        TContext
-      > => {
-
-      const mutationOptions = getCreateSkillMutationOptions(options);
-
-      return useMutation(mutationOptions , queryClient);
-    }
-    
 export const createMentorProfile = (
-    createMentorProfileRequest: CreateMentorProfileRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<CreateMentorProfileResponse>> => {
-    
-    
-    return axios.default.post(
-      `/api/mentorship/createMentorProfile`,
-      createMentorProfileRequest,options
-    );
-  }
+  createMentorProfileRequest: CreateMentorProfileRequest,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<CreateMentorProfileResponse>> => {
+  return axios.default.post(
+    `http://localhost:8310/api/mentorship/createMentorProfile`,
+    createMentorProfileRequest,
+    options,
+  );
+};
 
+export const getCreateMentorProfileMutationOptions = <
+  TError = AxiosError<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createMentorProfile>>,
+    TError,
+    { data: CreateMentorProfileRequest },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createMentorProfile>>,
+  TError,
+  { data: CreateMentorProfileRequest },
+  TContext
+> => {
+  const mutationKey = ['createMentorProfile'];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
 
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createMentorProfile>>,
+    { data: CreateMentorProfileRequest }
+  > = (props) => {
+    const { data } = props ?? {};
 
-export const getCreateMentorProfileMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createMentorProfile>>, TError,{data: CreateMentorProfileRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof createMentorProfile>>, TError,{data: CreateMentorProfileRequest}, TContext> => {
+    return createMentorProfile(data, axiosOptions);
+  };
 
-const mutationKey = ['createMentorProfile'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+  return { mutationFn, ...mutationOptions };
+};
 
-      
+export type CreateMentorProfileMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createMentorProfile>>
+>;
+export type CreateMentorProfileMutationBody = CreateMentorProfileRequest;
+export type CreateMentorProfileMutationError = AxiosError<unknown>;
 
+export const useCreateMentorProfile = <
+  TError = AxiosError<unknown>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof createMentorProfile>>,
+      TError,
+      { data: CreateMentorProfileRequest },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof createMentorProfile>>,
+  TError,
+  { data: CreateMentorProfileRequest },
+  TContext
+> => {
+  const mutationOptions = getCreateMentorProfileMutationOptions(options);
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createMentorProfile>>, {data: CreateMentorProfileRequest}> = (props) => {
-          const {data} = props ?? {};
+  return useMutation(mutationOptions, queryClient);
+};
 
-          return  createMentorProfile(data,axiosOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateMentorProfileMutationResult = NonNullable<Awaited<ReturnType<typeof createMentorProfile>>>
-    export type CreateMentorProfileMutationBody = CreateMentorProfileRequest
-    export type CreateMentorProfileMutationError = AxiosError<unknown>
-
-    export const useCreateMentorProfile = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createMentorProfile>>, TError,{data: CreateMentorProfileRequest}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof createMentorProfile>>,
-        TError,
-        {data: CreateMentorProfileRequest},
-        TContext
-      > => {
-
-      const mutationOptions = getCreateMentorProfileMutationOptions(options);
-
-      return useMutation(mutationOptions , queryClient);
-    }
-    
 export const createCategory = (
-    createCategoryRequest: CreateCategoryRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<CreateCategoryResponse>> => {
-    
-    
-    return axios.default.post(
-      `/api/mentorship/createCategory`,
-      createCategoryRequest,options
-    );
-  }
+  createCategoryRequest: CreateCategoryRequest,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<CreateCategoryResponse>> => {
+  return axios.default.post(
+    `http://localhost:8310/api/mentorship/createCategory`,
+    createCategoryRequest,
+    options,
+  );
+};
 
+export const getCreateCategoryMutationOptions = <
+  TError = AxiosError<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createCategory>>,
+    TError,
+    { data: CreateCategoryRequest },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createCategory>>,
+  TError,
+  { data: CreateCategoryRequest },
+  TContext
+> => {
+  const mutationKey = ['createCategory'];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
 
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createCategory>>,
+    { data: CreateCategoryRequest }
+  > = (props) => {
+    const { data } = props ?? {};
 
-export const getCreateCategoryMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCategory>>, TError,{data: CreateCategoryRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof createCategory>>, TError,{data: CreateCategoryRequest}, TContext> => {
+    return createCategory(data, axiosOptions);
+  };
 
-const mutationKey = ['createCategory'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+  return { mutationFn, ...mutationOptions };
+};
 
-      
+export type CreateCategoryMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createCategory>>
+>;
+export type CreateCategoryMutationBody = CreateCategoryRequest;
+export type CreateCategoryMutationError = AxiosError<unknown>;
 
+export const useCreateCategory = <
+  TError = AxiosError<unknown>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof createCategory>>,
+      TError,
+      { data: CreateCategoryRequest },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof createCategory>>,
+  TError,
+  { data: CreateCategoryRequest },
+  TContext
+> => {
+  const mutationOptions = getCreateCategoryMutationOptions(options);
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createCategory>>, {data: CreateCategoryRequest}> = (props) => {
-          const {data} = props ?? {};
+  return useMutation(mutationOptions, queryClient);
+};
 
-          return  createCategory(data,axiosOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateCategoryMutationResult = NonNullable<Awaited<ReturnType<typeof createCategory>>>
-    export type CreateCategoryMutationBody = CreateCategoryRequest
-    export type CreateCategoryMutationError = AxiosError<unknown>
-
-    export const useCreateCategory = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCategory>>, TError,{data: CreateCategoryRequest}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof createCategory>>,
-        TError,
-        {data: CreateCategoryRequest},
-        TContext
-      > => {
-
-      const mutationOptions = getCreateCategoryMutationOptions(options);
-
-      return useMutation(mutationOptions , queryClient);
-    }
-    
 export const updateMentorProfile = (
-    updateMentorProfileRequest: UpdateMentorProfileRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<UpdateMentorProfileResponse>> => {
-    
-    
-    return axios.default.patch(
-      `/api/mentorship/updateMentorProfile`,
-      updateMentorProfileRequest,options
-    );
-  }
-
-
-
-export const getUpdateMentorProfileMutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateMentorProfile>>, TError,{data: UpdateMentorProfileRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof updateMentorProfile>>, TError,{data: UpdateMentorProfileRequest}, TContext> => {
-
-const mutationKey = ['updateMentorProfile'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateMentorProfile>>, {data: UpdateMentorProfileRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  updateMentorProfile(data,axiosOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type UpdateMentorProfileMutationResult = NonNullable<Awaited<ReturnType<typeof updateMentorProfile>>>
-    export type UpdateMentorProfileMutationBody = UpdateMentorProfileRequest
-    export type UpdateMentorProfileMutationError = AxiosError<unknown>
-
-    export const useUpdateMentorProfile = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateMentorProfile>>, TError,{data: UpdateMentorProfileRequest}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof updateMentorProfile>>,
-        TError,
-        {data: UpdateMentorProfileRequest},
-        TContext
-      > => {
-
-      const mutationOptions = getUpdateMentorProfileMutationOptions(options);
-
-      return useMutation(mutationOptions , queryClient);
-    }
-    
-export const listSkills = (
-    params: ListSkillsParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ListSkillResponse>> => {
-    
-    
-    return axios.default.get(
-      `/api/mentorship/listSkills`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
-
-export const getListSkillsQueryKey = (params: ListSkillsParams,) => {
-    return [`/api/mentorship/listSkills`, ...(params ? [params]: [])] as const;
-    }
-
-    
-export const getListSkillsQueryOptions = <TData = Awaited<ReturnType<typeof listSkills>>, TError = AxiosError<unknown>>(params: ListSkillsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listSkills>>, TError, TData>>, axios?: AxiosRequestConfig}
-) => {
-
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getListSkillsQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof listSkills>>> = ({ signal }) => listSkills(params, { signal, ...axiosOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listSkills>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ListSkillsQueryResult = NonNullable<Awaited<ReturnType<typeof listSkills>>>
-export type ListSkillsQueryError = AxiosError<unknown>
-
-
-export function useListSkills<TData = Awaited<ReturnType<typeof listSkills>>, TError = AxiosError<unknown>>(
- params: ListSkillsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listSkills>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof listSkills>>,
-          TError,
-          Awaited<ReturnType<typeof listSkills>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListSkills<TData = Awaited<ReturnType<typeof listSkills>>, TError = AxiosError<unknown>>(
- params: ListSkillsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listSkills>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof listSkills>>,
-          TError,
-          Awaited<ReturnType<typeof listSkills>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListSkills<TData = Awaited<ReturnType<typeof listSkills>>, TError = AxiosError<unknown>>(
- params: ListSkillsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listSkills>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useListSkills<TData = Awaited<ReturnType<typeof listSkills>>, TError = AxiosError<unknown>>(
- params: ListSkillsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listSkills>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getListSkillsQueryOptions(params,options)
-
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-
-export const listMentorProfiles = (
-    params: ListMentorProfilesParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ListMentorProfileResponse>> => {
-    
-    
-    return axios.default.get(
-      `/api/mentorship/listMentorProfile`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
-
-export const getListMentorProfilesQueryKey = (params: ListMentorProfilesParams,) => {
-    return [`/api/mentorship/listMentorProfile`, ...(params ? [params]: [])] as const;
-    }
-
-    
-export const getListMentorProfilesQueryOptions = <TData = Awaited<ReturnType<typeof listMentorProfiles>>, TError = AxiosError<unknown>>(params: ListMentorProfilesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listMentorProfiles>>, TError, TData>>, axios?: AxiosRequestConfig}
-) => {
-
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getListMentorProfilesQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof listMentorProfiles>>> = ({ signal }) => listMentorProfiles(params, { signal, ...axiosOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listMentorProfiles>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ListMentorProfilesQueryResult = NonNullable<Awaited<ReturnType<typeof listMentorProfiles>>>
-export type ListMentorProfilesQueryError = AxiosError<unknown>
-
-
-export function useListMentorProfiles<TData = Awaited<ReturnType<typeof listMentorProfiles>>, TError = AxiosError<unknown>>(
- params: ListMentorProfilesParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listMentorProfiles>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof listMentorProfiles>>,
-          TError,
-          Awaited<ReturnType<typeof listMentorProfiles>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListMentorProfiles<TData = Awaited<ReturnType<typeof listMentorProfiles>>, TError = AxiosError<unknown>>(
- params: ListMentorProfilesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listMentorProfiles>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof listMentorProfiles>>,
-          TError,
-          Awaited<ReturnType<typeof listMentorProfiles>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListMentorProfiles<TData = Awaited<ReturnType<typeof listMentorProfiles>>, TError = AxiosError<unknown>>(
- params: ListMentorProfilesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listMentorProfiles>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useListMentorProfiles<TData = Awaited<ReturnType<typeof listMentorProfiles>>, TError = AxiosError<unknown>>(
- params: ListMentorProfilesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listMentorProfiles>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getListMentorProfilesQueryOptions(params,options)
-
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-
-export const listCategories = (
-    params: ListCategoriesParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ListCategoryResponse>> => {
-    
-    
-    return axios.default.get(
-      `/api/mentorship/listCategories`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
-
-export const getListCategoriesQueryKey = (params: ListCategoriesParams,) => {
-    return [`/api/mentorship/listCategories`, ...(params ? [params]: [])] as const;
-    }
-
-    
-export const getListCategoriesQueryOptions = <TData = Awaited<ReturnType<typeof listCategories>>, TError = AxiosError<unknown>>(params: ListCategoriesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listCategories>>, TError, TData>>, axios?: AxiosRequestConfig}
-) => {
-
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getListCategoriesQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof listCategories>>> = ({ signal }) => listCategories(params, { signal, ...axiosOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listCategories>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type ListCategoriesQueryResult = NonNullable<Awaited<ReturnType<typeof listCategories>>>
-export type ListCategoriesQueryError = AxiosError<unknown>
-
-
-export function useListCategories<TData = Awaited<ReturnType<typeof listCategories>>, TError = AxiosError<unknown>>(
- params: ListCategoriesParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof listCategories>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof listCategories>>,
-          TError,
-          Awaited<ReturnType<typeof listCategories>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListCategories<TData = Awaited<ReturnType<typeof listCategories>>, TError = AxiosError<unknown>>(
- params: ListCategoriesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listCategories>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof listCategories>>,
-          TError,
-          Awaited<ReturnType<typeof listCategories>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useListCategories<TData = Awaited<ReturnType<typeof listCategories>>, TError = AxiosError<unknown>>(
- params: ListCategoriesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listCategories>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useListCategories<TData = Awaited<ReturnType<typeof listCategories>>, TError = AxiosError<unknown>>(
- params: ListCategoriesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof listCategories>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getListCategoriesQueryOptions(params,options)
-
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
-
-export const getMentorProfile = (
-    params: GetMentorProfileParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<GetMentorProfileResponse>> => {
-    
-    
-    return axios.default.get(
-      `/api/mentorship/getMentorProfile`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
-
-
-export const getGetMentorProfileQueryKey = (params: GetMentorProfileParams,) => {
-    return [`/api/mentorship/getMentorProfile`, ...(params ? [params]: [])] as const;
-    }
-
-    
-export const getGetMentorProfileQueryOptions = <TData = Awaited<ReturnType<typeof getMentorProfile>>, TError = AxiosError<unknown>>(params: GetMentorProfileParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMentorProfile>>, TError, TData>>, axios?: AxiosRequestConfig}
-) => {
-
-const {query: queryOptions, axios: axiosOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getGetMentorProfileQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMentorProfile>>> = ({ signal }) => getMentorProfile(params, { signal, ...axiosOptions });
-
-      
-
-      
-
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMentorProfile>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
-
-export type GetMentorProfileQueryResult = NonNullable<Awaited<ReturnType<typeof getMentorProfile>>>
-export type GetMentorProfileQueryError = AxiosError<unknown>
-
-
-export function useGetMentorProfile<TData = Awaited<ReturnType<typeof getMentorProfile>>, TError = AxiosError<unknown>>(
- params: GetMentorProfileParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMentorProfile>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getMentorProfile>>,
-          TError,
-          Awaited<ReturnType<typeof getMentorProfile>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMentorProfile<TData = Awaited<ReturnType<typeof getMentorProfile>>, TError = AxiosError<unknown>>(
- params: GetMentorProfileParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMentorProfile>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getMentorProfile>>,
-          TError,
-          Awaited<ReturnType<typeof getMentorProfile>>
-        > , 'initialData'
-      >, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetMentorProfile<TData = Awaited<ReturnType<typeof getMentorProfile>>, TError = AxiosError<unknown>>(
- params: GetMentorProfileParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMentorProfile>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-
-export function useGetMentorProfile<TData = Awaited<ReturnType<typeof getMentorProfile>>, TError = AxiosError<unknown>>(
- params: GetMentorProfileParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMentorProfile>>, TError, TData>>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getGetMentorProfileQueryOptions(params,options)
-
-  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey ;
-
-  return query;
-}
-
-
-
+  updateMentorProfileRequest: UpdateMentorProfileRequest,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<UpdateMentorProfileResponse>> => {
+  return axios.default.patch(
+    `http://localhost:8310/api/mentorship/updateMentorProfile`,
+    updateMentorProfileRequest,
+    options,
+  );
+};
+
+export const getUpdateMentorProfileMutationOptions = <
+  TError = AxiosError<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateMentorProfile>>,
+    TError,
+    { data: UpdateMentorProfileRequest },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateMentorProfile>>,
+  TError,
+  { data: UpdateMentorProfileRequest },
+  TContext
+> => {
+  const mutationKey = ['updateMentorProfile'];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateMentorProfile>>,
+    { data: UpdateMentorProfileRequest }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return updateMentorProfile(data, axiosOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateMentorProfileMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateMentorProfile>>
+>;
+export type UpdateMentorProfileMutationBody = UpdateMentorProfileRequest;
+export type UpdateMentorProfileMutationError = AxiosError<unknown>;
+
+export const useUpdateMentorProfile = <
+  TError = AxiosError<unknown>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof updateMentorProfile>>,
+      TError,
+      { data: UpdateMentorProfileRequest },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof updateMentorProfile>>,
+  TError,
+  { data: UpdateMentorProfileRequest },
+  TContext
+> => {
+  const mutationOptions = getUpdateMentorProfileMutationOptions(options);
+
+  return useMutation(mutationOptions, queryClient);
+};
 
 export const createMentorProfile1 = (
-    deleteMentorProfileRequest: DeleteMentorProfileRequest, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<DeleteMentorProfileResponse>> => {
-    
-    
-    return axios.default.delete(
-      `/api/mentorship/deleteMentorProfile`,{data:
-      deleteMentorProfileRequest, ...options}
-    );
-  }
+  deleteMentorProfileRequest: DeleteMentorProfileRequest,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<DeleteMentorProfileResponse>> => {
+  return axios.default.delete(
+    `http://localhost:8310/api/mentorship/deleteMentorProfile`,
+    { data: deleteMentorProfileRequest, ...options },
+  );
+};
 
+export const getCreateMentorProfile1MutationOptions = <
+  TError = AxiosError<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createMentorProfile1>>,
+    TError,
+    { data: DeleteMentorProfileRequest },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createMentorProfile1>>,
+  TError,
+  { data: DeleteMentorProfileRequest },
+  TContext
+> => {
+  const mutationKey = ['createMentorProfile1'];
+  const { mutation: mutationOptions, axios: axiosOptions } = options
+    ? options.mutation &&
+      'mutationKey' in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, axios: undefined };
 
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createMentorProfile1>>,
+    { data: DeleteMentorProfileRequest }
+  > = (props) => {
+    const { data } = props ?? {};
 
-export const getCreateMentorProfile1MutationOptions = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createMentorProfile1>>, TError,{data: DeleteMentorProfileRequest}, TContext>, axios?: AxiosRequestConfig}
-): UseMutationOptions<Awaited<ReturnType<typeof createMentorProfile1>>, TError,{data: DeleteMentorProfileRequest}, TContext> => {
+    return createMentorProfile1(data, axiosOptions);
+  };
 
-const mutationKey = ['createMentorProfile1'];
-const {mutation: mutationOptions, axios: axiosOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, axios: undefined};
+  return { mutationFn, ...mutationOptions };
+};
 
-      
+export type CreateMentorProfile1MutationResult = NonNullable<
+  Awaited<ReturnType<typeof createMentorProfile1>>
+>;
+export type CreateMentorProfile1MutationBody = DeleteMentorProfileRequest;
+export type CreateMentorProfile1MutationError = AxiosError<unknown>;
 
+export const useCreateMentorProfile1 = <
+  TError = AxiosError<unknown>,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof createMentorProfile1>>,
+      TError,
+      { data: DeleteMentorProfileRequest },
+      TContext
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseMutationResult<
+  Awaited<ReturnType<typeof createMentorProfile1>>,
+  TError,
+  { data: DeleteMentorProfileRequest },
+  TContext
+> => {
+  const mutationOptions = getCreateMentorProfile1MutationOptions(options);
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createMentorProfile1>>, {data: DeleteMentorProfileRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  createMentorProfile1(data,axiosOptions)
-        }
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type CreateMentorProfile1MutationResult = NonNullable<Awaited<ReturnType<typeof createMentorProfile1>>>
-    export type CreateMentorProfile1MutationBody = DeleteMentorProfileRequest
-    export type CreateMentorProfile1MutationError = AxiosError<unknown>
-
-    export const useCreateMentorProfile1 = <TError = AxiosError<unknown>,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createMentorProfile1>>, TError,{data: DeleteMentorProfileRequest}, TContext>, axios?: AxiosRequestConfig}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof createMentorProfile1>>,
-        TError,
-        {data: DeleteMentorProfileRequest},
-        TContext
-      > => {
-
-      const mutationOptions = getCreateMentorProfile1MutationOptions(options);
-
-      return useMutation(mutationOptions , queryClient);
-    }
+  return useMutation(mutationOptions, queryClient);
+};
