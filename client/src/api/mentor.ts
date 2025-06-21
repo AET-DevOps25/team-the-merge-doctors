@@ -32,6 +32,7 @@ import type {
 } from 'axios';
 
 export interface CreateSkillRequest {
+  id?: string;
   skill?: string;
 }
 
@@ -72,6 +73,7 @@ export interface CreateMentorProfileResponse {
 }
 
 export interface CreateCategoryRequest {
+  id?: string;
   category?: string;
 }
 
@@ -126,6 +128,14 @@ export interface ListCategoryResponse {
   categories?: Category[];
 }
 
+export interface GetMentorProfileRequest {
+  mentorId?: string;
+}
+
+export interface GetMentorProfileResponse {
+  profile?: MentorProfile;
+}
+
 export interface DeleteMentorProfileRequest {
   profileId?: string;
 }
@@ -144,6 +154,10 @@ request: ListMentorProfileRequest;
 
 export type ListCategoriesParams = {
 request: ListCategoryRequest;
+};
+
+export type GetMentorProfileParams = {
+request: GetMentorProfileRequest;
 };
 
 export const createSkill = (
@@ -605,6 +619,88 @@ export function useListCategories<TData = Awaited<ReturnType<typeof listCategori
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getListCategoriesQueryOptions(params,options)
+
+  const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+export const getMentorProfile = (
+    params: GetMentorProfileParams, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<GetMentorProfileResponse>> => {
+    
+    
+    return axios.default.get(
+      `/api/mentorship/getMentorProfile`,{
+    ...options,
+        params: {...params, ...options?.params},}
+    );
+  }
+
+
+export const getGetMentorProfileQueryKey = (params: GetMentorProfileParams,) => {
+    return [`/api/mentorship/getMentorProfile`, ...(params ? [params]: [])] as const;
+    }
+
+    
+export const getGetMentorProfileQueryOptions = <TData = Awaited<ReturnType<typeof getMentorProfile>>, TError = AxiosError<unknown>>(params: GetMentorProfileParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMentorProfile>>, TError, TData>>, axios?: AxiosRequestConfig}
+) => {
+
+const {query: queryOptions, axios: axiosOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetMentorProfileQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getMentorProfile>>> = ({ signal }) => getMentorProfile(params, { signal, ...axiosOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getMentorProfile>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetMentorProfileQueryResult = NonNullable<Awaited<ReturnType<typeof getMentorProfile>>>
+export type GetMentorProfileQueryError = AxiosError<unknown>
+
+
+export function useGetMentorProfile<TData = Awaited<ReturnType<typeof getMentorProfile>>, TError = AxiosError<unknown>>(
+ params: GetMentorProfileParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMentorProfile>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMentorProfile>>,
+          TError,
+          Awaited<ReturnType<typeof getMentorProfile>>
+        > , 'initialData'
+      >, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetMentorProfile<TData = Awaited<ReturnType<typeof getMentorProfile>>, TError = AxiosError<unknown>>(
+ params: GetMentorProfileParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMentorProfile>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getMentorProfile>>,
+          TError,
+          Awaited<ReturnType<typeof getMentorProfile>>
+        > , 'initialData'
+      >, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetMentorProfile<TData = Awaited<ReturnType<typeof getMentorProfile>>, TError = AxiosError<unknown>>(
+ params: GetMentorProfileParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMentorProfile>>, TError, TData>>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetMentorProfile<TData = Awaited<ReturnType<typeof getMentorProfile>>, TError = AxiosError<unknown>>(
+ params: GetMentorProfileParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getMentorProfile>>, TError, TData>>, axios?: AxiosRequestConfig}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetMentorProfileQueryOptions(params,options)
 
   const query = useQuery(queryOptions , queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
