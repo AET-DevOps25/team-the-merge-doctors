@@ -1,5 +1,6 @@
 import json
 import random
+import uuid
 from typing import List
 
 from faker import Faker
@@ -10,8 +11,11 @@ NUM_USERS = 10
 
 ROLE_TYPES = ['MENTOR', 'MENTEE']
 
+
+# WARNING: If you generate a new users, you need to update the mentor ids in profiles.json
 def generate_user():
     return {
+        "id": str(uuid.uuid4()),
         "userName": fake.user_name(),
         "password": fake.password(length=10),
         "name": {

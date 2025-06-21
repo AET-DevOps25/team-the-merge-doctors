@@ -5,6 +5,18 @@ postgres:
   port: 5432
   db-name: mentorship_backend
 
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+  default-produces-media-type: application/json # Keep JSON as default if you want
+
+info:
+  title: Mentorship Service API
+  description: API documentation for Mentorship microservice
+  version: 1.0.0
+
 spring:
   application:
     name: mentorship-service
