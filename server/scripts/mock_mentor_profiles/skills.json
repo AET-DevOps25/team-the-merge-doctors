@@ -1,0 +1,22 @@
+[
+  {
+    "id": "e4f3a1b2-9c7d-4e20-a8b1-1234567890ab",
+    "name": "Java"
+  },
+  {
+    "id": "7d5c2e89-0f3a-4b8e-b6c4-234567890abc",
+    "name": "Python"
+  },
+  {
+    "id": "a1b2c3d4-5e6f-7a8b-9c0d-34567890bcde",
+    "name": "Databases"
+  },
+  {
+    "id": "f0e1d2c3-b4a5-6789-0abc-4567890cdef1",
+    "name": "Spring"
+  },
+  {
+    "id": "1a2b3c4d-5e6f-7b8c-9d0e-567890cdef12",
+    "name": "AWS"
+  }
+]

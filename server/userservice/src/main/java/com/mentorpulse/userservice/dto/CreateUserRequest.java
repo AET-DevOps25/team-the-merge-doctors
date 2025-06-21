@@ -6,6 +6,7 @@ import com.mentorpulse.userservice.models.Name;
 import com.mentorpulse.userservice.models.RoleType;
 
 public record CreateUserRequest(
+        String id,
         String userName,
         String password,
         Name name,
