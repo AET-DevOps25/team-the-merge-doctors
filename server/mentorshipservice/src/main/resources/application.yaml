@@ -1,5 +1,4 @@
 server:
-  address: localhost
   port: 8310
 postgres:
   ip: postgres-db
