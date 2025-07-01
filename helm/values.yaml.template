@@ -7,8 +7,8 @@ userMicroservice:
     pullPolicy: Always
   service:
     type: ClusterIP
-    port: 8080
-    targetPort: 8000
+    port: 8210
+    targetPort: 8210
   selector: user-microservice-selector
   replicaCount: 1
 
