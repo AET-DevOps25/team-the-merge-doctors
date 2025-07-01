@@ -21,18 +21,18 @@ services:
       - ./docker/backend_config_files/pg-hba.conf:/etc/postgresql/pg_hba.conf:ro
 
   user-service:
-     platform: linux/amd64
-     image: ghcr.io/aet-devops25/team-the-merge-doctors/server/user-service:latest
-     ports:
-       - 8210:8210
-     build:
-       context: server/userservice
-       dockerfile: Dockerfile
-     volumes:
-       - $HOME/mentorpulse-certificates/jwt-secret.key:/home/cnf/mentorpulse-certificates/jwt-secret.key:ro
-     depends_on:
-       - postgres-db
-     restart: on-failure:3
+    platform: linux/amd64
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/user-service:latest
+    ports:
+      - 8210:8210
+    build:
+      context: server/userservice
+      dockerfile: Dockerfile
+    volumes:
+      - $HOME/mentorpulse-certificates/jwt-secret.key:/home/cnf/mentorpulse-certificates/jwt-secret.key:ro
+    depends_on:
+      - postgres-db
+    restart: on-failure:3
 
   genai:
     platform: linux/amd64
@@ -46,7 +46,7 @@ services:
     ports:
       - "5001:5001"
     environment:
-    - POSTGRES_HOST=postgres-db
+      - POSTGRES_HOST=postgres-db
     env_file:
       - ./docker/backend_config_files/.env
     depends_on:

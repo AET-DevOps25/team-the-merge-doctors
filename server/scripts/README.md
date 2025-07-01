@@ -4,7 +4,7 @@
 
 1. Create a virtual environment 
 ```
-python -m venv .venv
+python3 -m venv .venv
 ```
 
 2. Activate virtual environment
