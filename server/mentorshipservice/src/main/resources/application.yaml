@@ -1,0 +1,37 @@
+server:
+  port: 8310
+postgres:
+  ip: postgres-db
+  port: 5432
+  db-name: mentorship_backend
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+  default-produces-media-type: application/json # Keep JSON as default if you want
+
+info:
+  title: Mentorship Service API
+  description: API documentation for Mentorship microservice
+  version: 1.0.0
+
+spring:
+  application:
+    name: mentorship-service
+  datasource:
+    password: qweasdzxc
+    username: merge_doctor_backend
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${postgres.ip}:${postgres.port}/${postgres.db-name}
+  jpa:
+    generate-ddl: true
+    database: POSTGRESQL
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  driver-class-name: org.postgresql.Driver
+  sql:
+    init:
+      platform: postgres

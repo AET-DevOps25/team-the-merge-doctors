@@ -2,6 +2,7 @@ name: CI – Build & Publish
 
 on:
   push:
+    branches: [main]
   pull_request:
   workflow_call:
 
@@ -44,6 +45,27 @@ jobs:
       - name: Build & push User Service image
         uses: docker/build-push-action@v4
         with:
-          context: ./server/user
+          context: ./server/userservice
           push: true
           tags: ghcr.io/aet-devops25/team-the-merge-doctors/server/user-service:latest
+
+      - name: Build & push Mentorship Service image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./server/mentorshipservice
+          push: true
+          tags: ghcr.io/aet-devops25/team-the-merge-doctors/server/mentorship-service:latest
+
+      - name: Build & push Rating Service image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./server/ratingservice
+          push: true
+          tags: ghcr.io/aet-devops25/team-the-merge-doctors/server/rating-service:latest
+
+      - name: Build & push Appointment Service image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./server/appointmentservice
+          push: true
+          tags: ghcr.io/aet-devops25/team-the-merge-doctors/server/appointment-service:latest

@@ -1,0 +1,121 @@
+[
+  {
+    "id": "9f1c2b3a-4d5e-6f70-8a9b-1c2d3e4f5a6b",
+    "mentorId": "dad02741-84d9-4300-8e8a-a8c47fb690af",
+    "bio": "Full-stack Java engineer with deep Spring expertise.",
+    "skills": [
+      {
+        "id": "e4f3a1b2-9c7d-4e20-a8b1-1234567890ab",
+        "name": "Java"
+      },
+      {
+        "id": "f0e1d2c3-b4a5-6789-0abc-4567890cdef1",
+        "name": "Spring"
+      }
+    ],
+    "isAvailable": true,
+    "mentorCategory": {
+      "category": {
+        "id": "d3b07384-d9a1-4fda-8f78-1a2b3c4d5e6f",
+        "name": "Technical"
+      },
+      "yearsOfExperience": 7
+    }
+  },
+  {
+    "id": "2a3b4c5d-6e7f-8091-2a3b-4c5d6e7f8091",
+    "mentorId": "c61132a7-304d-48d9-a550-3eee77f2325d",
+    "bio": "Data scientist specializing in Python and database design.",
+    "skills": [
+      {
+        "id": "7d5c2e89-0f3a-4b8e-b6c4-234567890abc",
+        "name": "Python"
+      },
+      {
+        "id": "a1b2c3d4-5e6f-7a8b-9c0d-34567890bcde",
+        "name": "Databases"
+      }
+    ],
+    "isAvailable": false,
+    "mentorCategory": {
+      "category": {
+        "id": "f1e2d3c4-b5a6-7f8e-9d0c-1b2a3c4d5e6f",
+        "name": "Career Development"
+      },
+      "yearsOfExperience": 5
+    }
+  },
+  {
+    "id": "3b4c5d6e-7f80-9123-4b5c-6d7e8f901234",
+    "mentorId": "66b9fd2a-4cf9-40a7-98bb-e1da57db953d",
+    "bio": "Cloud architect with AWS certifications and DB tuning skills.",
+    "skills": [
+      {
+        "id": "1a2b3c4d-5e6f-7b8c-9d0e-567890cdef12",
+        "name": "AWS"
+      },
+      {
+        "id": "a1b2c3d4-5e6f-7a8b-9c0d-34567890bcde",
+        "name": "Databases"
+      }
+    ],
+    "isAvailable": true,
+    "mentorCategory": {
+      "category": {
+        "id": "a5f5c6d7-8e9f-4b1a-9b2c-3d4e5f6a7b8c",
+        "name": "Leadership"
+      },
+      "yearsOfExperience": 8
+    }
+  },
+  {
+    "id": "4c5d6e7f-8091-2345-6c7d-8e9f01234567",
+    "mentorId": "1af6b5da-3b5e-43b7-9df0-f17e715fbd01",
+    "bio": "Java & Python polyglot with 10 years in enterprise apps.",
+    "skills": [
+      {
+        "id": "e4f3a1b2-9c7d-4e20-a8b1-1234567890ab",
+        "name": "Java"
+      },
+      {
+        "id": "7d5c2e89-0f3a-4b8e-b6c4-234567890abc",
+        "name": "Python"
+      },
+      {
+        "id": "f0e1d2c3-b4a5-6789-0abc-4567890cdef1",
+        "name": "Spring"
+      }
+    ],
+    "isAvailable": false,
+    "mentorCategory": {
+      "category": {
+        "id": "d3b07384-d9a1-4fda-8f78-1a2b3c4d5e6f",
+        "name": "Technical"
+      },
+      "yearsOfExperience": 10
+    }
+  },
+  {
+    "id": "5d6e7f80-9123-4567-7d8e-9f0123456789",
+    "mentorId": "0499bfbd-e913-4a3f-880a-7cf8b86d316e",
+    "bio": "AWS DevOps specialist focused on scalable microservices.",
+    "skills": [
+      {
+        "id": "1a2b3c4d-5e6f-7b8c-9d0e-567890cdef12",
+        "name": "AWS"
+      },
+      {
+        "id": "f0e1d2c3-b4a5-6789-0abc-4567890cdef1",
+        "name": "Spring"
+      }
+    ],
+    "isAvailable": true,
+    "mentorCategory": {
+      "category": {
+        "id": "f1e2d3c4-b5a6-7f8e-9d0c-1b2a3c4d5e6f",
+        "name": "Career Development"
+      },
+      "yearsOfExperience": 3
+    }
+  }
+]

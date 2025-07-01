@@ -1,0 +1,212 @@
+[
+  {
+    "id": "dad02741-84d9-4300-8e8a-a8c47fb690af",
+    "userName": "umartinez",
+    "password": "N3HncEW(!9",
+    "name": {
+      "title": "Prof.",
+      "firstName": "Claire",
+      "middleName": "Jennifer",
+      "lastName": "Martinez"
+    },
+    "contact": {
+      "email": "johnstonblake@example.net",
+      "phoneNumber": "+1-505-902-2507x777",
+      "mobileNumber": "+1-695-712-1283x7462"
+    },
+    "address": {
+      "city": "North Brandon",
+      "country": "Chad"
+    },
+    "roleType": "MENTOR"
+  },
+  {
+    "id": "f03dc27c-64bf-4ed3-9e6c-ce17a0ae4258",
+    "userName": "mooreconnie",
+    "password": "!ULGI)Mns7",
+    "name": {
+      "title": "Dr.",
+      "firstName": "Christina",
+      "middleName": "Mariah",
+      "lastName": "Palmer"
+    },
+    "contact": {
+      "email": "elizabethpineda@example.org",
+      "phoneNumber": "516.393.6256x48425",
+      "mobileNumber": "835.836.8021"
+    },
+    "address": {
+      "city": "Bergerfurt",
+      "country": "Faroe Islands"
+    },
+    "roleType": "MENTEE"
+  },
+  {
+    "id": "422c8fe2-bfb5-46e0-85ca-a842e855d6a3",
+    "userName": "zgeorge",
+    "password": "ltPgCz(w*0",
+    "name": {
+      "title": "Prof.",
+      "firstName": "Nancy",
+      "middleName": "Jennifer",
+      "lastName": "Mccarty"
+    },
+    "contact": {
+      "email": "stokesjohn@example.net",
+      "phoneNumber": "+1-284-207-0656x79123",
+      "mobileNumber": "913-790-8400x191"
+    },
+    "address": {
+      "city": "East Patrick",
+      "country": "Guinea"
+    },
+    "roleType": "MENTEE"
+  },
+  {
+    "id": "c2c82ff1-f1c7-485b-9ac4-467dcceac07d",
+    "userName": "kelly14",
+    "password": "s_z+l3Xv$Z",
+    "name": {
+      "title": "Mr.",
+      "firstName": "Paul",
+      "middleName": "Shannon",
+      "lastName": "Alvarez"
+    },
+    "contact": {
+      "email": "kimberlyburgess@example.org",
+      "phoneNumber": "001-221-699-3335x59376",
+      "mobileNumber": "694.897.1290x261"
+    },
+    "address": {
+      "city": "Jordanstad",
+      "country": "Philippines"
+    },
+    "roleType": "MENTEE"
+  },
+  {
+    "id": "c61132a7-304d-48d9-a550-3eee77f2325d",
+    "userName": "stacey66",
+    "password": "(36RGSql(w",
+    "name": {
+      "title": "Mr.",
+      "firstName": "Katherine",
+      "middleName": "William",
+      "lastName": "Pitts"
+    },
+    "contact": {
+      "email": "rachelthomas@example.org",
+      "phoneNumber": "474.313.9590x99392",
+      "mobileNumber": "+1-220-261-3731x7909"
+    },
+    "address": {
+      "city": "Reedhaven",
+      "country": "Ecuador"
+    },
+    "roleType": "MENTOR"
+  },
+  {
+    "id": "9a96bec1-54f2-4bad-ad8d-32a6afb3b0ef",
+    "userName": "iperkins",
+    "password": "_v6nLJTptW",
+    "name": {
+      "title": "Dr.",
+      "firstName": "Jamie",
+      "middleName": "Alan",
+      "lastName": "Hurst"
+    },
+    "contact": {
+      "email": "douglasemily@example.com",
+      "phoneNumber": "(206)413-4355x239",
+      "mobileNumber": "+1-834-257-5138"
+    },
+    "address": {
+      "city": "Nelsonshire",
+      "country": "Falkland Islands (Malvinas)"
+    },
+    "roleType": "MENTEE"
+  },
+  {
+    "id": "66b9fd2a-4cf9-40a7-98bb-e1da57db953d",
+    "userName": "lorischwartz",
+    "password": "25E+zrYq)5",
+    "name": {
+      "title": "Dr.",
+      "firstName": "Madeline",
+      "middleName": "Joshua",
+      "lastName": "Russell"
+    },
+    "contact": {
+      "email": "mmorris@example.net",
+      "phoneNumber": "2624439221",
+      "mobileNumber": "+1-209-686-4302x74298"
+    },
+    "address": {
+      "city": "North Josephborough",
+      "country": "Dominican Republic"
+    },
+    "roleType": "MENTOR"
+  },
+  {
+    "id": "1af6b5da-3b5e-43b7-9df0-f17e715fbd01",
+    "userName": "gary49",
+    "password": "(_2+RNYd#F",
+    "name": {
+      "title": "Dr.",
+      "firstName": "Mark",
+      "middleName": "Nicholas",
+      "lastName": "Williams"
+    },
+    "contact": {
+      "email": "ellisjoseph@example.net",
+      "phoneNumber": "001-882-682-9736x1406",
+      "mobileNumber": "(869)872-8256x2996"
+    },
+    "address": {
+      "city": "Hollyshire",
+      "country": "Niue"
+    },
+    "roleType": "MENTOR"
+  },
+  {
+    "id": "0499bfbd-e913-4a3f-880a-7cf8b86d316e",
+    "userName": "russelldavid",
+    "password": "efxDTRmj&2",
+    "name": {
+      "title": "Mrs.",
+      "firstName": "Kathy",
+      "middleName": "Jonathan",
+      "lastName": "Ward"
+    },
+    "contact": {
+      "email": "kelsey50@example.net",
+      "phoneNumber": "(710)885-5686x67214",
+      "mobileNumber": "618-843-5193x88518"
+    },
+    "address": {
+      "city": "West Bruce",
+      "country": "Malawi"
+    },
+    "roleType": "MENTOR"
+  },
+  {
+    "id": "452cd8fd-506f-4f95-b2b2-12e97137cb44",
+    "userName": "miguel31",
+    "password": "*zjLlM+Vm5",
+    "name": {
+      "title": "Dr.",
+      "firstName": "Heidi",
+      "middleName": "Joshua",
+      "lastName": "Watson"
+    },
+    "contact": {
+      "email": "nicole08@example.org",
+      "phoneNumber": "(319)396-5160",
+      "mobileNumber": "+1-351-278-1957x389"
+    },
+    "address": {
+      "city": "Tylerport",
+      "country": "Indonesia"
+    },
+    "roleType": "MENTEE"
+  }
+]
