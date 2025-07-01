@@ -1,11 +1,12 @@
 import { Space, Typography } from 'antd';
 import { SkillTag } from '../atoms/SkillTag';
+import type { Skill } from '@/api/mentor';
 
 const { Text } = Typography;
 
 interface SelectedSkillsDisplayProps {
-  skills: string[];
-  onSkillRemove: (skill: string) => void;
+  skills: Skill[];
+  onSkillRemove: (skill: Skill) => void;
   title?: string;
 }
 
@@ -28,7 +29,7 @@ export const SelectedSkillsDisplay = ({
       </Text>
       <Space size="small" wrap>
         {skills.map((skill) => (
-          <SkillTag key={skill} skill={skill} onRemove={onSkillRemove} />
+          <SkillTag key={skill.id} skill={skill} onRemove={onSkillRemove} />
         ))}
       </Space>
     </div>

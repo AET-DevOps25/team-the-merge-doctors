@@ -1,8 +1,9 @@
+import type { Skill } from '@/api/mentor';
 import { SkillSuggestionItem } from '../atoms/SkillSuggestionItem';
 
 interface SkillSuggestionListProps {
-  skills: string[];
-  onSkillSelect: (skill: string) => void;
+  skills: Skill[];
+  onSkillSelect: (skill: Skill) => void;
   maxItems?: number;
 }
 
@@ -25,7 +26,7 @@ export const SkillSuggestionList = ({
     >
       {skills?.map((skill) => (
         <SkillSuggestionItem
-          key={skill}
+          key={skill.id}
           skill={skill}
           onSelect={onSkillSelect}
         />

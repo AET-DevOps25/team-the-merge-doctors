@@ -1,11 +1,11 @@
 import { Layout, Col, Card, Typography, Space, Flex } from 'antd';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useParams } from '@tanstack/react-router';
 import { MentorInfo } from '@/components/organisms/MentorInfo';
 import { MentorStats } from '@/components/organisms/MentorStats';
 import MentorSkills from '@/components/organisms/MentorSkills';
-import { ExperienceTimeline } from '@/components/molecules/ExperienceTimeline';
 import { MentorReviews } from '@/components/organisms/MentorReviews';
 import type { Review } from '@/types/review';
+import { useGetMentorProfile, useListSkills } from '@/api/mentor';
 
 const { Content } = Layout;
 const { Title, Paragraph } = Typography;
@@ -15,15 +15,20 @@ export const Route = createFileRoute('/mentor/$mentorId')({
 });
 
 function MentorProfilePage() {
-  // const mentorId = useParams({
-  //     from: '/mentor/$mentorId',
-  //     select: (params) => params.mentorId,
-  //   });
+  const { data: listSkillsData } = useListSkills();
 
-  //   const { data: mentorProfileData, isLoading: mentorProfileLoading } =
-  //     useGetMentorProfile({ mentorId: mentorId });
+  const availableSkills = listSkillsData?.data?.skills ?? [];
 
-  //   const mentorProfile = mentorProfileData?.data.profile;
+  const mentorId = useParams({
+    from: '/mentor/$mentorId',
+    select: (params) => params.mentorId,
+  });
+
+  const { data: mentorProfileData } = useGetMentorProfile({
+    mentorId: mentorId,
+  });
+
+  const mentorProfile = mentorProfileData?.data.profile;
 
   const mentorData = {
     name: 'Rui Gouveia',
@@ -42,28 +47,6 @@ function MentorProfilePage() {
     isAvailable: true,
     isTopMentor: true,
   };
-
-  const availableSkills = [
-    'Entrepreneurship',
-    'Startup Strategy',
-    'Business Validation',
-    'Fundraising',
-    'Growth Hacking',
-    'Product Management',
-    'Marketing Strategy',
-    'Leadership',
-    'JavaScript',
-    'React',
-    'Node.js',
-    'Python',
-    'Data Science',
-    'Machine Learning',
-    'UX Design',
-    'UI Design',
-    'Project Management',
-    'Agile',
-    'Scrum',
-  ];
 
   const reviews: Review[] = [
     {
@@ -92,29 +75,29 @@ function MentorProfilePage() {
     },
   ];
 
-  const experience = [
-    {
-      title: 'CEO & Founder',
-      company: 'Build Up Labs',
-      period: '2018 - Present',
-      description:
-        'Leading a startup incubator that has helped 50+ startups raise over $20M in funding.',
-    },
-    {
-      title: 'VP of Product',
-      company: 'TechFlow Solutions',
-      period: '2015 - 2018',
-      description:
-        'Scaled product from 0 to 1M users, led a team of 25+ product managers and engineers.',
-    },
-    {
-      title: 'Senior Product Manager',
-      company: 'Innovation Labs',
-      period: '2012 - 2015',
-      description:
-        'Launched 3 successful products, increased user engagement by 150%.',
-    },
-  ];
+  // const experience = [
+  //   {
+  //     title: 'CEO & Founder',
+  //     company: 'Build Up Labs',
+  //     period: '2018 - Present',
+  //     description:
+  //       'Leading a startup incubator that has helped 50+ startups raise over $20M in funding.',
+  //   },
+  //   {
+  //     title: 'VP of Product',
+  //     company: 'TechFlow Solutions',
+  //     period: '2015 - 2018',
+  //     description:
+  //       'Scaled product from 0 to 1M users, led a team of 25+ product managers and engineers.',
+  //   },
+  //   {
+  //     title: 'Senior Product Manager',
+  //     company: 'Innovation Labs',
+  //     period: '2012 - 2015',
+  //     description:
+  //       'Launched 3 successful products, increased user engagement by 150%.',
+  //   },
+  // ];
 
   return (
     <Layout style={{ minHeight: '100vh', backgroundColor: '#fafafa' }}>
@@ -124,20 +107,24 @@ function MentorProfilePage() {
             {/* Profile Header */}
             <MentorInfo
               name={mentorData.name}
-              title={mentorData.title}
-              company={mentorData.company}
-              location={mentorData.location}
-              rating={mentorData.rating}
-              totalReviews={mentorData.totalReviews}
-              avatar={mentorData.avatar}
-              isAvailable={mentorData.isAvailable}
+              // title={mentorData.title}
+              // company={mentorData.company}
+              location={'DUMMY_LOCATION'}
+              // rating={mentorData.rating}
+              // totalReviews={mentorData.totalReviews}
+              // avatar={mentorData.avatar}
+              isAvailable={mentorProfile?.isAvailable ?? false}
             />
 
             {/* Stats */}
             <MentorStats
-              totalMentees={mentorData.totalMentees}
-              experience={mentorData.experience}
-              languages={mentorData.languages}
+              // totalMentees={mentorData.totalMentees}
+              category={mentorProfile?.mentorCategory?.category?.name ?? ''}
+              experience={
+                mentorProfile?.mentorCategory?.yearsOfExperience?.toString() ||
+                '0'
+              }
+              // languages={mentorData.languages}
             />
 
             {/* Content Sections */}
@@ -152,16 +139,7 @@ function MentorProfilePage() {
                   <div>
                     <Title level={4}>About Me</Title>
                     <Paragraph style={{ fontSize: 16, lineHeight: 1.6 }}>
-                      I'm a serial entrepreneur and startup mentor with over 15
-                      years of experience building and scaling companies. As the
-                      CEO of Build Up Labs, I've helped over 50 startups
-                      validate their ideas, build products, and raise funding.
-                    </Paragraph>
-                    <Paragraph style={{ fontSize: 16, lineHeight: 1.6 }}>
-                      My expertise spans across business validation, product
-                      development, growth strategies, and fundraising. I've
-                      personally raised over $5M for my own ventures and helped
-                      portfolio companies raise a combined $20M+.
+                      {mentorProfile?.bio}
                     </Paragraph>
                   </div>
                 </Space>
@@ -170,14 +148,17 @@ function MentorProfilePage() {
               {/* Skills Section */}
               <Card style={{ borderRadius: 16 }}>
                 <Title level={4}>Core Expertise</Title>
-                <MentorSkills availableSkills={availableSkills} />
+                <MentorSkills
+                  availableSkills={availableSkills}
+                  initialSkills={mentorProfile?.skills ?? []}
+                />
               </Card>
 
               {/* Experience Section */}
-              <Card style={{ borderRadius: 16 }}>
+              {/* <Card style={{ borderRadius: 16 }}>
                 <Title level={4}>Professional Experience</Title>
-                <ExperienceTimeline experiences={experience} />
-              </Card>
+                <ExperienceTimeline experiences={mentorProfile} />
+              </Card> */}
 
               {/* Reviews Section */}
               <MentorReviews reviews={reviews} />
