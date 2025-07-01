@@ -1,6 +1,6 @@
 # MentorPulse Client
 
-# Docker
+## Docker
 
 In the client directory execute the following commands
 

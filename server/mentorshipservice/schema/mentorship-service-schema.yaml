@@ -610,11 +610,14 @@
           }
         }
       },
-      "CreateSkillResponse": {
+      "ListSkillResponse": {
         "type": "object",
         "properties": {
-          "skill": {
-            "$ref": "#/components/schemas/Skill"
+          "skills": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Skill"
+            }
           }
         }
       },
@@ -630,6 +633,47 @@
           }
         }
       },
+      "ComparisonFilter": {
+        "type": "object",
+        "properties": {
+          "operator": {
+            "type": "string",
+            "enum": [
+              "GREATER_THAN",
+              "GREATER_THAN_OR_EQUAL",
+              "LESS_THAN",
+              "LESS_THAN_OR_EQUAL",
+              "EQUAL"
+            ]
+          },
+          "value": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ListMentorProfileRequest": {
+        "type": "object",
+        "properties": {
+          "categoryIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "skillIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "yearsOfExperienceFilter": {
+            "$ref": "#/components/schemas/ComparisonFilter"
+          }
+        }
+      },
       "Category": {
         "type": "object",
         "properties": {
@@ -642,11 +686,14 @@
           }
         }
       },
-      "CreateMentorProfileRequest": {
+      "ListMentorProfileResponse": {
         "type": "object",
         "properties": {
           "mentorProfile": {
-            "$ref": "#/components/schemas/MentorProfile"
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MentorProfile"
+            }
           }
         }
       },
@@ -688,6 +735,53 @@
           },
           "mentorCategory": {
             "$ref": "#/components/schemas/MentorCategory"
+          }
+        }
+      },
+      "ListCategoryRequest": {
+        "type": "object"
+      },
+      "ListCategoryResponse": {
+        "type": "object",
+        "properties": {
+          "categories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Category"
+            }
+          }
+        }
+      },
+      "GetMentorProfileRequest": {
+        "type": "object",
+        "properties": {
+          "mentorId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "GetMentorProfileResponse": {
+        "type": "object",
+        "properties": {
+          "profile": {
+            "$ref": "#/components/schemas/MentorProfile"
+          }
+        }
+      },
+      "CreateSkillResponse": {
+        "type": "object",
+        "properties": {
+          "skill": {
+            "$ref": "#/components/schemas/Skill"
+          }
+        }
+      },
+      "CreateMentorProfileRequest": {
+        "type": "object",
+        "properties": {
+          "mentorProfile": {
+            "$ref": "#/components/schemas/MentorProfile"
           }
         }
       },
@@ -760,100 +854,6 @@
       },
       "ListSkillRequest": {
         "type": "object"
-      },
-      "ListSkillResponse": {
-        "type": "object",
-        "properties": {
-          "skills": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Skill"
-            }
-          }
-        }
-      },
-      "ComparisonFilter": {
-        "type": "object",
-        "properties": {
-          "operator": {
-            "type": "string",
-            "enum": [
-              "GREATER_THAN",
-              "GREATER_THAN_OR_EQUAL",
-              "LESS_THAN",
-              "LESS_THAN_OR_EQUAL",
-              "EQUAL"
-            ]
-          },
-          "value": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
-      "ListMentorProfileRequest": {
-        "type": "object",
-        "properties": {
-          "categoryIds": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "uuid"
-            }
-          },
-          "skillIds": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "format": "uuid"
-            }
-          },
-          "yearsOfExperienceFilter": {
-            "$ref": "#/components/schemas/ComparisonFilter"
-          }
-        }
-      },
-      "ListMentorProfileResponse": {
-        "type": "object",
-        "properties": {
-          "mentorProfile": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/MentorProfile"
-            }
-          }
-        }
-      },
-      "ListCategoryRequest": {
-        "type": "object"
-      },
-      "ListCategoryResponse": {
-        "type": "object",
-        "properties": {
-          "categories": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Category"
-            }
-          }
-        }
-      },
-      "GetMentorProfileRequest": {
-        "type": "object",
-        "properties": {
-          "mentorId": {
-            "type": "string",
-            "format": "uuid"
-          }
-        }
-      },
-      "GetMentorProfileResponse": {
-        "type": "object",
-        "properties": {
-          "profile": {
-            "$ref": "#/components/schemas/MentorProfile"
-          }
-        }
       },
       "GetApplicationResponse": {
         "type": "object",

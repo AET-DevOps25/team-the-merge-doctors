@@ -4,10 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "pnpm run generate && vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "generate": "orval --config orval.config.cjs && prettier --write src/api"
   },
   "dependencies": {
     "@ant-design/icons": "5.x",
@@ -15,6 +16,7 @@
     "@tanstack/react-router": "^1.120.11",
     "@tanstack/react-router-devtools": "^1.120.11",
     "antd": "^5.25.2",
+    "axios": "^1.10.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
@@ -29,6 +31,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
+    "orval": "^7.10.0",
     "prettier": "3.5.3",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.30.1",
