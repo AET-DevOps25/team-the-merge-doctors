@@ -1,0 +1,117 @@
+services:
+  traefik:
+    image: traefik:v3.0
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8081:8080"  # Traefik dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - traefik-network
+  gateway:
+    platform: linux/amd64
+    build:
+      context: server/gateway
+      dockerfile: Dockerfile
+    depends_on:
+      - user-service
+    restart: on-failure:3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.gateway.rule=Host(`localhost`) && Path(`/api/auth`)"
+      - "traefik.http.routers.gateway.entrypoints=web"
+      - "traefik.http.services.gateway.loadbalancer.server.port=8080"
+    networks:
+      - traefik-network
+  client:
+    platform: linux/amd64
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/client:latest
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    # ports:
+    #   - 3000:80
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.client.rule=Host(`localhost`) && PathPrefix(`/`)"
+      - "traefik.http.routers.client.entrypoints=web"
+      - "traefik.http.services.client.loadbalancer.server.port=80"
+    networks:
+      - traefik-network
+
+  postgres-db:
+    platform: linux/amd64
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./docker/backend_config_files/.env
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./docker/backend_config_files/postgres-init.sh:/docker-entrypoint-initdb.d/init.sh:ro
+      - ./docker/backend_config_files/pg-hba.conf:/etc/postgresql/pg_hba.conf:ro
+    networks:
+      - traefik-network
+
+  user-service:
+    platform: linux/amd64
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/user-service:latest
+    build:
+      context: server/userservice
+      dockerfile: Dockerfile
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.user-public.rule=Host(`localhost`) && (Path(`/api/user/login`) || Path(`/api/user/createUser`))"
+      - "traefik.http.routers.user-public.entrypoints=web"
+      - "traefik.http.routers.user-public.service=user-service"
+
+      # Protected routes (auth required) - for future use
+      - "traefik.http.routers.user-protected.rule=Host(`localhost`) && PathPrefix(`/api/user/`) && !Path(`/api/user/login`) && !Path(`/api/user/createUser`)"
+      - "traefik.http.routers.user-protected.entrypoints=web"
+      - "traefik.http.routers.user-protected.middlewares=auth-middleware"
+      - "traefik.http.routers.user-protected.service=user-service"
+      
+      - "traefik.http.services.user-service.loadbalancer.server.port=8210"
+      - "traefik.http.middlewares.auth-middleware.forwardauth.address=http://gateway:8080/api/auth"
+      # Forward these headers to downstream services.
+      - "traefik.http.middlewares.auth-middleware.forwardauth.authResponseHeaders=X-User-Id,X-Username,X-User-Role"
+    networks:
+      - traefik-network
+    volumes:
+      - $HOME/mentorpulse-certificates/jwt-secret.key:/home/cnf/mentorpulse-certificates/jwt-secret.key:ro
+    depends_on:
+      - postgres-db
+    restart: on-failure:3
+
+  mentorship-service:
+    platform: linux/amd64
+    # image: ghcr.io/aet-devops25/team-the-merge-doctors/server/mentorship-service:latest
+    build:
+      context: server/mentorshipservice
+      dockerfile: Dockerfile
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mentorship-service.rule=Host(`localhost`) && PathPrefix(`/api/mentorship`)"
+      - "traefik.http.routers.mentorship-service.entrypoints=web"
+      - "traefik.http.routers.mentorship-service.middlewares=auth-middleware"
+      - "traefik.http.routers.mentorship-service.service=mentorship-service"
+
+      - "traefik.http.services.mentorship-service.loadbalancer.server.port=8310"
+
+    networks:
+      - traefik-network
+    depends_on:
+      - postgres-db
+    restart: on-failure:3
+
+networks:
+  traefik-network:
+    driver: bridge    
+
+volumes:
+  db_data:
