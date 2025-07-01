@@ -87,10 +87,10 @@ function ViewProfileButton({ mentor }: ViewProfileButtonProps) {
       <Button
         type="primary"
         onClick={() => {
-          if (mentor.id !== undefined) {
+          if (mentor.mentorId !== undefined) {
             navigate({
               to: '/mentor/$mentorId',
-              params: { mentorId: mentor.id },
+              params: { mentorId: mentor.mentorId },
             });
           }
         }}
