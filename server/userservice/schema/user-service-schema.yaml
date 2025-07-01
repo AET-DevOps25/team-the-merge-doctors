@@ -162,26 +162,6 @@
         }
       }
     },
-    "/api/demo": {
-      "get": {
-        "tags": [
-          "demo-controller"
-        ],
-        "operationId": "sayHello",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/user/deleteUser": {
       "delete": {
         "tags": [
@@ -373,9 +353,6 @@
             "type": "string",
             "format": "date-time"
           },
-          "password": {
-            "type": "string"
-          },
           "authorities": {
             "type": "array",
             "items": {
@@ -385,16 +362,19 @@
           "username": {
             "type": "string"
           },
-          "enabled": {
-            "type": "boolean"
+          "password": {
+            "type": "string"
           },
-          "credentialsNonExpired": {
+          "enabled": {
             "type": "boolean"
           },
           "accountNonExpired": {
             "type": "boolean"
           },
           "accountNonLocked": {
+            "type": "boolean"
+          },
+          "credentialsNonExpired": {
             "type": "boolean"
           }
         }

@@ -15,6 +15,16 @@ export const Route = createFileRoute('/mentor/$mentorId')({
 });
 
 function MentorProfilePage() {
+  // const mentorId = useParams({
+  //     from: '/mentor/$mentorId',
+  //     select: (params) => params.mentorId,
+  //   });
+
+  //   const { data: mentorProfileData, isLoading: mentorProfileLoading } =
+  //     useGetMentorProfile({ mentorId: mentorId });
+
+  //   const mentorProfile = mentorProfileData?.data.profile;
+
   const mentorData = {
     name: 'Rui Gouveia',
     title: 'CEO & Startup Incubator Expert',

@@ -25,18 +25,16 @@ export function Search() {
   const [selectedExperienceFilter, setSelectedExperienceFilter] =
     useState<ComparisonFilter>();
 
-  const { mutate: listSkills, data: listSkillsData } = useListSkills();
+  const { data: listSkillsData, isLoading: skillsIsLoading } = useListSkills();
 
-  const { mutate: listCategories, data: listCategoriesData } =
+  const { data: listCategoriesData, isLoading: categoriesIsLoading } =
     useListCategories();
 
-  const { mutate: listMentorProfiles, data: listMentorsData } =
-    useListMentorProfiles();
-
-  useEffect(() => {
-    listCategories({ data: {} });
-    listSkills({ data: {} });
-  }, []);
+  const {
+    mutate: listMentorProfiles,
+    data: listMentorsData,
+    isPending: listProfilesIsPending,
+  } = useListMentorProfiles();
 
   useEffect(() => {
     listMentorProfiles({
@@ -50,7 +48,12 @@ export function Search() {
         yearsOfExperienceFilter: selectedExperienceFilter,
       },
     });
-  }, [selectedCategories, selectedSkills, selectedExperienceFilter]);
+  }, [
+    listMentorProfiles,
+    selectedCategories,
+    selectedSkills,
+    selectedExperienceFilter,
+  ]);
 
   return (
     <Layout style={{ height: '100vh', padding: 24, overflow: 'hidden' }}>
@@ -66,7 +69,7 @@ export function Search() {
             paddingRight: 16,
           }}
         >
-          {false || false ? (
+          {skillsIsLoading || categoriesIsLoading ? (
             <Spin />
           ) : (
             <>
@@ -105,7 +108,7 @@ export function Search() {
             paddingLeft: 16,
           }}
         >
-          {false ? (
+          {listProfilesIsPending ? (
             <Spin />
           ) : (
             <Space size="large" direction="vertical">

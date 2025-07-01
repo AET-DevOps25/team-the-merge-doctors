@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.UUID;
+
 import javax.management.InvalidAttributeValueException;
 
 @RestController
@@ -32,10 +34,9 @@ public class MentorProfileController {
         }
     }
 
-    @PostMapping("/listSkills")
-    public ResponseEntity<ListSkillResponse> listSkills(
-            @RequestBody @Valid ListSkillRequest request) {
-        return ResponseEntity.status(HttpStatus.OK).body(mentorProfileService.listSkills(request));
+    @GetMapping("/listSkills")
+    public ResponseEntity<ListSkillResponse> listSkills() {
+        return ResponseEntity.status(HttpStatus.OK).body(mentorProfileService.listSkills());
     }
 
     @PostMapping("/createCategory")
@@ -49,11 +50,9 @@ public class MentorProfileController {
         }
     }
 
-    @PostMapping("/listCategories")
-    public ResponseEntity<ListCategoryResponse> listCategories(
-            @RequestBody @Valid ListCategoryRequest request) {
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(mentorProfileService.listCategories(request));
+    @GetMapping("/listCategories")
+    public ResponseEntity<ListCategoryResponse> listCategories() {
+        return ResponseEntity.status(HttpStatus.OK).body(mentorProfileService.listCategories());
     }
 
     @PostMapping("/createMentorProfile")
@@ -78,18 +77,17 @@ public class MentorProfileController {
         }
     }
 
-    @PostMapping("/getMentorProfile")
-    public ResponseEntity<GetMentorProfileResponse> getMentorProfile(
-            @RequestBody @Valid GetMentorProfileRequest request) {
+    @GetMapping("/getMentorProfile")
+    public ResponseEntity<GetMentorProfileResponse> getMentorProfile(@RequestParam UUID mentorId) {
         try {
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(mentorProfileService.getMentorProfile(request));
+                    .body(mentorProfileService.getMentorProfile(mentorId));
         } catch (InvalidArgumentsException | NotFoundException ex) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
         }
     }
 
-    @PostMapping("/listMentorProfile")
+    @PostMapping("/listMentorProfiles")
     public ResponseEntity<ListMentorProfileResponse> listMentorProfiles(
             @RequestBody @Valid ListMentorProfileRequest request) {
         return ResponseEntity.status(HttpStatus.OK)
@@ -97,7 +95,7 @@ public class MentorProfileController {
     }
 
     @DeleteMapping("/deleteMentorProfile")
-    public ResponseEntity<DeleteMentorProfileResponse> createMentorProfile(
+    public ResponseEntity<DeleteMentorProfileResponse> deleteMentorProfile(
             @RequestBody @Valid DeleteMentorProfileRequest request) {
         try {
             return ResponseEntity.status(HttpStatus.OK)
