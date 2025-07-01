@@ -12,17 +12,17 @@
     }
   ],
   "paths": {
-    "/api/mentorship/listSkills": {
-      "post": {
+    "/api/mentorship/scheduleSession": {
+      "put": {
         "tags": [
-          "mentor-profile-controller"
+          "mentor-application-controller"
         ],
-        "operationId": "listSkills",
+        "operationId": "scheduleSession",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ListSkillRequest"
+                "$ref": "#/components/schemas/ScheduleSessionRequest"
               }
             }
           },
@@ -34,7 +34,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ListSkillResponse"
+                  "$ref": "#/components/schemas/ScheduleSessionResponse"
                 }
               }
             }
@@ -42,29 +42,30 @@
         }
       }
     },
-    "/api/mentorship/listMentorProfile": {
-      "post": {
+    "/api/mentorship/rejectApplication/{id}": {
+      "put": {
         "tags": [
-          "mentor-profile-controller"
+          "mentor-application-controller"
         ],
-        "operationId": "listMentorProfiles",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ListMentorProfileRequest"
-              }
+        "operationId": "rejectApplication",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
             }
-          },
-          "required": true
-        },
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ListMentorProfileResponse"
+                  "$ref": "#/components/schemas/RejectApplicationResponse"
                 }
               }
             }
@@ -72,29 +73,30 @@
         }
       }
     },
-    "/api/mentorship/listCategories": {
-      "post": {
+    "/api/mentorship/acceptApplication/{id}": {
+      "put": {
         "tags": [
-          "mentor-profile-controller"
+          "mentor-application-controller"
         ],
-        "operationId": "listCategories",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ListCategoryRequest"
-              }
+        "operationId": "acceptApplication",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
             }
-          },
-          "required": true
-        },
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ListCategoryResponse"
+                  "$ref": "#/components/schemas/AcceptApplicationResponse"
                 }
               }
             }
@@ -102,17 +104,17 @@
         }
       }
     },
-    "/api/mentorship/getMentorProfile": {
+    "/api/mentorship/listApplication": {
       "post": {
         "tags": [
-          "mentor-profile-controller"
+          "mentor-application-controller"
         ],
-        "operationId": "getMentorProfile",
+        "operationId": "listApplication",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/GetMentorProfileRequest"
+                "$ref": "#/components/schemas/ListApplicationRequest"
               }
             }
           },
@@ -124,7 +126,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetMentorProfileResponse"
+                  "$ref": "#/components/schemas/ListApplicationResponse"
                 }
               }
             }
@@ -222,6 +224,36 @@
         }
       }
     },
+    "/api/mentorship/createApplication": {
+      "post": {
+        "tags": [
+          "mentor-application-controller"
+        ],
+        "operationId": "createApplication",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateApplicationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateApplicationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/mentorship/updateMentorProfile": {
       "patch": {
         "tags": [
@@ -245,6 +277,157 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UpdateMentorProfileResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/mentorship/listSkills": {
+      "get": {
+        "tags": [
+          "mentor-profile-controller"
+        ],
+        "operationId": "listSkills",
+        "parameters": [
+          {
+            "name": "request",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ListSkillRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListSkillResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/mentorship/listMentorProfile": {
+      "get": {
+        "tags": [
+          "mentor-profile-controller"
+        ],
+        "operationId": "listMentorProfiles",
+        "parameters": [
+          {
+            "name": "request",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ListMentorProfileRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListMentorProfileResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/mentorship/listCategories": {
+      "get": {
+        "tags": [
+          "mentor-profile-controller"
+        ],
+        "operationId": "listCategories",
+        "parameters": [
+          {
+            "name": "request",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/ListCategoryRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListCategoryResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/mentorship/getMentorProfile": {
+      "get": {
+        "tags": [
+          "mentor-profile-controller"
+        ],
+        "operationId": "getMentorProfile",
+        "parameters": [
+          {
+            "name": "request",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/GetMentorProfileRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMentorProfileResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/mentorship/application/{id}": {
+      "get": {
+        "tags": [
+          "mentor-application-controller"
+        ],
+        "operationId": "getApplication",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetApplicationResponse"
                 }
               }
             }
@@ -285,8 +468,147 @@
   },
   "components": {
     "schemas": {
-      "ListSkillRequest": {
-        "type": "object"
+      "ScheduleSessionRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "startOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endOn": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "MentorApplication": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "mentorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "menteeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "applicationMessage": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "ACCEPTED",
+              "REJECTED"
+            ]
+          },
+          "appliedOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "session": {
+            "$ref": "#/components/schemas/MentorSession"
+          }
+        }
+      },
+      "MentorSession": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "startOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "endOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ACTIVE",
+              "SCHEDULED",
+              "COMPLETED"
+            ]
+          }
+        }
+      },
+      "ScheduleSessionResponse": {
+        "type": "object",
+        "properties": {
+          "application": {
+            "$ref": "#/components/schemas/MentorApplication"
+          }
+        }
+      },
+      "RejectApplicationResponse": {
+        "type": "object",
+        "properties": {
+          "application": {
+            "$ref": "#/components/schemas/MentorApplication"
+          }
+        }
+      },
+      "AcceptApplicationResponse": {
+        "type": "object",
+        "properties": {
+          "application": {
+            "$ref": "#/components/schemas/MentorApplication"
+          }
+        }
+      },
+      "ListApplicationRequest": {
+        "type": "object",
+        "properties": {
+          "mentors": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "mentees": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        }
+      },
+      "ListApplicationResponse": {
+        "type": "object",
+        "properties": {
+          "applications": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MentorApplication"
+            }
+          }
+        }
+      },
+      "CreateSkillRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "skill": {
+            "type": "string"
+          }
+        }
       },
       "ListSkillResponse": {
         "type": "object",
@@ -447,17 +769,6 @@
           }
         }
       },
-      "CreateSkillRequest": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "skill": {
-            "type": "string"
-          }
-        }
-      },
       "CreateSkillResponse": {
         "type": "object",
         "properties": {
@@ -501,6 +812,30 @@
           }
         }
       },
+      "CreateApplicationRequest": {
+        "type": "object",
+        "properties": {
+          "mentorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "menteeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "applicationMessage": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateApplicationResponse": {
+        "type": "object",
+        "properties": {
+          "application": {
+            "$ref": "#/components/schemas/MentorApplication"
+          }
+        }
+      },
       "UpdateMentorProfileRequest": {
         "type": "object",
         "properties": {
@@ -514,6 +849,17 @@
         "properties": {
           "mentorProfile": {
             "$ref": "#/components/schemas/MentorProfile"
+          }
+        }
+      },
+      "ListSkillRequest": {
+        "type": "object"
+      },
+      "GetApplicationResponse": {
+        "type": "object",
+        "properties": {
+          "application": {
+            "$ref": "#/components/schemas/MentorApplication"
           }
         }
       },
