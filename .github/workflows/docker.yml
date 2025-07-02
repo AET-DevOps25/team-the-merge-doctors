@@ -42,6 +42,13 @@ jobs:
           push: true
           tags: ghcr.io/aet-devops25/team-the-merge-doctors/genai:latest
 
+      - name: Build & push Ollama image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./genai/ollama
+          push: true
+          tags: ghcr.io/aet-devops25/team-the-merge-doctors/ollama:latest
+
       - name: Build & push User Service image
         uses: docker/build-push-action@v4
         with:

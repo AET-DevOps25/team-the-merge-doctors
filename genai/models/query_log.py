@@ -1,9 +1,8 @@
-from flask_sqlalchemy import SQLAlchemy
+from database import db
 from datetime import datetime
 
-db = SQLAlchemy()
-
 class QueryLog(db.Model):
+    '''Database model for storing question-answer pairs and their timestamps'''
     __tablename__ = 'query_logs'
     id = db.Column(db.Integer, primary_key=True)
     question = db.Column(db.Text, nullable=False)

@@ -34,23 +34,37 @@ services:
       - postgres-db
     restart: on-failure:3
 
+  ollama:
+    platform: linux/amd64
+    build:
+      context: ./genai/ollama
+      dockerfile: Dockerfile
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: always
+
   genai:
     platform: linux/amd64
     image: ghcr.io/aet-devops25/team-the-merge-doctors/genai:latest
     build:
       context: genai
       dockerfile: Dockerfile
-    command: gunicorn -b 0.0.0.0:5001 app:app
+    command: gunicorn -b 0.0.0.0:5001 --config gunicorn.conf.py app:app
     volumes:
       - ./genai:/app
     ports:
       - "5001:5001"
     environment:
       - POSTGRES_HOST=postgres-db
+      - OLLAMA_BASE_URL=http://ollama:11434
     env_file:
       - ./docker/backend_config_files/.env
     depends_on:
       - postgres-db
+      - ollama
     restart: always
 
   mentorship-service:
@@ -91,3 +105,4 @@ services:
 
 volumes:
   db_data:
+  ollama_data:
