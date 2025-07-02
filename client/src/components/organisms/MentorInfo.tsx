@@ -9,25 +9,24 @@ import {
   Typography,
   Tag,
   Button,
-  Rate,
 } from 'antd';
 import {
   EnvironmentOutlined,
-  HeartOutlined,
   MessageOutlined,
+  UserOutlined,
 } from '@ant-design/icons';
 
 const { Title, Text } = Typography;
 
 interface MentorInfoProps {
   isAvailable: boolean;
-  avatar: string;
+  // avatar: string;
   name: string;
-  title: string;
-  company: string;
+  // title: string;
+  // company: string;
   location: string;
-  rating: number;
-  totalReviews: number;
+  // rating: number;
+  // totalReviews: number;
 }
 
 export const MentorInfo: React.FC<MentorInfoProps> = (
@@ -37,7 +36,8 @@ export const MentorInfo: React.FC<MentorInfoProps> = (
     <Row align="middle" gutter={24}>
       <Col>
         <Badge dot={props.isAvailable} color="green">
-          <Avatar size={120} src={props.avatar} />
+          {/* <Avatar size={120} src={props.avatar} /> */}
+          <Avatar size={120} icon={<UserOutlined />} />
         </Badge>
       </Col>
       <Col flex={1}>
@@ -51,21 +51,21 @@ export const MentorInfo: React.FC<MentorInfoProps> = (
                 </Tag>
               )}
             </Title>
-            <Text style={{ fontSize: 18, color: '#666' }}>{props.title}</Text>
+            {/* <Text style={{ fontSize: 18, color: '#666' }}>{props.title}</Text> */}
           </div>
-          <Text style={{ fontSize: 16, color: '#1890ff' }}>
+          {/* <Text style={{ fontSize: 16, color: '#1890ff' }}>
             {props.company}
-          </Text>
+          </Text> */}
           <Space size="middle">
             <Space>
               <EnvironmentOutlined />
               <Text>{props.location}</Text>
             </Space>
             <Space>
-              <Rate disabled defaultValue={props.rating} />
-              <Text>
+              {/* <Rate disabled defaultValue={props.rating} /> */}
+              {/* <Text>
                 {props.rating} ({props.totalReviews} reviews)
-              </Text>
+              </Text> */}
             </Space>
           </Space>
         </Space>
@@ -80,9 +80,9 @@ export const MentorInfo: React.FC<MentorInfoProps> = (
           >
             Contact {props.name}
           </Button>
-          <Button icon={<HeartOutlined />} style={{ borderRadius: 8 }} block>
+          {/* <Button icon={<HeartOutlined />} style={{ borderRadius: 8 }} block>
             Save
-          </Button>
+          </Button> */}
         </Space>
       </Col>
     </Row>
