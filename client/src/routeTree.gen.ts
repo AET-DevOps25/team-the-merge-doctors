@@ -15,6 +15,8 @@ import { Route as TestImport } from './pages/test'
 import { Route as IndexImport } from './pages/index'
 import { Route as SearchIndexImport } from './pages/search/index'
 import { Route as MentorMentorIdImport } from './pages/mentor.$mentorId'
+import { Route as ApplicationsMentorMentorIdImport } from './pages/applications/mentor/$mentorId'
+import { Route as ApplicationsMenteeMenteeIdImport } from './pages/applications/mentee/$menteeId'
 
 // Create/Update Routes
 
@@ -41,6 +43,22 @@ const MentorMentorIdRoute = MentorMentorIdImport.update({
   path: '/mentor/$mentorId',
   getParentRoute: () => rootRoute,
 } as any)
+
+const ApplicationsMentorMentorIdRoute = ApplicationsMentorMentorIdImport.update(
+  {
+    id: '/applications/mentor/$mentorId',
+    path: '/applications/mentor/$mentorId',
+    getParentRoute: () => rootRoute,
+  } as any,
+)
+
+const ApplicationsMenteeMenteeIdRoute = ApplicationsMenteeMenteeIdImport.update(
+  {
+    id: '/applications/mentee/$menteeId',
+    path: '/applications/mentee/$menteeId',
+    getParentRoute: () => rootRoute,
+  } as any,
+)
 
 // Populate the FileRoutesByPath interface
 
@@ -74,6 +92,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SearchIndexImport
       parentRoute: typeof rootRoute
     }
+    '/applications/mentee/$menteeId': {
+      id: '/applications/mentee/$menteeId'
+      path: '/applications/mentee/$menteeId'
+      fullPath: '/applications/mentee/$menteeId'
+      preLoaderRoute: typeof ApplicationsMenteeMenteeIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/applications/mentor/$mentorId': {
+      id: '/applications/mentor/$mentorId'
+      path: '/applications/mentor/$mentorId'
+      fullPath: '/applications/mentor/$mentorId'
+      preLoaderRoute: typeof ApplicationsMentorMentorIdImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -84,6 +116,8 @@ export interface FileRoutesByFullPath {
   '/test': typeof TestRoute
   '/mentor/$mentorId': typeof MentorMentorIdRoute
   '/search': typeof SearchIndexRoute
+  '/applications/mentee/$menteeId': typeof ApplicationsMenteeMenteeIdRoute
+  '/applications/mentor/$mentorId': typeof ApplicationsMentorMentorIdRoute
 }
 
 export interface FileRoutesByTo {
@@ -91,6 +125,8 @@ export interface FileRoutesByTo {
   '/test': typeof TestRoute
   '/mentor/$mentorId': typeof MentorMentorIdRoute
   '/search': typeof SearchIndexRoute
+  '/applications/mentee/$menteeId': typeof ApplicationsMenteeMenteeIdRoute
+  '/applications/mentor/$mentorId': typeof ApplicationsMentorMentorIdRoute
 }
 
 export interface FileRoutesById {
@@ -99,14 +135,35 @@ export interface FileRoutesById {
   '/test': typeof TestRoute
   '/mentor/$mentorId': typeof MentorMentorIdRoute
   '/search/': typeof SearchIndexRoute
+  '/applications/mentee/$menteeId': typeof ApplicationsMenteeMenteeIdRoute
+  '/applications/mentor/$mentorId': typeof ApplicationsMentorMentorIdRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/test' | '/mentor/$mentorId' | '/search'
+  fullPaths:
+    | '/'
+    | '/test'
+    | '/mentor/$mentorId'
+    | '/search'
+    | '/applications/mentee/$menteeId'
+    | '/applications/mentor/$mentorId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/test' | '/mentor/$mentorId' | '/search'
-  id: '__root__' | '/' | '/test' | '/mentor/$mentorId' | '/search/'
+  to:
+    | '/'
+    | '/test'
+    | '/mentor/$mentorId'
+    | '/search'
+    | '/applications/mentee/$menteeId'
+    | '/applications/mentor/$mentorId'
+  id:
+    | '__root__'
+    | '/'
+    | '/test'
+    | '/mentor/$mentorId'
+    | '/search/'
+    | '/applications/mentee/$menteeId'
+    | '/applications/mentor/$mentorId'
   fileRoutesById: FileRoutesById
 }
 
@@ -115,6 +172,8 @@ export interface RootRouteChildren {
   TestRoute: typeof TestRoute
   MentorMentorIdRoute: typeof MentorMentorIdRoute
   SearchIndexRoute: typeof SearchIndexRoute
+  ApplicationsMenteeMenteeIdRoute: typeof ApplicationsMenteeMenteeIdRoute
+  ApplicationsMentorMentorIdRoute: typeof ApplicationsMentorMentorIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -122,6 +181,8 @@ const rootRouteChildren: RootRouteChildren = {
   TestRoute: TestRoute,
   MentorMentorIdRoute: MentorMentorIdRoute,
   SearchIndexRoute: SearchIndexRoute,
+  ApplicationsMenteeMenteeIdRoute: ApplicationsMenteeMenteeIdRoute,
+  ApplicationsMentorMentorIdRoute: ApplicationsMentorMentorIdRoute,
 }
 
 export const routeTree = rootRoute
@@ -137,7 +198,9 @@ export const routeTree = rootRoute
         "/",
         "/test",
         "/mentor/$mentorId",
-        "/search/"
+        "/search/",
+        "/applications/mentee/$menteeId",
+        "/applications/mentor/$mentorId"
       ]
     },
     "/": {
@@ -151,6 +214,12 @@ export const routeTree = rootRoute
     },
     "/search/": {
       "filePath": "search/index.tsx"
+    },
+    "/applications/mentee/$menteeId": {
+      "filePath": "applications/mentee/$menteeId.tsx"
+    },
+    "/applications/mentor/$mentorId": {
+      "filePath": "applications/mentor/$mentorId.tsx"
     }
   }
 }
