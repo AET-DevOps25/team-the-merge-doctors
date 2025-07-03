@@ -21,19 +21,26 @@ public class MentorApplicationController {
     private final MentorApplicationService mentorApplicationService;
 
     @PostMapping("/createApplication")
-    public ResponseEntity<CreateApplicationResponse> createApplication(@RequestBody @Valid CreateApplicationRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(mentorApplicationService.createApplication(request));
+    public ResponseEntity<CreateApplicationResponse> createApplication(
+            @RequestBody @Valid CreateApplicationRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(mentorApplicationService.createApplication(request));
     }
 
-    @PostMapping("/listApplication")
-    public ResponseEntity<ListApplicationResponse> listApplication(@RequestBody @Valid ListApplicationRequest request) {
-        return ResponseEntity.status(HttpStatus.OK).body(mentorApplicationService.listApplication(request));
+    @GetMapping("/listApplications")
+    public ResponseEntity<ListApplicationResponse> listApplications(
+            @RequestParam(required = false) UUID mentorId,
+            @RequestParam(required = false) UUID menteeId) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(mentorApplicationService.listApplications(mentorId, menteeId));
     }
 
     @GetMapping("/application/{id}")
     public ResponseEntity<GetApplicationResponse> getApplication(@PathVariable("id") UUID id) {
-        Optional<MentorApplication> applicationOptional = mentorApplicationService.getApplication(id);
-        return applicationOptional.map(application -> ResponseEntity.ok(new GetApplicationResponse(application)))
+        Optional<MentorApplication> applicationOptional =
+                mentorApplicationService.getApplication(id);
+        return applicationOptional
+                .map(application -> ResponseEntity.ok(new GetApplicationResponse(application)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -63,14 +70,11 @@ public class MentorApplicationController {
 
     @PutMapping("/scheduleSession")
     public ResponseEntity<ScheduleSessionResponse> scheduleSession(
-            @RequestBody ScheduleSessionRequest request
-    ) {
+            @RequestBody ScheduleSessionRequest request) {
         try {
-            MentorApplication updated = mentorApplicationService.scheduleSession(
-                    request.id(),
-                    request.startOn(),
-                    request.endOn()
-            );
+            MentorApplication updated =
+                    mentorApplicationService.scheduleSession(
+                            request.id(), request.startOn(), request.endOn());
             return ResponseEntity.ok(new ScheduleSessionResponse(updated));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
@@ -78,5 +82,4 @@ public class MentorApplicationController {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
-
 }

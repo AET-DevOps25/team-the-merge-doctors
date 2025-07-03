@@ -81,24 +81,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ListMentorProfileResponse"
-  /api/mentorship/listApplication:
-    post:
-      tags:
-      - mentor-application-controller
-      operationId: listApplication
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ListApplicationRequest"
-        required: true
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ListApplicationResponse"
   /api/mentorship/createSkill:
     post:
       tags:
@@ -213,6 +195,31 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ListCategoryResponse"
+  /api/mentorship/listApplications:
+    get:
+      tags:
+      - mentor-application-controller
+      operationId: listApplications
+      parameters:
+      - name: mentorId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      - name: menteeId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListApplicationResponse"
   /api/mentorship/getMentorProfile:
     get:
       tags:
@@ -296,6 +303,8 @@ components:
           type: string
           format: uuid
         applicationMessage:
+          type: string
+        summarizedApplicationMessage:
           type: string
         status:
           type: string
@@ -421,26 +430,6 @@ components:
           format: uuid
         name:
           type: string
-    ListApplicationRequest:
-      type: object
-      properties:
-        mentors:
-          type: array
-          items:
-            type: string
-            format: uuid
-        mentees:
-          type: array
-          items:
-            type: string
-            format: uuid
-    ListApplicationResponse:
-      type: object
-      properties:
-        applications:
-          type: array
-          items:
-            $ref: "#/components/schemas/MentorApplication"
     CreateSkillRequest:
       type: object
       properties:
@@ -515,6 +504,13 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Category"
+    ListApplicationResponse:
+      type: object
+      properties:
+        applications:
+          type: array
+          items:
+            $ref: "#/components/schemas/MentorApplication"
     GetMentorProfileResponse:
       type: object
       properties:

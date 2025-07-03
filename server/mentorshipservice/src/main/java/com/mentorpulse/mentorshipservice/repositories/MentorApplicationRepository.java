@@ -11,15 +11,14 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 import java.util.UUID;
 
-public interface MentorApplicationRepository extends CrudRepository<MentorApplication, UUID> , JpaSpecificationExecutor<MentorApplication> {
+public interface MentorApplicationRepository
+        extends CrudRepository<MentorApplication, UUID>,
+                JpaSpecificationExecutor<MentorApplication> {
 
-
-    static Specification<MentorApplication> createSpecification(ListApplicationRequest request) {
-        return Specification.allOf(
-                mentorIn(request.mentors()),
-                menteeIn(request.mentees())
-        );
+    static Specification<MentorApplication> createSpecification(UUID mentorId, UUID menteeId) {
+        return Specification.allOf(mentorIn(List.of(mentorId)), menteeIn(List.of(menteeId)));
     }
+
     private static Specification<MentorApplication> mentorIn(List<UUID> mentors) {
         return (root, query, criteriaBuilder) -> {
             if (ObjectUtils.isEmpty(mentors)) {

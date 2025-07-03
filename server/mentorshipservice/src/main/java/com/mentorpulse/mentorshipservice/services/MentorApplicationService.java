@@ -23,18 +23,24 @@ public class MentorApplicationService {
 
     @Transactional
     public CreateApplicationResponse createApplication(CreateApplicationRequest request) {
-        MentorApplication mentorApplication = MentorApplication.builder()
-                .mentorId(request.mentorId())
-                .menteeId(request.menteeId())
-                .applicationMessage(request.applicationMessage())
-                .build();
+        // TODO: summarize application text using llm
+        MentorApplication mentorApplication =
+                MentorApplication.builder()
+                        .mentorId(request.mentorId())
+                        .menteeId(request.menteeId())
+                        .applicationMessage(request.applicationMessage())
+                        .summarizedApplicationMessage(
+                                "Every sunrise brings a new chance to grow and shine. Embrace the day with hope, and let your heart lead the way. Tomorrow is shaped by what you choose today.")
+                        .build();
         mentorApplication = mentorApplicationRepository.save(mentorApplication);
         return new CreateApplicationResponse(mentorApplication);
     }
 
     @Transactional(readOnly = true)
-    public ListApplicationResponse listApplication(ListApplicationRequest request) {
-        List<MentorApplication> applications = mentorApplicationRepository.findAll(MentorApplicationRepository.createSpecification(request));
+    public ListApplicationResponse listApplications(UUID mentorId, UUID menteeId) {
+        List<MentorApplication> applications =
+                mentorApplicationRepository.findAll(
+                        MentorApplicationRepository.createSpecification(mentorId, menteeId));
         return new ListApplicationResponse(applications);
     }
 
@@ -44,10 +50,15 @@ public class MentorApplicationService {
     }
 
     @Transactional
-    public MentorApplication acceptApplication(UUID applicationId) throws ResourceNotFoundException {
-        MentorApplication application = mentorApplicationRepository.findById(applicationId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Application not found: " + applicationId));
+    public MentorApplication acceptApplication(UUID applicationId)
+            throws ResourceNotFoundException {
+        MentorApplication application =
+                mentorApplicationRepository
+                        .findById(applicationId)
+                        .orElseThrow(
+                                () ->
+                                        new ResourceNotFoundException(
+                                                "Application not found: " + applicationId));
 
         if (application.getStatus() != ApplicationStatus.PENDING) {
             throw new IllegalStateException(
@@ -56,19 +67,22 @@ public class MentorApplicationService {
 
         application.setStatus(ApplicationStatus.ACCEPTED);
 
-        MentorSession session = MentorSession.builder()
-                .status(SessionStatus.ACTIVE)
-                .build();
+        MentorSession session = MentorSession.builder().status(SessionStatus.ACTIVE).build();
 
         application.setSession(session);
         return mentorApplicationRepository.save(application);
     }
 
     @Transactional
-    public MentorApplication rejectApplication(UUID applicationId) throws ResourceNotFoundException {
-        MentorApplication application = mentorApplicationRepository.findById(applicationId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Application not found: " + applicationId));
+    public MentorApplication rejectApplication(UUID applicationId)
+            throws ResourceNotFoundException {
+        MentorApplication application =
+                mentorApplicationRepository
+                        .findById(applicationId)
+                        .orElseThrow(
+                                () ->
+                                        new ResourceNotFoundException(
+                                                "Application not found: " + applicationId));
 
         if (application.getStatus() != ApplicationStatus.PENDING) {
             throw new IllegalStateException(
@@ -81,10 +95,15 @@ public class MentorApplicationService {
     }
 
     @Transactional
-    public MentorApplication scheduleSession(UUID applicationId, Instant startOn, Instant endOn) throws ResourceNotFoundException {
-        MentorApplication application = mentorApplicationRepository.findById(applicationId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Application not found: " + applicationId));
+    public MentorApplication scheduleSession(UUID applicationId, Instant startOn, Instant endOn)
+            throws ResourceNotFoundException {
+        MentorApplication application =
+                mentorApplicationRepository
+                        .findById(applicationId)
+                        .orElseThrow(
+                                () ->
+                                        new ResourceNotFoundException(
+                                                "Application not found: " + applicationId));
 
         if (application.getStatus() != ApplicationStatus.ACCEPTED) {
             throw new IllegalStateException(
@@ -104,6 +123,4 @@ public class MentorApplicationService {
 
         return mentorApplicationRepository.save(application);
     }
-
-
 }
