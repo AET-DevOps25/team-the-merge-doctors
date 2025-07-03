@@ -1,5 +1,4 @@
-import { MentorApplicationStatus, useListApplications } from '@/api/mentor';
-import { MentorApplicationCard } from '@/components/organisms/manage-view-applications/mentor/MentorApplicationCard';
+import { useListApplications } from '@/api/mentor';
 import { MentorApplicationsList } from '@/components/organisms/manage-view-applications/mentor/MentorApplicationList';
 import {
   getAcceptedApplications,

@@ -1,7 +1,7 @@
-import { Button, Card, Col, Row, Space, Tag } from 'antd';
+import { Button, Card, Col, Row, Space } from 'antd';
 import '@/components/organisms/mentor-search/MentorCard.css';
 import { useNavigate } from '@tanstack/react-router';
-import type { MentorProfile, Skill } from '@/api/mentor';
+import type { MentorProfile } from '@/api/mentor';
 import { MentorCategoryPill } from '@/components/atoms/MentorCategoryPill';
 import { MentorSkillsSection } from '@/components/atoms/MentorSkillsSection';
 
@@ -62,7 +62,7 @@ function ViewProfileButton({ mentor }: ViewProfileButtonProps) {
           }
         }}
       >
-        View Profile
+        View Profile & Apply
       </Button>
     </div>
   );
