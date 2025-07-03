@@ -1,6 +1,5 @@
 package com.mentorpulse.mentorshipservice.repositories;
 
-import com.mentorpulse.mentorshipservice.dto.ListApplicationRequest;
 import com.mentorpulse.mentorshipservice.models.MentorApplication;
 import com.mentorpulse.mentorshipservice.models.MentorApplication_;
 import org.apache.commons.lang3.ObjectUtils;
@@ -16,7 +15,9 @@ public interface MentorApplicationRepository
                 JpaSpecificationExecutor<MentorApplication> {
 
     static Specification<MentorApplication> createSpecification(UUID mentorId, UUID menteeId) {
-        return Specification.allOf(mentorIn(List.of(mentorId)), menteeIn(List.of(menteeId)));
+        List<UUID> mentors = mentorId == null ? List.of() : List.of(mentorId);
+        List<UUID> mentees = menteeId == null ? List.of() : List.of(menteeId);
+        return Specification.allOf(mentorIn(mentors), menteeIn(mentees));
     }
 
     private static Specification<MentorApplication> mentorIn(List<UUID> mentors) {

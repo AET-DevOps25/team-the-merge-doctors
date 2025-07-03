@@ -1,7 +1,9 @@
-import { Button, Card, Col, Divider, Row, Space, Tag } from 'antd';
+import { Button, Card, Col, Row, Space, Tag } from 'antd';
 import '@/components/organisms/mentor-search/MentorCard.css';
 import { useNavigate } from '@tanstack/react-router';
-import type { MentorCategory, MentorProfile, Skill } from '@/api/mentor';
+import type { MentorProfile, Skill } from '@/api/mentor';
+import { MentorCategoryPill } from '@/components/atoms/MentorCategoryPill';
+import { MentorSkillsSection } from '@/components/atoms/MentorSkillsSection';
 
 interface MentorCardProps {
   mentor: MentorProfile;
@@ -9,8 +11,6 @@ interface MentorCardProps {
 
 export function MentorCard({ mentor }: MentorCardProps) {
   // getAverageRating(mentorId)
-  // getNumberOfReviews(mentorId)
-  // getMentor(mentorId): should include categories, skills, bio, etc.
 
   // const {data: userData} = useGetUser({req: {userId: mentor.id}});
 
@@ -33,46 +33,13 @@ export function MentorCard({ mentor }: MentorCardProps) {
           <div style={{ fontWeight: 'bold' }}>About</div>
           <div className="mentorBio">{mentor.bio}</div>
         </div>
-        {mentor.skills !== undefined && <MentorSkills skills={mentor.skills} />}
+        {mentor.skills !== undefined && (
+          <MentorSkillsSection skills={mentor.skills} />
+        )}
         <ViewProfileButton mentor={mentor} />
       </Space>
     </Card>
   );
-}
-
-interface MentorSkillsProps {
-  skills: Skill[];
-}
-
-function MentorSkills({ skills }: MentorSkillsProps) {
-  return (
-    <div>
-      <div style={{ fontWeight: 'bold' }}>Skills</div>
-      {skills?.map((skill) => <SkillPill key={skill?.id} skill={skill} />)}
-    </div>
-  );
-}
-
-interface MentorCategoryPillProps {
-  category: MentorCategory;
-}
-
-function MentorCategoryPill({ category }: MentorCategoryPillProps) {
-  return (
-    <Tag>
-      {category.category?.name}
-      <Divider type="vertical" size="large" />
-      {category.yearsOfExperience} years
-    </Tag>
-  );
-}
-
-interface SkillPillProps {
-  skill: Skill;
-}
-
-function SkillPill({ skill }: SkillPillProps) {
-  return <Tag>{skill.name}</Tag>;
 }
 
 interface ViewProfileButtonProps {

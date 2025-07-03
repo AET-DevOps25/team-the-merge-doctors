@@ -11,7 +11,6 @@
 // Import Routes
 
 import { Route as rootRoute } from './pages/__root'
-import { Route as TestImport } from './pages/test'
 import { Route as IndexImport } from './pages/index'
 import { Route as SearchIndexImport } from './pages/search/index'
 import { Route as MentorMentorIdImport } from './pages/mentor.$mentorId'
@@ -19,12 +18,6 @@ import { Route as ApplicationsMentorMentorIdImport } from './pages/applications/
 import { Route as ApplicationsMenteeMenteeIdImport } from './pages/applications/mentee/$menteeId'
 
 // Create/Update Routes
-
-const TestRoute = TestImport.update({
-  id: '/test',
-  path: '/test',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -71,13 +64,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/test': {
-      id: '/test'
-      path: '/test'
-      fullPath: '/test'
-      preLoaderRoute: typeof TestImport
-      parentRoute: typeof rootRoute
-    }
     '/mentor/$mentorId': {
       id: '/mentor/$mentorId'
       path: '/mentor/$mentorId'
@@ -113,7 +99,6 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/test': typeof TestRoute
   '/mentor/$mentorId': typeof MentorMentorIdRoute
   '/search': typeof SearchIndexRoute
   '/applications/mentee/$menteeId': typeof ApplicationsMenteeMenteeIdRoute
@@ -122,7 +107,6 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/test': typeof TestRoute
   '/mentor/$mentorId': typeof MentorMentorIdRoute
   '/search': typeof SearchIndexRoute
   '/applications/mentee/$menteeId': typeof ApplicationsMenteeMenteeIdRoute
@@ -132,7 +116,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/test': typeof TestRoute
   '/mentor/$mentorId': typeof MentorMentorIdRoute
   '/search/': typeof SearchIndexRoute
   '/applications/mentee/$menteeId': typeof ApplicationsMenteeMenteeIdRoute
@@ -143,7 +126,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/test'
     | '/mentor/$mentorId'
     | '/search'
     | '/applications/mentee/$menteeId'
@@ -151,7 +133,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/test'
     | '/mentor/$mentorId'
     | '/search'
     | '/applications/mentee/$menteeId'
@@ -159,7 +140,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/test'
     | '/mentor/$mentorId'
     | '/search/'
     | '/applications/mentee/$menteeId'
@@ -169,7 +149,6 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  TestRoute: typeof TestRoute
   MentorMentorIdRoute: typeof MentorMentorIdRoute
   SearchIndexRoute: typeof SearchIndexRoute
   ApplicationsMenteeMenteeIdRoute: typeof ApplicationsMenteeMenteeIdRoute
@@ -178,7 +157,6 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  TestRoute: TestRoute,
   MentorMentorIdRoute: MentorMentorIdRoute,
   SearchIndexRoute: SearchIndexRoute,
   ApplicationsMenteeMenteeIdRoute: ApplicationsMenteeMenteeIdRoute,
@@ -196,7 +174,6 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/test",
         "/mentor/$mentorId",
         "/search/",
         "/applications/mentee/$menteeId",
@@ -205,9 +182,6 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.tsx"
-    },
-    "/test": {
-      "filePath": "test.tsx"
     },
     "/mentor/$mentorId": {
       "filePath": "mentor.$mentorId.tsx"

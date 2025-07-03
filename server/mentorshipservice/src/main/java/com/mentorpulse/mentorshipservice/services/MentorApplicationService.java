@@ -24,6 +24,7 @@ public class MentorApplicationService {
     @Transactional
     public CreateApplicationResponse createApplication(CreateApplicationRequest request) {
         // TODO: summarize application text using llm
+        // TODO: add when the application happens
         MentorApplication mentorApplication =
                 MentorApplication.builder()
                         .mentorId(request.mentorId())
@@ -31,6 +32,7 @@ public class MentorApplicationService {
                         .applicationMessage(request.applicationMessage())
                         .summarizedApplicationMessage(
                                 "Every sunrise brings a new chance to grow and shine. Embrace the day with hope, and let your heart lead the way. Tomorrow is shaped by what you choose today.")
+                        .status(ApplicationStatus.PENDING)
                         .build();
         mentorApplication = mentorApplicationRepository.save(mentorApplication);
         return new CreateApplicationResponse(mentorApplication);
