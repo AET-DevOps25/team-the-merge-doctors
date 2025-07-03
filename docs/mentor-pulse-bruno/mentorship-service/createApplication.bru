@@ -4,8 +4,16 @@ meta {
   seq: 1
 }
 
-get {
-  url: 
-  body: none
+post {
+  url: {{method}}://{{mentorship-service-endpoint}}/api/mentorship/createApplication
+  body: json
   auth: inherit
+}
+
+body:json {
+  {
+      "mentorId": "dad02741-84d9-4300-8e8a-a8c47fb690af",
+      "menteeId": "f03dc27c-64bf-4ed3-9e6c-ce17a0ae4258",
+      "applicationMessage": "Hi Prof. Martinez, I'm Christina Palmer, and I'm deeply interested in learning more about your expertise in your field. I would love to have you as my mentor to guide me through my career development. I've been following your work and am particularly impressed by your academic achievements and research contributions. As someone who is still early in my career, I believe your mentorship would provide invaluable insights into navigating the complexities of professional growth. I'm eager to learn from your experience and would be honored to discuss potential mentorship opportunities with you. I'm committed to being a dedicated mentee who values your time and expertise."
+    }
 }
