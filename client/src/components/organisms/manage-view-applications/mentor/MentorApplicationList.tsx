@@ -18,10 +18,12 @@ export function MentorApplicationsList({
       locale={{ emptyText: 'No applications found' }}
       renderItem={(application) => {
         return (
-          <MentorApplicationCard
-            key={application.id}
-            application={application}
-          />
+          <div style={{ marginBottom: 16 }}>
+            <MentorApplicationCard
+              key={application.id}
+              application={application}
+            />
+          </div>
         );
       }}
     />

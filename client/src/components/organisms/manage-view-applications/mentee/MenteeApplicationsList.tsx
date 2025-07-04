@@ -18,10 +18,12 @@ export function MenteeApplicationsList({
       locale={{ emptyText: 'No applications found' }}
       renderItem={(application) => {
         return (
-          <MenteeApplicationCard
-            key={application.id}
-            application={application}
-          />
+          <div style={{ marginBottom: 16 }}>
+            <MenteeApplicationCard
+              key={application.id}
+              application={application}
+            />
+          </div>
         );
       }}
     />

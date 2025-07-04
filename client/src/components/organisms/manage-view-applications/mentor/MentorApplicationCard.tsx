@@ -10,7 +10,7 @@ import { ApplicationCard } from '@/components/organisms/manage-view-applications
 import { getFullName } from '@/utils/getFullName';
 import { UserOutlined } from '@ant-design/icons';
 import { useQueryClient } from '@tanstack/react-query';
-import { Avatar, Button, notification, Space, Typography } from 'antd';
+import { Avatar, Button, message, notification, Space, Typography } from 'antd';
 
 interface MentorApplicationCardProps {
   application: MentorApplication;
@@ -49,6 +49,8 @@ export function MentorApplicationCard({
 
   // const menteeUser = getUserData?.data?.user;
 
+  const [messageApi, contextHolder] = message.useMessage();
+
   const { mutate: rejectApplication } = useRejectApplication();
 
   const { mutate: acceptApplication } = useAcceptApplication();
@@ -60,73 +62,72 @@ export function MentorApplicationCard({
   };
 
   return (
-    <ApplicationCard
-      application={application}
-      personDetail={<MenteeSection menteeUser={menteeUser} />}
-      showActionButtons={application.status === MentorApplicationStatus.PENDING}
-      actionButtons={
-        <Space>
-          <Button
-            type="primary"
-            style={{ backgroundColor: '#ff4d4f', borderColor: '#ff4d4f' }}
-            onClick={() =>
-              rejectApplication(
-                { id: application.id! },
-                {
-                  onSuccess: () => {
-                    // TODO: fix notfication not showing up
-                    notification.success({
-                      message: 'Application rejected successfully.',
-                    });
-                    // setTimeout(() => {
-                    //   invalidateQueries();
-                    // }, 100);
-                    invalidateQueries();
+    <>
+      {contextHolder}
+      <ApplicationCard
+        application={application}
+        personDetail={<MenteeSection menteeUser={menteeUser} />}
+        showActionButtons={
+          application.status === MentorApplicationStatus.PENDING
+        }
+        actionButtons={
+          <Space>
+            <Button
+              type="primary"
+              style={{ backgroundColor: '#ff4d4f', borderColor: '#ff4d4f' }}
+              onClick={() =>
+                rejectApplication(
+                  { id: application.id! },
+                  {
+                    onSuccess: () => {
+                      messageApi.success({ content: 'Application rejected' });
+                      setTimeout(() => {
+                        invalidateQueries();
+                      }, 750);
+                    },
+                    onError: () => {
+                      notification.error({
+                        message:
+                          'Failed to reject application. Please try again.',
+                      });
+                    },
                   },
-                  onError: () => {
-                    notification.error({
-                      message:
-                        'Failed to reject application. Please try again.',
-                    });
+                )
+              }
+            >
+              Reject Application
+            </Button>
+            <Button
+              type="primary"
+              style={{ backgroundColor: '#52c41a', borderColor: '#52c41a' }}
+              onClick={() =>
+                acceptApplication(
+                  { id: application.id! },
+                  {
+                    onSuccess: () => {
+                      messageApi.success({
+                        content: 'Application accepted',
+                      });
+                      setTimeout(() => {
+                        invalidateQueries();
+                      }, 750);
+                    },
+                    onError: () => {
+                      notification.error({
+                        message:
+                          'Failed to accept application. Please try again.',
+                      });
+                    },
                   },
-                },
-              )
-            }
-          >
-            Reject Application
-          </Button>
-          <Button
-            type="primary"
-            style={{ backgroundColor: '#52c41a', borderColor: '#52c41a' }}
-            onClick={() =>
-              acceptApplication(
-                { id: application.id! },
-                {
-                  onSuccess: () => {
-                    // TODO: fix notfication not showing up
-                    notification.success({
-                      message: 'Application accepted successfully.',
-                    });
-                    // setTimeout(() => {
-                    //   invalidateQueries();
-                    // }, 100);
-                    invalidateQueries();
-                  },
-                  onError: () => {
-                    notification.error({
-                      message:
-                        'Failed to accept application. Please try again.',
-                    });
-                  },
-                },
-              )
-            }
-          >
-            Accept Application
-          </Button>
-        </Space>
-      }
-    />
+                )
+              }
+            >
+              Accept Application
+            </Button>
+          </Space>
+        }
+      />
+    </>
   );
 }
 
