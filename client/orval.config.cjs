@@ -13,7 +13,7 @@ module.exports = {
       target: 'src/api/user.ts',
     },
     input: {
-      target: '../server/userservice/schema/user-service-schema.yaml',
+      target: '../server/userservice/schema/user-service-schema.json',
     },
   },
   // rating: {
@@ -41,7 +41,7 @@ module.exports = {
     },
     input: {
       target:
-        '../server/mentorshipservice/schema/mentorship-service-schema.yaml',
+        '../server/mentorshipservice/schema/mentorship-service-schema.json',
     },
   },
 };
