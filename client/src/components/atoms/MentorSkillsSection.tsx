@@ -2,7 +2,7 @@ import type { Skill } from '@/api/mentor';
 import { SkillPill } from '@/components/atoms/SkillPill';
 
 interface MentorSkillsSectionProps {
-  skills: Skill[];
+  skills?: Skill[];
 }
 
 export function MentorSkillsSection({ skills }: MentorSkillsSectionProps) {

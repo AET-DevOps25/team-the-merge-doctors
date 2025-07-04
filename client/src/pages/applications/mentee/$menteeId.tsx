@@ -1,11 +1,12 @@
-import {
-  MentorApplicationStatus,
-  useListApplications,
-  type MentorApplication,
-} from '@/api/mentor';
+import { useListApplications } from '@/api/mentor';
 import { MenteeApplicationsList } from '@/components/organisms/manage-view-applications/mentee/MenteeApplicationsList';
 import { createFileRoute, useParams } from '@tanstack/react-router';
 import { Layout, Tabs, Typography, type TabsProps } from 'antd';
+import {
+  getAcceptedApplications,
+  getPendingApplications,
+  getRejectedApplications,
+} from '@/utils/filterApplications.ts';
 
 export const Route = createFileRoute('/applications/mentee/$menteeId')({
   component: MenteeViewApplicationsPage,
@@ -70,15 +71,6 @@ export function MenteeViewApplicationsPage() {
         defaultActiveKey={ViewApplicationTabs.ACCEPTED_APPLICATIONS}
         items={tabItems}
       ></Tabs>
-      {/* <MenteeApplicationCard
-        application={{
-          menteeId: '123',
-          mentorId: '1234',
-          applicationMessage: 'test',
-          summarizedApplicationMessage: 'test',
-          status: MentorApplicationStatus.ACCEPTED,
-        }}
-      /> */}
     </Layout>
   );
 }
@@ -88,27 +80,3 @@ export const ViewApplicationTabs = {
   PENDING_APPLICATIONS: 'Pending',
   ACCEPTED_APPLICATIONS: 'Accepted',
 } as const;
-
-export function getPendingApplications(
-  applications: MentorApplication[],
-): MentorApplication[] {
-  return applications.filter(
-    (application) => application.status === MentorApplicationStatus.PENDING,
-  );
-}
-
-export function getAcceptedApplications(
-  applications: MentorApplication[],
-): MentorApplication[] {
-  return applications.filter(
-    (application) => application.status === MentorApplicationStatus.ACCEPTED,
-  );
-}
-
-export function getRejectedApplications(
-  applications: MentorApplication[],
-): MentorApplication[] {
-  return applications.filter(
-    (application) => application.status === MentorApplicationStatus.REJECTED,
-  );
-}

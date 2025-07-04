@@ -1,26 +1,16 @@
 import {
+  getListApplicationsQueryKey,
   MentorApplicationStatus,
   useAcceptApplication,
-  useGetMentorProfile,
   useRejectApplication,
   type MentorApplication,
-  type MentorProfile,
 } from '@/api/mentor';
-import type { User } from '@/api/user';
-import { MentorCategoryPill } from '@/components/atoms/MentorCategoryPill';
-import { MentorSkillsSection } from '@/components/atoms/MentorSkillsSection';
+import { type User } from '@/api/user';
 import { ApplicationCard } from '@/components/organisms/manage-view-applications/ApplicationCard';
+import { getFullName } from '@/utils/getFullName';
 import { UserOutlined } from '@ant-design/icons';
-import {
-  Avatar,
-  Button,
-  Col,
-  notification,
-  Row,
-  Space,
-  Typography,
-} from 'antd';
-import { useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { Avatar, Button, notification, Space, Typography } from 'antd';
 
 interface MentorApplicationCardProps {
   application: MentorApplication;
@@ -29,14 +19,11 @@ interface MentorApplicationCardProps {
 export function MentorApplicationCard({
   application,
 }: MentorApplicationCardProps) {
-  // TODO: add getUser after schema was updated to get the user (get mentee)
-  // const { } = useGetUser({userId: })
-
-  const { mutate: rejectApplication } = useRejectApplication();
-
-  const { mutate: acceptApplication } = useAcceptApplication();
-
-  const [api, contextHolder] = notification.useNotification();
+  // const { data: getUserData } = useGetFullUser(
+  //   { userId: application.mentorId! },
+  //   { query: { enabled: !!application.mentorId } },
+  // );
+  const queryClient = useQueryClient();
 
   const menteeUser: User = {
     id: 'dad02741-84d9-4300-8e8a-a8c47fb690af',
@@ -57,7 +44,19 @@ export function MentorApplicationCard({
       city: 'North Brandon',
       country: 'Chad',
     },
-    roleType: 'MENTEE',
+    roleType: 'MENTOR',
+  };
+
+  // const menteeUser = getUserData?.data?.user;
+
+  const { mutate: rejectApplication } = useRejectApplication();
+
+  const { mutate: acceptApplication } = useAcceptApplication();
+
+  const invalidateQueries = () => {
+    queryClient.invalidateQueries({
+      queryKey: getListApplicationsQueryKey({ mentorId: application.mentorId }),
+    });
   };
 
   return (
@@ -67,7 +66,6 @@ export function MentorApplicationCard({
       showActionButtons={application.status === MentorApplicationStatus.PENDING}
       actionButtons={
         <Space>
-          {contextHolder}
           <Button
             type="primary"
             style={{ backgroundColor: '#ff4d4f', borderColor: '#ff4d4f' }}
@@ -76,12 +74,17 @@ export function MentorApplicationCard({
                 { id: application.id! },
                 {
                   onSuccess: () => {
-                    api.success({
+                    // TODO: fix notfication not showing up
+                    notification.success({
                       message: 'Application rejected successfully.',
                     });
+                    // setTimeout(() => {
+                    //   invalidateQueries();
+                    // }, 100);
+                    invalidateQueries();
                   },
                   onError: () => {
-                    api.error({
+                    notification.error({
                       message:
                         'Failed to reject application. Please try again.',
                     });
@@ -100,12 +103,17 @@ export function MentorApplicationCard({
                 { id: application.id! },
                 {
                   onSuccess: () => {
-                    api.success({
+                    // TODO: fix notfication not showing up
+                    notification.success({
                       message: 'Application accepted successfully.',
                     });
+                    // setTimeout(() => {
+                    //   invalidateQueries();
+                    // }, 100);
+                    invalidateQueries();
                   },
                   onError: () => {
-                    api.error({
+                    notification.error({
                       message:
                         'Failed to accept application. Please try again.',
                     });
@@ -127,7 +135,7 @@ interface MenteeSectionProps {
 }
 
 function MenteeSection({ menteeUser }: MenteeSectionProps) {
-  const fullName = `${menteeUser?.name?.title} ${menteeUser?.name?.firstName} ${menteeUser?.name?.lastName}`;
+  const fullName = getFullName(menteeUser?.name);
 
   return (
     <Space align="center" size="large">

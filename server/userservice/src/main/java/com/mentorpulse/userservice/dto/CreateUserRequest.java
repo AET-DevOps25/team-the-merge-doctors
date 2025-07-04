@@ -13,5 +13,4 @@ public record CreateUserRequest(
         Contact contact,
         Address address,
         // MENTOR, MENTEE
-        RoleType roleType
-) {}
+        RoleType roleType) {}

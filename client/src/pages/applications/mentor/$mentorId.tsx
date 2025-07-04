@@ -1,13 +1,13 @@
 import { useListApplications } from '@/api/mentor';
 import { MentorApplicationsList } from '@/components/organisms/manage-view-applications/mentor/MentorApplicationList';
+import { ViewApplicationTabs } from '@/pages/applications/mentee/$menteeId';
+import { createFileRoute, useParams } from '@tanstack/react-router';
+import { Layout, Tabs, Typography, type TabsProps } from 'antd';
 import {
   getAcceptedApplications,
   getPendingApplications,
   getRejectedApplications,
-  ViewApplicationTabs,
-} from '@/pages/applications/mentee/$menteeId';
-import { createFileRoute, useParams } from '@tanstack/react-router';
-import { Layout, Tabs, Typography, type TabsProps } from 'antd';
+} from '@/utils/filterApplications.ts';
 
 export const Route = createFileRoute('/applications/mentor/$mentorId')({
   component: MentorManageApplicationsPage,
@@ -64,7 +64,9 @@ export function MentorManageApplicationsPage() {
   ];
 
   return (
-    <Layout style={{ padding: 24 }}>
+    <Layout
+      style={{ padding: 24, minHeight: '100vh', backgroundColor: '#f5f5f5' }}
+    >
       <Typography.Title level={2} style={{ marginBottom: 24 }}>
         Manage Applications
       </Typography.Title>
@@ -72,15 +74,6 @@ export function MentorManageApplicationsPage() {
         defaultActiveKey={ViewApplicationTabs.PENDING_APPLICATIONS}
         items={tabItems}
       />
-      {/* <MentorApplicationCard
-        application={{
-          menteeId: '123',
-          mentorId: '1234',
-          applicationMessage: 'test',
-          summarizedApplicationMessage: 'test',
-          status: MentorApplicationStatus.PENDING,
-        }}
-      /> */}
     </Layout>
   );
 }

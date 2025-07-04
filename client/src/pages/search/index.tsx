@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Col, Divider, Layout, List, Row, Space, Spin } from 'antd';
+import { Col, Divider, Layout, List, Row, Spin } from 'antd';
 import { SearchFilter } from '@/components/molecules/SearchFilter';
 import {
   type ComparisonFilter,
@@ -112,9 +112,12 @@ export function Search() {
             dataSource={listMentorsData?.data?.mentorProfile}
             loading={listProfilesIsPending}
             locale={{ emptyText: 'No mentors found' }}
+            size="large"
             renderItem={(mentorProfile) => {
               return (
-                <MentorCard key={mentorProfile.id} mentor={mentorProfile} />
+                <div style={{ marginBottom: 16 }}>
+                  <MentorCard key={mentorProfile.id} mentor={mentorProfile} />
+                </div>
               );
             }}
           />

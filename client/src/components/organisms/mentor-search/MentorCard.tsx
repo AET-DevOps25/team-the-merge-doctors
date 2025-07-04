@@ -12,14 +12,16 @@ interface MentorCardProps {
 export function MentorCard({ mentor }: MentorCardProps) {
   // getAverageRating(mentorId)
 
-  // const {data: userData} = useGetUser({req: {userId: mentor.id}});
+  // const { data: userData } = useGetUser(
+  //   { userId: mentor.mentorId! },
+  //   { query: { enabled: !!mentor.mentorId } },
+  // );
 
   return (
     <Card
       title={
         <Row>
-          {/* TODO: add name once its updated in schema */}
-          {/* <Col span={24}>{userData?.data.user?.userName}</Col> */}
+          {/*<Col span={24}>{getFullName(userData?.data?.user?.name)}</Col> */}
           {mentor.mentorCategory !== undefined && (
             <Col span={24}>
               <MentorCategoryPill category={mentor.mentorCategory} />
@@ -36,7 +38,9 @@ export function MentorCard({ mentor }: MentorCardProps) {
         {mentor.skills !== undefined && (
           <MentorSkillsSection skills={mentor.skills} />
         )}
-        <ViewProfileButton mentor={mentor} />
+        <div style={{ marginTop: 10 }}>
+          <ViewProfileButton mentor={mentor} />
+        </div>
       </Space>
     </Card>
   );
@@ -50,20 +54,18 @@ function ViewProfileButton({ mentor }: ViewProfileButtonProps) {
   const navigate = useNavigate();
 
   return (
-    <div style={{ textAlign: 'right' }}>
-      <Button
-        type="primary"
-        onClick={() => {
-          if (mentor.mentorId !== undefined) {
-            navigate({
-              to: '/mentor/$mentorId',
-              params: { mentorId: mentor.mentorId },
-            });
-          }
-        }}
-      >
-        View Profile & Apply
-      </Button>
-    </div>
+    <Button
+      type="primary"
+      onClick={() => {
+        if (mentor.mentorId !== undefined) {
+          navigate({
+            to: '/mentor/$mentorId',
+            params: { mentorId: mentor.mentorId },
+          });
+        }
+      }}
+    >
+      View Profile
+    </Button>
   );
 }

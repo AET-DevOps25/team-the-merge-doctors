@@ -4,7 +4,7 @@ import {
   type MentorApplication,
   type MentorProfile,
 } from '@/api/mentor';
-import type { User } from '@/api/user';
+import { type UserDto } from '@/api/user';
 import { MentorCategoryPill } from '@/components/atoms/MentorCategoryPill';
 import { MentorSkillsSection } from '@/components/atoms/MentorSkillsSection';
 import { ApplicationCard } from '@/components/organisms/manage-view-applications/ApplicationCard';
@@ -23,28 +23,14 @@ export function MenteeApplicationCard({
     { query: { enabled: !!application.mentorId } },
   );
 
-  // TODO: add getUser after schema was updated to get the user
-  // const { } = useGetUser({userId: })
+  // const { data: getUserData } = useGetFullUser(
+  //   { userId: application.mentorId! },
+  //   { query: { enabled: !!application.mentorId } },
+  // );
 
-  const mentorProfile: MentorProfile = {
-    id: '123',
-    mentorId: '1234',
-    bio: 'Hello I am a mentor',
-    skills: [
-      { name: 'Java', id: '123' },
-      { name: 'Swift', id: '123' },
-    ],
-    isAvailable: true,
-    mentorCategory: {
-      category: { name: 'Engineering Exper', id: '123' },
-      yearsOfExperience: 10,
-    },
-  };
-
-  const mentorUser: User = {
+  const mentorUser: UserDto = {
     id: 'dad02741-84d9-4300-8e8a-a8c47fb690af',
-    username: 'umartinez',
-    password: 'N3HncEW(!9',
+    userName: 'umartinez',
     name: {
       title: 'Prof.',
       firstName: 'Claire',
@@ -60,8 +46,10 @@ export function MenteeApplicationCard({
       city: 'North Brandon',
       country: 'Chad',
     },
-    roleType: 'MENTOR',
   };
+
+  // const mentorUser = getUserData?.data?.user;
+  const mentorProfile = mentorProfileData?.data?.profile;
 
   return (
     <ApplicationCard
@@ -74,7 +62,7 @@ export function MenteeApplicationCard({
       }
       actionButtons={
         <Space>
-          <Button type="link" href={'mailto:' + mentorUser.contact?.email}>
+          <Button type="link" href={'mailto:' + mentorUser?.contact?.email}>
             Contact Mentor
           </Button>
           <Button
@@ -93,7 +81,7 @@ export function MenteeApplicationCard({
 
 interface MentorSectionProps {
   mentorProfile?: MentorProfile;
-  mentorUser?: User;
+  mentorUser?: UserDto;
 }
 
 function MentorSection({ mentorProfile, mentorUser }: MentorSectionProps) {
