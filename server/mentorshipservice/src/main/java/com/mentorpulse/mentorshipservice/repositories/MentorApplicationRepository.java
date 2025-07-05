@@ -1,6 +1,6 @@
 package com.mentorpulse.mentorshipservice.repositories;
 
-import com.mentorpulse.mentorshipservice.dto.ListApplicationRequest;
+import com.mentorpulse.mentorshipservice.dto.service.*;
 import com.mentorpulse.mentorshipservice.models.MentorApplication;
 import com.mentorpulse.mentorshipservice.models.MentorApplication_;
 import org.apache.commons.lang3.ObjectUtils;

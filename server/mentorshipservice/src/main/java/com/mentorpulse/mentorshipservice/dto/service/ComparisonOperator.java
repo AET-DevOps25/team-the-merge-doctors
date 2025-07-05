@@ -1,4 +1,4 @@
-package com.mentorpulse.mentorshipservice.dto;
+package com.mentorpulse.mentorshipservice.dto.service;
 
 public enum ComparisonOperator {
     GREATER_THAN,
