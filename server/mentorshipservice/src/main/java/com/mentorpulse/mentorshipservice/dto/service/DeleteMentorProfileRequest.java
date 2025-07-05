@@ -1,4 +1,4 @@
-package com.mentorpulse.mentorshipservice.dto;
+package com.mentorpulse.mentorshipservice.dto.service;
 
 import java.util.UUID;
 

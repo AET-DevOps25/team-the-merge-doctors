@@ -1,6 +1,9 @@
 postgres:
   ip: localhost
 
+genai:
+  host: localhost
+
 spring:
   jpa:
     hibernate:

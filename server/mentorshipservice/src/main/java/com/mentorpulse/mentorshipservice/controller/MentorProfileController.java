@@ -1,6 +1,6 @@
 package com.mentorpulse.mentorshipservice.controller;
 
-import com.mentorpulse.mentorshipservice.dto.*;
+import com.mentorpulse.mentorshipservice.dto.service.*;
 import com.mentorpulse.mentorshipservice.exceptions.AlreadyExistsException;
 import com.mentorpulse.mentorshipservice.exceptions.InvalidArgumentsException;
 import com.mentorpulse.mentorshipservice.exceptions.NotFoundException;
