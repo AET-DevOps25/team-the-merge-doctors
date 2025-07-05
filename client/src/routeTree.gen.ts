@@ -12,6 +12,9 @@
 
 import { Route as rootRoute } from './pages/__root'
 import { Route as TestImport } from './pages/test'
+import { Route as SignupImport } from './pages/signup'
+import { Route as MentorProfileImport } from './pages/mentor-profile'
+import { Route as LoginImport } from './pages/login'
 import { Route as IndexImport } from './pages/index'
 import { Route as SearchIndexImport } from './pages/search/index'
 import { Route as MentorMentorIdImport } from './pages/mentor.$mentorId'
@@ -21,6 +24,24 @@ import { Route as MentorMentorIdImport } from './pages/mentor.$mentorId'
 const TestRoute = TestImport.update({
   id: '/test',
   path: '/test',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const SignupRoute = SignupImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MentorProfileRoute = MentorProfileImport.update({
+  id: '/mentor-profile',
+  path: '/mentor-profile',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LoginRoute = LoginImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -53,6 +74,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/mentor-profile': {
+      id: '/mentor-profile'
+      path: '/mentor-profile'
+      fullPath: '/mentor-profile'
+      preLoaderRoute: typeof MentorProfileImport
+      parentRoute: typeof rootRoute
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupImport
+      parentRoute: typeof rootRoute
+    }
     '/test': {
       id: '/test'
       path: '/test'
@@ -81,6 +123,9 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/mentor-profile': typeof MentorProfileRoute
+  '/signup': typeof SignupRoute
   '/test': typeof TestRoute
   '/mentor/$mentorId': typeof MentorMentorIdRoute
   '/search': typeof SearchIndexRoute
@@ -88,6 +133,9 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/mentor-profile': typeof MentorProfileRoute
+  '/signup': typeof SignupRoute
   '/test': typeof TestRoute
   '/mentor/$mentorId': typeof MentorMentorIdRoute
   '/search': typeof SearchIndexRoute
@@ -96,6 +144,9 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/mentor-profile': typeof MentorProfileRoute
+  '/signup': typeof SignupRoute
   '/test': typeof TestRoute
   '/mentor/$mentorId': typeof MentorMentorIdRoute
   '/search/': typeof SearchIndexRoute
@@ -103,15 +154,40 @@ export interface FileRoutesById {
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/test' | '/mentor/$mentorId' | '/search'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/mentor-profile'
+    | '/signup'
+    | '/test'
+    | '/mentor/$mentorId'
+    | '/search'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/test' | '/mentor/$mentorId' | '/search'
-  id: '__root__' | '/' | '/test' | '/mentor/$mentorId' | '/search/'
+  to:
+    | '/'
+    | '/login'
+    | '/mentor-profile'
+    | '/signup'
+    | '/test'
+    | '/mentor/$mentorId'
+    | '/search'
+  id:
+    | '__root__'
+    | '/'
+    | '/login'
+    | '/mentor-profile'
+    | '/signup'
+    | '/test'
+    | '/mentor/$mentorId'
+    | '/search/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LoginRoute: typeof LoginRoute
+  MentorProfileRoute: typeof MentorProfileRoute
+  SignupRoute: typeof SignupRoute
   TestRoute: typeof TestRoute
   MentorMentorIdRoute: typeof MentorMentorIdRoute
   SearchIndexRoute: typeof SearchIndexRoute
@@ -119,6 +195,9 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LoginRoute: LoginRoute,
+  MentorProfileRoute: MentorProfileRoute,
+  SignupRoute: SignupRoute,
   TestRoute: TestRoute,
   MentorMentorIdRoute: MentorMentorIdRoute,
   SearchIndexRoute: SearchIndexRoute,
@@ -135,6 +214,9 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/login",
+        "/mentor-profile",
+        "/signup",
         "/test",
         "/mentor/$mentorId",
         "/search/"
@@ -142,6 +224,15 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/login": {
+      "filePath": "login.tsx"
+    },
+    "/mentor-profile": {
+      "filePath": "mentor-profile.tsx"
+    },
+    "/signup": {
+      "filePath": "signup.tsx"
     },
     "/test": {
       "filePath": "test.tsx"

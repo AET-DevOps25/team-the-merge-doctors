@@ -17,6 +17,7 @@
     "@tanstack/react-router-devtools": "^1.120.11",
     "antd": "^5.25.2",
     "axios": "^1.10.0",
+    "jwt-decode": "^4.0.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
