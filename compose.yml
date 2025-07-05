@@ -36,6 +36,7 @@ services:
 
   ollama:
     platform: linux/amd64
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/ollama:latest
     build:
       context: ./genai/ollama
       dockerfile: Dockerfile
