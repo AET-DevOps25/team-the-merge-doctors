@@ -62,10 +62,3 @@ jobs:
           context: ./server/ratingservice
           push: true
           tags: ghcr.io/aet-devops25/team-the-merge-doctors/server/rating-service:latest
-
-      - name: Build & push Appointment Service image
-        uses: docker/build-push-action@v4
-        with:
-          context: ./server/appointmentservice
-          push: true
-          tags: ghcr.io/aet-devops25/team-the-merge-doctors/server/appointment-service:latest

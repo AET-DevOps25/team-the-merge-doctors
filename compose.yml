@@ -77,17 +77,5 @@ services:
       - postgres-db
     restart: on-failure:3
 
-  appointment-service:
-    platform: linux/amd64
-    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/appointment-service:latest
-    build:
-      context: server/appointmentservice
-      dockerfile: Dockerfile
-    ports:
-      - 8510:8510
-    depends_on:
-      - postgres-db
-    restart: on-failure:3
-
 volumes:
   db_data:
