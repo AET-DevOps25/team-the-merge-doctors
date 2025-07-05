@@ -1,0 +1,17 @@
+meta {
+  name: summarize
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{method}}://{{genai-base-endpoint}}/api/summarize
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "textToSummarize": "Dear Mentorship Committee, I am writing to express my strong interest in joining your mentorship program as a mentee. Currently, I am a third-semester computer science student at the university, with a particular passion for software development and DevOps practices. Throughout my academic journey, I have consistently demonstrated excellence in programming fundamentals, having completed courses in object-oriented programming, data structures, and algorithms with distinction. My current semester focuses heavily on DevOps methodologies, where I am gaining hands-on experience with containerization technologies like Docker, continuous integration and deployment pipelines, and cloud infrastructure management. I have been working extensively with Python and Flask for backend development, implementing RESTful APIs and integrating with databases using SQLAlchemy. Additionally, I have experience with frontend technologies including JavaScript, HTML, and CSS, allowing me to work effectively on full-stack projects. One of my most significant projects this semester involves developing a comprehensive AI-powered application that utilizes large language models for text summarization and question-answering capabilities. This project has given me valuable experience in working with modern AI frameworks like LangChain, implementing both cloud-based and local model solutions, and designing scalable architectures that can handle real-world workloads. I am particularly interested in this mentorship program because I believe that learning from experienced professionals in the industry will help me bridge the gap between academic knowledge and practical application. I am eager to gain insights into best practices for software architecture, code quality standards, project management methodologies, and career development strategies. My goal is to become a well-rounded software engineer who can contribute meaningfully to complex technical projects while continuously learning and adapting to new technologies. I am committed to making the most of this mentorship opportunity by being proactive in seeking guidance, implementing feedback constructively, and contributing positively to any collaborative efforts. I am available for meetings and discussions at flexible times and am willing to dedicate the necessary time and effort to maximize the value of this mentorship relationship. Thank you for considering my application, and I look forward to the opportunity to learn and grow under your guidance."
+  }
+}

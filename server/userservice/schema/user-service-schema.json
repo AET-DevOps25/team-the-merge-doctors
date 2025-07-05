@@ -32,7 +32,7 @@
           "200": {
             "description": "OK",
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/LoginUserResponse"
                 }
@@ -62,7 +62,7 @@
           "200": {
             "description": "OK",
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CreateUserResponse"
                 }
@@ -92,7 +92,7 @@
           "200": {
             "description": "OK",
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UpdateUserResponse"
                 }
@@ -110,11 +110,16 @@
         "operationId": "listUsers",
         "parameters": [
           {
-            "name": "request",
+            "name": "roleType",
             "in": "query",
             "required": true,
             "schema": {
-              "$ref": "#/components/schemas/ListUsersRequest"
+              "type": "string",
+              "enum": [
+                "NONE",
+                "MENTOR",
+                "MENTEE"
+              ]
             }
           }
         ],
@@ -122,7 +127,7 @@
           "200": {
             "description": "OK",
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ListUsersResponse"
                 }
@@ -140,11 +145,12 @@
         "operationId": "getUser",
         "parameters": [
           {
-            "name": "req",
+            "name": "userId",
             "in": "query",
             "required": true,
             "schema": {
-              "$ref": "#/components/schemas/GetUserRequest"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -152,7 +158,7 @@
           "200": {
             "description": "OK",
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GetUserResponse"
                 }
@@ -182,7 +188,7 @@
           "200": {
             "description": "OK",
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/DeleteUserResponse"
                 }
@@ -353,6 +359,9 @@
             "type": "string",
             "format": "date-time"
           },
+          "password": {
+            "type": "string"
+          },
           "authorities": {
             "type": "array",
             "items": {
@@ -360,9 +369,6 @@
             }
           },
           "username": {
-            "type": "string"
-          },
-          "password": {
             "type": "string"
           },
           "enabled": {
@@ -397,8 +403,14 @@
           "userName": {
             "type": "string"
           },
+          "name": {
+            "$ref": "#/components/schemas/Name"
+          },
           "address": {
             "$ref": "#/components/schemas/Address"
+          },
+          "contact": {
+            "$ref": "#/components/schemas/Contact"
           },
           "role": {
             "type": "string",
@@ -418,19 +430,6 @@
           }
         }
       },
-      "ListUsersRequest": {
-        "type": "object",
-        "properties": {
-          "roleType": {
-            "type": "string",
-            "enum": [
-              "NONE",
-              "MENTOR",
-              "MENTEE"
-            ]
-          }
-        }
-      },
       "ListUsersResponse": {
         "type": "object",
         "properties": {
@@ -439,15 +438,6 @@
             "items": {
               "$ref": "#/components/schemas/UserDto"
             }
-          }
-        }
-      },
-      "GetUserRequest": {
-        "type": "object",
-        "properties": {
-          "userId": {
-            "type": "string",
-            "format": "uuid"
           }
         }
       },

@@ -10,6 +10,7 @@ const queryClient = new QueryClient();
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
+import { App } from 'antd';
 
 // Create a new router instance
 const router = createRouter({ routeTree });
@@ -24,7 +25,9 @@ declare module '@tanstack/react-router' {
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <App>
+        <RouterProvider router={router} />
+      </App>
     </QueryClientProvider>
   </StrictMode>,
 );

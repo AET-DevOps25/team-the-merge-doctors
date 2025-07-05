@@ -50,7 +50,7 @@ dependencies {
 openApi {
 	apiDocsUrl.set("http://localhost:8210/v3/api-docs")
 	outputDir.set(file("$projectDir/schema"))
-	outputFileName.set("user-service-schema.yaml")
+	outputFileName.set("user-service-schema.json")
 
 	customBootRun {
 		environment = mapOf("SPRING_PROFILES_ACTIVE" to "dev")

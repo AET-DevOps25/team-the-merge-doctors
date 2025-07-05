@@ -4,6 +4,8 @@ import com.mentorpulse.userservice.dto.*;
 import com.mentorpulse.userservice.models.RoleType;
 import com.mentorpulse.userservice.services.UserService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import javax.management.InvalidAttributeValueException;
 import java.util.UUID;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/user")
 public class UserController {
 

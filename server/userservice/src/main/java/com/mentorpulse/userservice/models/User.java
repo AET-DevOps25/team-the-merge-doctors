@@ -1,6 +1,5 @@
 package com.mentorpulse.userservice.models;
 
-
 import com.mentorpulse.userservice.dto.UserDto;
 import com.mentorpulse.userservice.exceptions.PermissionDeniedException;
 import jakarta.persistence.*;
@@ -22,9 +21,8 @@ import java.util.UUID;
 @Table(name = "user_table")
 public class User implements UserDetails {
 
-//    @GeneratedValue
-    @Id
-    private UUID id;
+    //    @GeneratedValue
+    @Id private UUID id;
 
     @Column(unique = true)
     private String userName;
@@ -32,14 +30,11 @@ public class User implements UserDetails {
     @Column(columnDefinition = "text")
     private String passwordHash;
 
-    @Embedded
-    private Name name;
+    @Embedded private Name name;
 
-    @Embedded
-    private Address address;
+    @Embedded private Address address;
 
-    @Embedded
-    private Contact contact;
+    @Embedded private Contact contact;
 
     private RoleType roleType;
 
@@ -51,7 +46,8 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (roleType == null || roleType == RoleType.NONE) {
-            throw new PermissionDeniedException("There is no role for user: " + (userName == null ? "" : userName));
+            throw new PermissionDeniedException(
+                    "There is no role for user: " + (userName == null ? "" : userName));
         }
         return List.of(new SimpleGrantedAuthority(roleType.name()));
     }
@@ -67,7 +63,7 @@ public class User implements UserDetails {
     }
 
     public UserDto toUserDto() {
-        return new UserDto(id, userName, address, roleType, createdAt, lastLoginAt);
+        return new UserDto(id, userName, name, address, contact, roleType, createdAt, lastLoginAt);
     }
 
     public void updateLastLogin() {

@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Col, Divider, Layout, Row, Space, Spin } from 'antd';
+import { Col, Divider, Layout, List, Row, Spin } from 'antd';
 import { SearchFilter } from '@/components/molecules/SearchFilter';
 import {
   type ComparisonFilter,
@@ -108,15 +108,19 @@ export function Search() {
             paddingLeft: 16,
           }}
         >
-          {listProfilesIsPending ? (
-            <Spin />
-          ) : (
-            <Space size="large" direction="vertical">
-              {listMentorsData?.data?.mentorProfile?.map((mentor) => (
-                <MentorCard key={mentor.id} mentor={mentor} />
-              ))}
-            </Space>
-          )}
+          <List
+            dataSource={listMentorsData?.data?.mentorProfile}
+            loading={listProfilesIsPending}
+            locale={{ emptyText: 'No mentors found' }}
+            size="large"
+            renderItem={(mentorProfile) => {
+              return (
+                <div style={{ marginBottom: 16 }}>
+                  <MentorCard key={mentorProfile.id} mentor={mentorProfile} />
+                </div>
+              );
+            }}
+          />
           <div style={{ height: 50 }} />
         </Col>
       </Row>

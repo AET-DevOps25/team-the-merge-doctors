@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "mentor-pulse-bruno",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

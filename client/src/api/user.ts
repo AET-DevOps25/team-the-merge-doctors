@@ -103,9 +103,9 @@ export interface User {
   roleType?: UserRoleType;
   createdAt?: string;
   lastLoginAt?: string;
+  password?: string;
   authorities?: GrantedAuthority[];
   username?: string;
-  password?: string;
   enabled?: boolean;
   accountNonExpired?: boolean;
   accountNonLocked?: boolean;
@@ -128,32 +128,16 @@ export const UserDtoRole = {
 export interface UserDto {
   id?: string;
   userName?: string;
+  name?: Name;
   address?: Address;
+  contact?: Contact;
   role?: UserDtoRole;
   createdAt?: string;
   lastLoginAt?: string;
 }
 
-export type ListUsersRequestRoleType =
-  (typeof ListUsersRequestRoleType)[keyof typeof ListUsersRequestRoleType];
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const ListUsersRequestRoleType = {
-  NONE: 'NONE',
-  MENTOR: 'MENTOR',
-  MENTEE: 'MENTEE',
-} as const;
-
-export interface ListUsersRequest {
-  roleType?: ListUsersRequestRoleType;
-}
-
 export interface ListUsersResponse {
   users?: UserDto[];
-}
-
-export interface GetUserRequest {
-  userId?: string;
 }
 
 export interface GetUserResponse {
@@ -169,11 +153,21 @@ export interface DeleteUserResponse {
 }
 
 export type ListUsersParams = {
-  request: ListUsersRequest;
+  roleType: ListUsersRoleType;
 };
 
+export type ListUsersRoleType =
+  (typeof ListUsersRoleType)[keyof typeof ListUsersRoleType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ListUsersRoleType = {
+  NONE: 'NONE',
+  MENTOR: 'MENTOR',
+  MENTEE: 'MENTEE',
+} as const;
+
 export type GetUserParams = {
-  req: GetUserRequest;
+  userId: string;
 };
 
 export const loginUser = (
