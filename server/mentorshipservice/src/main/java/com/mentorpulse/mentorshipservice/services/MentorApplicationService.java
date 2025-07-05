@@ -1,6 +1,7 @@
 package com.mentorpulse.mentorshipservice.services;
 
-import com.mentorpulse.mentorshipservice.dto.*;
+import com.mentorpulse.mentorshipservice.client.SummarizationClient;
+import com.mentorpulse.mentorshipservice.dto.service.*;
 import com.mentorpulse.mentorshipservice.exceptions.ResourceNotFoundException;
 import com.mentorpulse.mentorshipservice.models.ApplicationStatus;
 import com.mentorpulse.mentorshipservice.models.MentorApplication;
@@ -8,6 +9,7 @@ import com.mentorpulse.mentorshipservice.models.MentorSession;
 import com.mentorpulse.mentorshipservice.models.SessionStatus;
 import com.mentorpulse.mentorshipservice.repositories.MentorApplicationRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,15 +22,20 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class MentorApplicationService {
     private final MentorApplicationRepository mentorApplicationRepository;
+    private final SummarizationClient summarizationClient;
 
     @Transactional
     public CreateApplicationResponse createApplication(CreateApplicationRequest request) {
-        MentorApplication mentorApplication = MentorApplication.builder()
+        MentorApplication.MentorApplicationBuilder mentorApplicationBuilder = MentorApplication.builder()
                 .mentorId(request.mentorId())
                 .menteeId(request.menteeId())
-                .applicationMessage(request.applicationMessage())
-                .build();
-        mentorApplication = mentorApplicationRepository.save(mentorApplication);
+                .status(ApplicationStatus.PENDING)
+                .applicationMessage(request.applicationMessage());
+        if (!ObjectUtils.isEmpty(request.applicationMessage()) && !ObjectUtils.isEmpty(request.applicationMessage().trim())) {
+            String summarizedApplicationText = summarizationClient.summarize(request.applicationMessage()).summarizedText();
+            mentorApplicationBuilder.summarizedApplicationText(summarizedApplicationText);
+        }
+        MentorApplication mentorApplication = mentorApplicationRepository.save(mentorApplicationBuilder.build());
         return new CreateApplicationResponse(mentorApplication);
     }
 

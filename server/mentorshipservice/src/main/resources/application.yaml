@@ -5,6 +5,10 @@ postgres:
   port: 5432
   db-name: mentorship_backend
 
+genai:
+  host: genai
+  port: 5001
+
 springdoc:
   api-docs:
     path: /v3/api-docs

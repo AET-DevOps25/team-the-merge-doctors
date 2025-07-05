@@ -1,6 +1,6 @@
 package com.mentorpulse.mentorshipservice.controller;
 
-import com.mentorpulse.mentorshipservice.dto.*;
+import com.mentorpulse.mentorshipservice.dto.service.*;
 import com.mentorpulse.mentorshipservice.exceptions.ResourceNotFoundException;
 import com.mentorpulse.mentorshipservice.models.MentorApplication;
 import com.mentorpulse.mentorshipservice.services.MentorApplicationService;

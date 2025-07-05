@@ -29,6 +29,9 @@ public class MentorApplication {
 
     Instant appliedOn;
 
+    @Column(columnDefinition = "text")
+    String summarizedApplicationText;
+
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     MentorSession session;
 }

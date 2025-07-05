@@ -1,4 +1,4 @@
-package com.mentorpulse.mentorshipservice.dto;
+package com.mentorpulse.mentorshipservice.dto.service;
 
 import java.time.Instant;
 import java.util.UUID;
