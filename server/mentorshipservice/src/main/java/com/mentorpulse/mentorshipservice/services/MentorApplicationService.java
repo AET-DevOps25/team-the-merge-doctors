@@ -29,6 +29,7 @@ public class MentorApplicationService {
         MentorApplication.MentorApplicationBuilder mentorApplicationBuilder = MentorApplication.builder()
                 .mentorId(request.mentorId())
                 .menteeId(request.menteeId())
+                .status(ApplicationStatus.PENDING)
                 .applicationMessage(request.applicationMessage());
         if (!ObjectUtils.isEmpty(request.applicationMessage()) && !ObjectUtils.isEmpty(request.applicationMessage().trim())) {
             String summarizedApplicationText = summarizationClient.summarize(request.applicationMessage()).summarizedText();
