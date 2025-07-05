@@ -16,19 +16,6 @@ def _get_llm():
         logger.error(f"Failed to initialize Ollama LLM: {e}")
         raise
 
-def ask(question: str) -> str:
-  """Processes a question through the LLM and returns the answer."""
-  prompt = PromptTemplate(
-      template="You are a helpful assistant. Q: {question}\n",
-      input_variables=["question"],
-  )
-  llm = _get_llm()
-
-  chain = prompt | llm
-
-  result = chain.invoke({"question": question})
-  return result
-
 def summarize(text_to_summarize: str) -> str:
   """Summarizes the given text using the LLM."""
   prompt = PromptTemplate(
