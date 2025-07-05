@@ -21,7 +21,7 @@ public class RatingController {
 
     private final RatingService ratingService;
 
-    @PostMapping
+    @PostMapping("/rateMentor")
     public ResponseEntity<Rating> rateMentor(@RequestBody @NotNull Rating request) {
         Rating rating = ratingService.rateMentor(
                 request.getMentorId(),
