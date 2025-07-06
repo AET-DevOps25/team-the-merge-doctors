@@ -24,9 +24,16 @@ function MentorProfilePage() {
     select: (params) => params.mentorId,
   });
 
-  const { data: mentorProfileData } = useGetMentorProfile({
-    mentorId: mentorId,
-  });
+  const { data: mentorProfileData } = useGetMentorProfile(
+    {
+      mentorId: mentorId,
+    },
+    {
+      query: {
+        enabled: !!mentorId,
+      },
+    },
+  );
 
   const mentorProfile = mentorProfileData?.data.profile;
 
