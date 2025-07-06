@@ -20,6 +20,7 @@ import {
 } from '@/api/mentor';
 import { createFileRoute } from '@tanstack/react-router';
 import { jwtDecode } from 'jwt-decode';
+import { useAuth } from '@/contexts/AuthContext';
 
 const { Title } = Typography;
 
@@ -31,9 +32,7 @@ interface MentorProfileFormValues {
   isAvailable: boolean;
 }
 
-// Utility function to decode JWT token and extract userId
-const getUserIdFromToken = (): string | null => {
-  const token = localStorage.getItem('token');
+const getUserIdFromToken = (token: string | null): string | null => {
   if (!token) return null;
   const decoded = jwtDecode<{
     sub: string;
@@ -48,6 +47,9 @@ export const Route = createFileRoute('/mentor-profile')({
   component: CreateMentorProfilePage,
 });
 export function CreateMentorProfilePage() {
+  const { token } = useAuth();
+  const userId = getUserIdFromToken(token);
+
   const { data: listSkillsData } = useListSkills();
   const { data: listCategoriesData } = useListCategories();
   const skillOptions = (listSkillsData?.data?.skills ?? []).map(
@@ -67,8 +69,6 @@ export function CreateMentorProfilePage() {
   const [loading, setLoading] = useState(false);
 
   const onFinish = (values: MentorProfileFormValues) => {
-    const mentorId = getUserIdFromToken() ?? '';
-
     // Find the selected category to get its name
     const selectedCategory = mentorCategories.find(
       (cat) => cat.value === values.category,
@@ -79,7 +79,7 @@ export function CreateMentorProfilePage() {
       .mutateAsync({
         data: {
           mentorProfile: {
-            mentorId: mentorId,
+            mentorId: userId ?? '',
             bio: values.bio,
             skills: values.skills?.map((id: string) => ({ id })),
             isAvailable: values.isAvailable,
@@ -206,6 +206,7 @@ export function CreateMentorProfilePage() {
               <Switch />
             </Form.Item>
 
+            {/* TODO: Redirect to application page after creating */}
             <Form.Item style={{ marginTop: '32px', marginBottom: 0 }}>
               <Button
                 type="primary"

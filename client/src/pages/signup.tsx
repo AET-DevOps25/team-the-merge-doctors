@@ -1,6 +1,7 @@
 import { Form, Input, Button, Typography, Select, Row, Col } from 'antd';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useCreateUser, CreateUserRequestRoleType } from '@/api/user';
+import { useAuth } from '@/contexts/AuthContext';
 
 export const Route = createFileRoute('/signup')({
   component: SignupPage,
@@ -15,13 +16,17 @@ const roleOptions = Object.values(CreateUserRequestRoleType)
 
 export function SignupPage() {
   const [form] = Form.useForm();
+  const { login } = useAuth();
+  const navigate = useNavigate();
   const createUserMutation = useCreateUser({
     mutation: {
       onSuccess: (response) => {
         const data = response.data;
         if (data.token) {
-          localStorage.setItem('token', data.token);
-          window.location.href = `${window.location.origin}/search`;
+          login(data.token);
+          navigate({
+            to: '/search',
+          });
         }
       },
     },
@@ -51,11 +56,15 @@ export function SignupPage() {
     createUserMutation.mutateAsync({ data: payload }).then((response) => {
       const data = response.data;
       if (data.token) {
-        localStorage.setItem('token', data.token);
+        login(data.token);
         if (values.roleType === CreateUserRequestRoleType.MENTOR) {
-          window.location.href = `${window.location.origin}/mentor-profile`;
+          navigate({
+            to: '/mentor-profile',
+          });
         } else {
-          window.location.href = `${window.location.origin}/search`;
+          navigate({
+            to: '/search',
+          });
         }
       }
     });

@@ -1,7 +1,12 @@
 import { useState } from 'react';
 import { Form, Input, Button, Alert, Typography } from 'antd';
-import { createFileRoute, useRouter } from '@tanstack/react-router';
+import {
+  createFileRoute,
+  useNavigate,
+  useRouter,
+} from '@tanstack/react-router';
 import { useLoginUser } from '@/api/user';
+import { useAuth } from '@/contexts/AuthContext';
 import type { AxiosError } from 'axios';
 
 export const Route = createFileRoute('/login')({
@@ -12,13 +17,18 @@ export function LoginPage() {
   const [form] = Form.useForm();
   const [error, setError] = useState('');
   const router = useRouter();
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
   const loginMutation = useLoginUser({
     mutation: {
       onSuccess: (response) => {
         const data = response.data;
         if (data.authenticated && data.token) {
-          localStorage.setItem('token', data.token);
-          window.location.href = `${window.location.origin}/search`;
+          login(data.token);
+          navigate({
+            to: '/search',
+          });
         } else {
           setError('Invalid credentials');
         }
