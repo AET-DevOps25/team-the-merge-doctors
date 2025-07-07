@@ -8,7 +8,6 @@
 ## Project Setup
 
 1. Copy `values.yaml.template` and rename it to `values.yaml`.
-2. Replace `<YOUR_OPEN_API_KEY>` with your OpenAI API key.
 
 ## Deploy
 

@@ -5,15 +5,15 @@ meta {
 }
 
 post {
-  url: {{method}}://{{mentorship-service-endpoint}}/api/mentorship/createApplication
+  url: {{method}}://{{mentorship-service-endpoint}}{{mentorship-path}}createApplication
   body: json
   auth: inherit
 }
 
 body:json {
   {
-      "mentorId": "dad02741-84d9-4300-8e8a-a8c47fb690af",
-      "menteeId": "f03dc27c-64bf-4ed3-9e6c-ce17a0ae4258",
-      "applicationMessage": "Hi Prof. Martinez, I'm Christina Palmer, and I'm deeply interested in learning more about your expertise in your field. I would love to have you as my mentor to guide me through my career development. I've been following your work and am particularly impressed by your academic achievements and research contributions. As someone who is still early in my career, I believe your mentorship would provide invaluable insights into navigating the complexities of professional growth. I'm eager to learn from your experience and would be honored to discuss potential mentorship opportunities with you. I'm committed to being a dedicated mentee who values your time and expertise."
-    }
+    "mentorId": "dad02741-84d9-4300-8e8a-a8c47fb690af",
+    "menteeId": "f03dc27c-64bf-4ed3-9e6c-ce17a0ae4258",
+    "applicationMessage": "Dear Prof. Claire Martinez,\n\nI hope this message finds you well. My name is Christina Palmer, and I am reaching out to express my sincere interest in establishing a mentorship relationship with you. After reviewing your impressive background and expertise, I believe that your guidance would be invaluable for my professional development and career advancement.\n\nI am currently at a pivotal point in my career where I am seeking to enhance my skills in leadership, strategic thinking, and industry best practices. Your extensive experience and proven track record in the field make you an ideal mentor for someone like me who is eager to learn and grow. I am particularly interested in understanding how to navigate complex professional challenges, develop effective communication strategies, and build meaningful professional relationships.\n\nI am committed to making the most of any mentorship opportunity and am prepared to dedicate the necessary time and effort to our sessions. I am flexible with scheduling and can accommodate your availability. Whether through regular one-on-one meetings, virtual discussions, or project-based collaboration, I am open to whatever format works best for you.\n\nI would be honored to have the opportunity to learn from your expertise and insights. Thank you for considering my application, and I look forward to the possibility of working together.\n\nBest regards,\nDr. Christina Palmer\nEmail: elizabethpineda@example.org\nPhone: 516.393.6256x48425"
+  }
 }

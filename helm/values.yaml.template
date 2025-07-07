@@ -37,7 +37,6 @@ client:
   selector: client-selector
 
 secrets:
-  openAPIKey: <YOUR_OPEN_API_KEY>
   postgresUser: postgres
   postgresPassword: postgres_password
 

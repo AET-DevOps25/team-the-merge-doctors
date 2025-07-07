@@ -1,6 +1,6 @@
 from flask import Flask
 from config import Config
-from models.query_log import db
+from database import db
 
 # Import the blueprint object
 from controllers.api_controller import api

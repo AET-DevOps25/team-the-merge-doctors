@@ -25,15 +25,6 @@ module.exports = {
   //     target: '../server/ratingservice/rating-openapi.yaml',
   //   },
   // },
-  // appointment: {
-  //   output: {
-  //     ...SHARED_CONFIG,
-  //     target: 'src/api/appointment.ts',
-  //   },
-  //   input: {
-  //     target: '../server/appointmentservice/appointment-openapi.yaml',
-  //   },
-  // },
   mentor: {
     output: {
       ...SHARED_CONFIG,
