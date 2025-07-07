@@ -1,8 +1,9 @@
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import { useLocalStorage } from '@uidotdev/usehooks';
+import { createContext, useContext, type ReactNode } from 'react';
 
 interface AuthContextType {
   isLoggedIn: boolean;
-  token: string | null;
+  token: string | undefined;
   login: (token: string) => void;
   logout: () => void;
 }
@@ -10,14 +11,14 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useLocalStorage<string | undefined>('token');
 
   const login = (newToken: string) => {
     setToken(newToken);
   };
 
   const logout = () => {
-    setToken(null);
+    setToken(undefined);
   };
 
   return (

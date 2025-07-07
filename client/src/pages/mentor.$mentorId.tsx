@@ -82,30 +82,7 @@ function MentorProfilePage() {
     },
   ];
 
-  // const experience = [
-  //   {
-  //     title: 'CEO & Founder',
-  //     company: 'Build Up Labs',
-  //     period: '2018 - Present',
-  //     description:
-  //       'Leading a startup incubator that has helped 50+ startups raise over $20M in funding.',
-  //   },
-  //   {
-  //     title: 'VP of Product',
-  //     company: 'TechFlow Solutions',
-  //     period: '2015 - 2018',
-  //     description:
-  //       'Scaled product from 0 to 1M users, led a team of 25+ product managers and engineers.',
-  //   },
-  //   {
-  //     title: 'Senior Product Manager',
-  //     company: 'Innovation Labs',
-  //     period: '2012 - 2015',
-  //     description:
-  //       'Launched 3 successful products, increased user engagement by 150%.',
-  //   },
-  // ];
-
+  // TODO: remove dummy data
   return (
     <Layout style={{ minHeight: '100vh', backgroundColor: '#fafafa' }}>
       <Content style={{ padding: '40px 24px', justifyContent: 'center' }}>

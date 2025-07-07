@@ -19,8 +19,7 @@ import {
   type Category,
 } from '@/api/mentor';
 import { createFileRoute } from '@tanstack/react-router';
-import { jwtDecode } from 'jwt-decode';
-import { useAuth } from '@/contexts/AuthContext';
+import { useCurrentUserId } from '@/utils/useCurrentUserId';
 
 const { Title } = Typography;
 
@@ -32,23 +31,11 @@ interface MentorProfileFormValues {
   isAvailable: boolean;
 }
 
-const getUserIdFromToken = (token: string | null): string | null => {
-  if (!token) return null;
-  const decoded = jwtDecode<{
-    sub: string;
-    userId: string;
-    role: string;
-    exp: number;
-  }>(token);
-  return decoded.userId;
-};
-
 export const Route = createFileRoute('/mentor-profile')({
   component: CreateMentorProfilePage,
 });
 export function CreateMentorProfilePage() {
-  const { token } = useAuth();
-  const userId = getUserIdFromToken(token);
+  const userId = useCurrentUserId();
 
   const { data: listSkillsData } = useListSkills();
   const { data: listCategoriesData } = useListCategories();

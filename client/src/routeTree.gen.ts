@@ -11,7 +11,6 @@
 // Import Routes
 
 import { Route as rootRoute } from './pages/__root'
-import { Route as TestImport } from './pages/test'
 import { Route as SignupImport } from './pages/signup'
 import { Route as MentorProfileImport } from './pages/mentor-profile'
 import { Route as LoginImport } from './pages/login'
@@ -22,12 +21,6 @@ import { Route as ApplicationsMentorMentorIdImport } from './pages/applications/
 import { Route as ApplicationsMenteeMenteeIdImport } from './pages/applications/mentee/$menteeId'
 
 // Create/Update Routes
-
-const TestRoute = TestImport.update({
-  id: '/test',
-  path: '/test',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const SignupRoute = SignupImport.update({
   id: '/signup',
@@ -113,13 +106,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SignupImport
       parentRoute: typeof rootRoute
     }
-    '/test': {
-      id: '/test'
-      path: '/test'
-      fullPath: '/test'
-      preLoaderRoute: typeof TestImport
-      parentRoute: typeof rootRoute
-    }
     '/mentor/$mentorId': {
       id: '/mentor/$mentorId'
       path: '/mentor/$mentorId'
@@ -158,7 +144,6 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/mentor-profile': typeof MentorProfileRoute
   '/signup': typeof SignupRoute
-  '/test': typeof TestRoute
   '/mentor/$mentorId': typeof MentorMentorIdRoute
   '/search': typeof SearchIndexRoute
   '/applications/mentee/$menteeId': typeof ApplicationsMenteeMenteeIdRoute
@@ -170,7 +155,6 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/mentor-profile': typeof MentorProfileRoute
   '/signup': typeof SignupRoute
-  '/test': typeof TestRoute
   '/mentor/$mentorId': typeof MentorMentorIdRoute
   '/search': typeof SearchIndexRoute
   '/applications/mentee/$menteeId': typeof ApplicationsMenteeMenteeIdRoute
@@ -183,7 +167,6 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/mentor-profile': typeof MentorProfileRoute
   '/signup': typeof SignupRoute
-  '/test': typeof TestRoute
   '/mentor/$mentorId': typeof MentorMentorIdRoute
   '/search/': typeof SearchIndexRoute
   '/applications/mentee/$menteeId': typeof ApplicationsMenteeMenteeIdRoute
@@ -194,38 +177,19 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/login'
+    | '/mentor-profile'
+    | '/signup'
     | '/mentor/$mentorId'
     | '/search'
     | '/applications/mentee/$menteeId'
     | '/applications/mentor/$mentorId'
-  fullPaths:
-    | '/'
-    | '/login'
-    | '/mentor-profile'
-    | '/signup'
-    | '/test'
-    | '/mentor/$mentorId'
-    | '/search'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
     | '/mentor-profile'
     | '/signup'
-    | '/test'
-    | '/mentor/$mentorId'
-    | '/search'
-  id:
-    | '__root__'
-    | '/'
-    | '/login'
-    | '/mentor-profile'
-    | '/signup'
-    | '/test'
-    | '/mentor/$mentorId'
-    | '/search/'
-  to:
-    | '/'
     | '/mentor/$mentorId'
     | '/search'
     | '/applications/mentee/$menteeId'
@@ -233,6 +197,9 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/login'
+    | '/mentor-profile'
+    | '/signup'
     | '/mentor/$mentorId'
     | '/search/'
     | '/applications/mentee/$menteeId'
@@ -245,7 +212,6 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   MentorProfileRoute: typeof MentorProfileRoute
   SignupRoute: typeof SignupRoute
-  TestRoute: typeof TestRoute
   MentorMentorIdRoute: typeof MentorMentorIdRoute
   SearchIndexRoute: typeof SearchIndexRoute
   ApplicationsMenteeMenteeIdRoute: typeof ApplicationsMenteeMenteeIdRoute
@@ -257,7 +223,6 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   MentorProfileRoute: MentorProfileRoute,
   SignupRoute: SignupRoute,
-  TestRoute: TestRoute,
   MentorMentorIdRoute: MentorMentorIdRoute,
   SearchIndexRoute: SearchIndexRoute,
   ApplicationsMenteeMenteeIdRoute: ApplicationsMenteeMenteeIdRoute,
@@ -278,7 +243,6 @@ export const routeTree = rootRoute
         "/login",
         "/mentor-profile",
         "/signup",
-        "/test",
         "/mentor/$mentorId",
         "/search/",
         "/applications/mentee/$menteeId",
@@ -296,9 +260,6 @@ export const routeTree = rootRoute
     },
     "/signup": {
       "filePath": "signup.tsx"
-    },
-    "/test": {
-      "filePath": "test.tsx"
     },
     "/mentor/$mentorId": {
       "filePath": "mentor.$mentorId.tsx"
