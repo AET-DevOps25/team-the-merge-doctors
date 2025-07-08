@@ -5,10 +5,10 @@ export function useCurrentUser() {
   const userId = useCurrentUserId();
 
   if (!userId) {
-    return undefined;
+    return { currentUser: undefined, isLoading: false };
   }
 
-  const { data: getUserData } = useGetUser({ userId: userId });
+  const { data: getUserData, isLoading } = useGetUser({ userId: userId });
 
-  return getUserData?.data.user;
+  return { currentUser: getUserData?.data.user, isLoading: isLoading };
 }

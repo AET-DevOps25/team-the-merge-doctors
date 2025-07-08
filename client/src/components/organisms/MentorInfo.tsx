@@ -23,7 +23,7 @@ const { Title, Text } = Typography;
 
 interface MentorInfoProps {
   isAvailable: boolean;
-  user: UserDto;
+  user: UserDto | undefined;
   // rating: number;
   // totalReviews: number;
 }
@@ -43,7 +43,7 @@ export const MentorInfo: React.FC<MentorInfoProps> = ({
         <Space direction="vertical" size="small">
           <div>
             <Title level={2} style={{ margin: 0, marginBottom: 4 }}>
-              {getFullName(user.name)}
+              {getFullName(user?.name)}
               {isAvailable && (
                 <Tag color="green" style={{ marginLeft: 12, borderRadius: 12 }}>
                   Available
@@ -54,7 +54,6 @@ export const MentorInfo: React.FC<MentorInfoProps> = ({
           <Space size="middle">
             <Space>
               <EnvironmentOutlined />
-              {/* TODO: show location when getUserCall is fixed */}
               <Text>{getLocation(user?.address)}</Text>
             </Space>
             <Space>

@@ -22,7 +22,7 @@ function RootComponent() {
   const matchRoute = useMatchRoute();
   const matchedCreateProfileRoute = matchRoute({ to: '/mentor-profile' });
 
-  const currentUser = useCurrentUser();
+  const { currentUser } = useCurrentUser();
 
   const handleLogout = () => {
     logout();

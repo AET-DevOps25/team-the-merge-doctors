@@ -4,6 +4,8 @@ import { useNavigate } from '@tanstack/react-router';
 import type { MentorProfile } from '@/api/mentor';
 import { MentorCategoryPill } from '@/components/atoms/MentorCategoryPill';
 import { MentorSkillsSection } from '@/components/atoms/MentorSkillsSection';
+import { useGetUser } from '@/api/user';
+import { getFullName } from '@/utils/getFullName';
 
 interface MentorCardProps {
   mentor: MentorProfile;
@@ -12,22 +14,20 @@ interface MentorCardProps {
 export function MentorCard({ mentor }: MentorCardProps) {
   // getAverageRating(mentorId)
 
-  // const { data: userData } = useGetUser(
-  //   { userId: mentor.mentorId! },
-  //   { query: { enabled: !!mentor.mentorId } },
-  // );
+  const { data: userData } = useGetUser(
+    { userId: mentor.mentorId! },
+    { query: { enabled: !!mentor.mentorId } },
+  );
 
   return (
     <Card
       title={
-        <Row>
-          {/*<Col span={24}>{getFullName(userData?.data?.user?.name)}</Col> */}
+        <Space direction="horizontal" size={'large'}>
+          {getFullName(userData?.data?.user?.name)}
           {mentor.mentorCategory !== undefined && (
-            <Col span={24}>
-              <MentorCategoryPill category={mentor.mentorCategory} />
-            </Col>
+            <MentorCategoryPill category={mentor.mentorCategory} />
           )}
-        </Row>
+        </Space>
       }
     >
       <Space direction="vertical">

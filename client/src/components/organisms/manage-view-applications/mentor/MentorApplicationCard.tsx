@@ -5,7 +5,7 @@ import {
   useRejectApplication,
   type MentorApplication,
 } from '@/api/mentor';
-import { type User } from '@/api/user';
+import { useGetUser, type User } from '@/api/user';
 import { ApplicationCard } from '@/components/organisms/manage-view-applications/ApplicationCard';
 import { getFullName } from '@/utils/getFullName';
 import { UserOutlined } from '@ant-design/icons';
@@ -19,35 +19,13 @@ interface MentorApplicationCardProps {
 export function MentorApplicationCard({
   application,
 }: MentorApplicationCardProps) {
-  // const { data: getUserData } = useGetFullUser(
-  //   { userId: application.mentorId! },
-  //   { query: { enabled: !!application.mentorId } },
-  // );
+  const { data: getUserData } = useGetUser(
+    { userId: application.mentorId! },
+    { query: { enabled: !!application.mentorId } },
+  );
   const queryClient = useQueryClient();
 
-  const menteeUser: User = {
-    id: 'dad02741-84d9-4300-8e8a-a8c47fb690af',
-    username: 'umartinez',
-    password: 'N3HncEW(!9',
-    name: {
-      title: 'Prof.',
-      firstName: 'Claire',
-      middleName: 'Jennifer',
-      lastName: 'Martinez',
-    },
-    contact: {
-      email: 'johnstonblake@example.net',
-      phoneNumber: '+1-505-902-2507x777',
-      mobileNumber: '+1-695-712-1283x7462',
-    },
-    address: {
-      city: 'North Brandon',
-      country: 'Chad',
-    },
-    roleType: 'MENTOR',
-  };
-
-  // const menteeUser = getUserData?.data?.user;
+  const menteeUser = getUserData?.data?.user;
 
   const [messageApi, contextHolder] = message.useMessage();
 

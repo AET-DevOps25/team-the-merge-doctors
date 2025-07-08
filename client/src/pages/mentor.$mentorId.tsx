@@ -13,6 +13,7 @@ import { MentorInfo } from '@/components/organisms/MentorInfo';
 import { useGetMentorProfile } from '@/api/mentor';
 import { SkillPill } from '@/components/atoms/SkillPill';
 import { SolutionOutlined, TrophyOutlined } from '@ant-design/icons';
+import { useGetUser } from '@/api/user';
 
 const { Content } = Layout;
 const { Title, Paragraph } = Typography;
@@ -40,7 +41,14 @@ function MentorProfilePage() {
 
   const mentorProfile = mentorProfileData?.data.profile;
 
-  // TODO: add getUser call with mentorId, pass user data to mentorinfo
+  const { data: getUserData } = useGetUser(
+    { userId: mentorId },
+    {
+      query: {
+        enabled: !!mentorId,
+      },
+    },
+  );
 
   return (
     <Layout style={{ minHeight: '100vh', backgroundColor: '#fafafa' }}>
@@ -50,7 +58,7 @@ function MentorProfilePage() {
             <Row gutter={[16, 16]}>
               <Col span={24}>
                 <MentorInfo
-                  user={{}}
+                  user={getUserData?.data?.user}
                   // rating={mentorData.rating}
                   // totalReviews={mentorData.totalReviews}
                   isAvailable={mentorProfile?.isAvailable ?? false}

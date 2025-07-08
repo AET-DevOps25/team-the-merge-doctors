@@ -4,7 +4,7 @@ import {
   type MentorApplication,
   type MentorProfile,
 } from '@/api/mentor';
-import { type UserDto } from '@/api/user';
+import { useGetUser, type UserDto } from '@/api/user';
 import { MentorCategoryPill } from '@/components/atoms/MentorCategoryPill';
 import { MentorSkillsSection } from '@/components/atoms/MentorSkillsSection';
 import { ApplicationCard } from '@/components/organisms/manage-view-applications/ApplicationCard';
@@ -23,32 +23,12 @@ export function MenteeApplicationCard({
     { query: { enabled: !!application.mentorId } },
   );
 
-  // const { data: getUserData } = useGetFullUser(
-  //   { userId: application.mentorId! },
-  //   { query: { enabled: !!application.mentorId } },
-  // );
+  const { data: getUserData } = useGetUser(
+    { userId: application.mentorId! },
+    { query: { enabled: !!application.mentorId } },
+  );
 
-  const mentorUser: UserDto = {
-    id: 'dad02741-84d9-4300-8e8a-a8c47fb690af',
-    userName: 'umartinez',
-    name: {
-      title: 'Prof.',
-      firstName: 'Claire',
-      middleName: 'Jennifer',
-      lastName: 'Martinez',
-    },
-    contact: {
-      email: 'johnstonblake@example.net',
-      phoneNumber: '+1-505-902-2507x777',
-      mobileNumber: '+1-695-712-1283x7462',
-    },
-    address: {
-      city: 'North Brandon',
-      country: 'Chad',
-    },
-  };
-
-  // const mentorUser = getUserData?.data?.user;
+  const mentorUser = getUserData?.data?.user;
   const mentorProfile = mentorProfileData?.data?.profile;
 
   return (

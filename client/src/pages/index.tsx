@@ -1,5 +1,4 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import './index.css';
 import { useAuth } from '@/contexts/AuthContext';
 import { useEffect } from 'react';
 import { Spin } from 'antd';
@@ -12,10 +11,14 @@ export const Route = createFileRoute('/')({
 
 function Index() {
   const { isLoggedIn } = useAuth();
-  const currentUser = useCurrentUser();
+  const { currentUser, isLoading } = useCurrentUser();
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (isLoading) {
+      return;
+    }
+
     if (isLoggedIn && currentUser?.role === UserDtoRole.MENTEE) {
       navigate({ to: '/search' });
     } else if (
@@ -30,7 +33,7 @@ function Index() {
     } else {
       navigate({ to: '/login' });
     }
-  }, [isLoggedIn, navigate]);
+  }, [isLoggedIn, currentUser, isLoading, navigate]);
 
   return <Spin />;
 }

@@ -10,7 +10,7 @@ export function MentorCategoryPill({ category }: MentorCategoryPillProps) {
     <Tag>
       {category.category?.name}
       <Divider type="vertical" size="large" />
-      {category.yearsOfExperience} years
+      {category.yearsOfExperience}+ years
     </Tag>
   );
 }
