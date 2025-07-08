@@ -1,4 +1,4 @@
-import { Button, Card, Col, Row, Space } from 'antd';
+import { Button, Card, Space } from 'antd';
 import '@/components/organisms/mentor-search/MentorCard.css';
 import { useNavigate } from '@tanstack/react-router';
 import type { MentorProfile } from '@/api/mentor';
