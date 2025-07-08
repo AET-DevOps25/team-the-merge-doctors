@@ -1,8 +1,8 @@
 import { useAuth } from '@/contexts/AuthContext';
 import {
   createRootRoute,
-  Link,
   Outlet,
+  useMatchRoute,
   useNavigate,
 } from '@tanstack/react-router';
 import {
@@ -19,6 +19,8 @@ import type { MenuItemType } from 'antd/es/menu/interface';
 function RootComponent() {
   const { isLoggedIn, logout } = useAuth();
   const navigate = useNavigate();
+  const matchRoute = useMatchRoute();
+  const matchedCreateProfileRoute = matchRoute({ to: '/mentor-profile' });
 
   const currentUser = useCurrentUser();
 
@@ -85,7 +87,7 @@ function RootComponent() {
 
   return (
     <>
-      {isLoggedIn && (
+      {isLoggedIn && !matchedCreateProfileRoute && (
         <Menu
           mode="horizontal"
           items={menuItems}

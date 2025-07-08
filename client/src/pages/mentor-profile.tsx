@@ -18,7 +18,7 @@ import {
   type Skill,
   type Category,
 } from '@/api/mentor';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useCurrentUserId } from '@/utils/useCurrentUserId';
 
 const { Title } = Typography;
@@ -34,8 +34,10 @@ interface MentorProfileFormValues {
 export const Route = createFileRoute('/mentor-profile')({
   component: CreateMentorProfilePage,
 });
+
 export function CreateMentorProfilePage() {
   const userId = useCurrentUserId();
+  const navigate = useNavigate();
 
   const { data: listSkillsData } = useListSkills();
   const { data: listCategoriesData } = useListCategories();
@@ -82,6 +84,12 @@ export function CreateMentorProfilePage() {
       })
       .then(() => {
         message.success('Mentor profile created!');
+        if (userId) {
+          navigate({
+            to: '/applications/mentor/$mentorId',
+            params: { mentorId: userId },
+          });
+        }
       })
       .catch(() => message.error('Failed to create mentor profile'))
       .finally(() => setLoading(false));
@@ -192,8 +200,6 @@ export function CreateMentorProfilePage() {
             >
               <Switch />
             </Form.Item>
-
-            {/* TODO: Redirect to application page after creating */}
             <Form.Item style={{ marginTop: '32px', marginBottom: 0 }}>
               <Button
                 type="primary"

@@ -29,11 +29,6 @@ export interface LoginUserRequest {
   password?: string;
 }
 
-export interface LoginUserResponse {
-  authenticated?: boolean;
-  token?: string;
-}
-
 export interface Address {
   city?: string;
   country?: string;
@@ -43,6 +38,39 @@ export interface Contact {
   email?: string;
   phoneNumber?: string;
   mobileNumber?: string;
+}
+
+export interface LoginUserResponse {
+  authenticated?: boolean;
+  token?: string;
+  user?: UserDto;
+}
+
+export interface Name {
+  title?: string;
+  firstName?: string;
+  middleName?: string;
+  lastName?: string;
+}
+
+export type UserDtoRole = (typeof UserDtoRole)[keyof typeof UserDtoRole];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const UserDtoRole = {
+  NONE: 'NONE',
+  MENTOR: 'MENTOR',
+  MENTEE: 'MENTEE',
+} as const;
+
+export interface UserDto {
+  id?: string;
+  userName?: string;
+  name?: Name;
+  address?: Address;
+  contact?: Contact;
+  role?: UserDtoRole;
+  createdAt?: string;
+  lastLoginAt?: string;
 }
 
 export type CreateUserRequestRoleType =
@@ -63,13 +91,6 @@ export interface CreateUserRequest {
   contact?: Contact;
   address?: Address;
   roleType?: CreateUserRequestRoleType;
-}
-
-export interface Name {
-  title?: string;
-  firstName?: string;
-  middleName?: string;
-  lastName?: string;
 }
 
 export interface CreateUserResponse {
@@ -103,8 +124,8 @@ export interface User {
   roleType?: UserRoleType;
   createdAt?: string;
   lastLoginAt?: string;
-  password?: string;
   authorities?: GrantedAuthority[];
+  password?: string;
   username?: string;
   enabled?: boolean;
   accountNonExpired?: boolean;
@@ -114,26 +135,6 @@ export interface User {
 
 export interface UpdateUserResponse {
   updatedUser?: UserDto;
-}
-
-export type UserDtoRole = (typeof UserDtoRole)[keyof typeof UserDtoRole];
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const UserDtoRole = {
-  NONE: 'NONE',
-  MENTOR: 'MENTOR',
-  MENTEE: 'MENTEE',
-} as const;
-
-export interface UserDto {
-  id?: string;
-  userName?: string;
-  name?: Name;
-  address?: Address;
-  contact?: Contact;
-  role?: UserDtoRole;
-  createdAt?: string;
-  lastLoginAt?: string;
 }
 
 export interface ListUsersResponse {

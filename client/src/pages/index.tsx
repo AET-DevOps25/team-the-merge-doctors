@@ -1,28 +1,36 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { Button, notification } from 'antd';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import './index.css';
+import { useAuth } from '@/contexts/AuthContext';
+import { useEffect } from 'react';
+import { Spin } from 'antd';
+import { useCurrentUser } from '@/utils/useCurrentUser';
+import { UserDtoRole } from '@/api/user';
 
 export const Route = createFileRoute('/')({
   component: Index,
 });
 
 function Index() {
-  const [api, contextHolder] = notification.useNotification();
+  const { isLoggedIn } = useAuth();
+  const currentUser = useCurrentUser();
+  const navigate = useNavigate();
 
-  const openNotification = () => {
-    api.open({
-      message: 'Welcome to MentorPulse',
-      description:
-        'MentorPulse is an application that connects mentors with mentees.',
-      duration: 0,
-    });
-  };
+  useEffect(() => {
+    if (isLoggedIn && currentUser?.role === UserDtoRole.MENTEE) {
+      navigate({ to: '/search' });
+    } else if (
+      isLoggedIn &&
+      currentUser?.role === UserDtoRole.MENTOR &&
+      currentUser.id
+    ) {
+      navigate({
+        to: '/applications/mentor/$mentorId',
+        params: { mentorId: currentUser.id },
+      });
+    } else {
+      navigate({ to: '/login' });
+    }
+  }, [isLoggedIn, navigate]);
 
-  return (
-    <>
-      {contextHolder}
-      <h1>Welcome to MentorPulse</h1>
-      <Button onClick={openNotification}> Click Me! </Button>
-    </>
-  );
+  return <Spin />;
 }

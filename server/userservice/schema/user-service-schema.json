@@ -212,17 +212,6 @@
           }
         }
       },
-      "LoginUserResponse": {
-        "type": "object",
-        "properties": {
-          "authenticated": {
-            "type": "boolean"
-          },
-          "token": {
-            "type": "string"
-          }
-        }
-      },
       "Address": {
         "type": "object",
         "properties": {
@@ -245,6 +234,74 @@
           },
           "mobileNumber": {
             "type": "string"
+          }
+        }
+      },
+      "LoginUserResponse": {
+        "type": "object",
+        "properties": {
+          "authenticated": {
+            "type": "boolean"
+          },
+          "token": {
+            "type": "string"
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserDto"
+          }
+        }
+      },
+      "Name": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "middleName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          }
+        }
+      },
+      "UserDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "userName": {
+            "type": "string"
+          },
+          "name": {
+            "$ref": "#/components/schemas/Name"
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "contact": {
+            "$ref": "#/components/schemas/Contact"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "NONE",
+              "MENTOR",
+              "MENTEE"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastLoginAt": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
@@ -276,23 +333,6 @@
               "MENTOR",
               "MENTEE"
             ]
-          }
-        }
-      },
-      "Name": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string"
-          },
-          "firstName": {
-            "type": "string"
-          },
-          "middleName": {
-            "type": "string"
-          },
-          "lastName": {
-            "type": "string"
           }
         }
       },
@@ -359,14 +399,14 @@
             "type": "string",
             "format": "date-time"
           },
-          "password": {
-            "type": "string"
-          },
           "authorities": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/GrantedAuthority"
             }
+          },
+          "password": {
+            "type": "string"
           },
           "username": {
             "type": "string"
@@ -390,43 +430,6 @@
         "properties": {
           "updatedUser": {
             "$ref": "#/components/schemas/UserDto"
-          }
-        }
-      },
-      "UserDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "userName": {
-            "type": "string"
-          },
-          "name": {
-            "$ref": "#/components/schemas/Name"
-          },
-          "address": {
-            "$ref": "#/components/schemas/Address"
-          },
-          "contact": {
-            "$ref": "#/components/schemas/Contact"
-          },
-          "role": {
-            "type": "string",
-            "enum": [
-              "NONE",
-              "MENTOR",
-              "MENTEE"
-            ]
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "lastLoginAt": {
-            "type": "string",
-            "format": "date-time"
           }
         }
       },

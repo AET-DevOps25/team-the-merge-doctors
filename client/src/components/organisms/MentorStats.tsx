@@ -15,7 +15,7 @@ interface MentorStatsProps {
 
 export const MentorStats = (props: MentorStatsProps) => {
   return (
-    <Flex gap={18} justify="space-between" style={{ padding: '1rem' }}>
+    <Flex gap={18} justify="space-between">
       <Col span={12}>
         <Card style={{ textAlign: 'center', borderRadius: 12 }}>
           <Statistic
@@ -24,13 +24,6 @@ export const MentorStats = (props: MentorStatsProps) => {
             prefix={<SolutionOutlined />}
           />
         </Card>
-        {/* <Card style={{ textAlign: 'center', borderRadius: 12 }}>
-          <Statistic
-            title="Mentees"
-            value={props.totalMentees}
-            prefix={<UserOutlined />}
-          />
-        </Card> */}
       </Col>
       <Col span={12}>
         <Card style={{ textAlign: 'center', borderRadius: 12 }}>
@@ -41,15 +34,6 @@ export const MentorStats = (props: MentorStatsProps) => {
           />
         </Card>
       </Col>
-      {/* <Col span={6}> */}
-      {/* <Card style={{ textAlign: 'center', borderRadius: 12 }}>
-          <Statistic
-            title="Languages"
-            value={props.languages.length}
-            prefix={<GlobalOutlined />}
-          />
-        </Card> */}
-      {/* </Col> */}
     </Flex>
   );
 };
