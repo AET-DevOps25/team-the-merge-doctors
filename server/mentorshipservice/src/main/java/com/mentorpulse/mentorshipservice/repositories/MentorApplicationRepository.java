@@ -1,6 +1,5 @@
 package com.mentorpulse.mentorshipservice.repositories;
 
-import com.mentorpulse.mentorshipservice.dto.service.*;
 import com.mentorpulse.mentorshipservice.models.MentorApplication;
 import com.mentorpulse.mentorshipservice.models.MentorApplication_;
 import org.apache.commons.lang3.ObjectUtils;
@@ -11,15 +10,16 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 import java.util.UUID;
 
-public interface MentorApplicationRepository extends CrudRepository<MentorApplication, UUID> , JpaSpecificationExecutor<MentorApplication> {
+public interface MentorApplicationRepository
+        extends CrudRepository<MentorApplication, UUID>,
+                JpaSpecificationExecutor<MentorApplication> {
 
-
-    static Specification<MentorApplication> createSpecification(ListApplicationRequest request) {
-        return Specification.allOf(
-                mentorIn(request.mentors()),
-                menteeIn(request.mentees())
-        );
+    static Specification<MentorApplication> createSpecification(UUID mentorId, UUID menteeId) {
+        List<UUID> mentors = mentorId == null ? List.of() : List.of(mentorId);
+        List<UUID> mentees = menteeId == null ? List.of() : List.of(menteeId);
+        return Specification.allOf(mentorIn(mentors), menteeIn(mentees));
     }
+
     private static Specification<MentorApplication> mentorIn(List<UUID> mentors) {
         return (root, query, criteriaBuilder) -> {
             if (ObjectUtils.isEmpty(mentors)) {

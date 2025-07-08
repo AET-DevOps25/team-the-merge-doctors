@@ -29,11 +29,6 @@ export interface LoginUserRequest {
   password?: string;
 }
 
-export interface LoginUserResponse {
-  authenticated?: boolean;
-  token?: string;
-}
-
 export interface Address {
   city?: string;
   country?: string;
@@ -43,6 +38,39 @@ export interface Contact {
   email?: string;
   phoneNumber?: string;
   mobileNumber?: string;
+}
+
+export interface LoginUserResponse {
+  authenticated?: boolean;
+  token?: string;
+  user?: UserDto;
+}
+
+export interface Name {
+  title?: string;
+  firstName?: string;
+  middleName?: string;
+  lastName?: string;
+}
+
+export type UserDtoRole = (typeof UserDtoRole)[keyof typeof UserDtoRole];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const UserDtoRole = {
+  NONE: 'NONE',
+  MENTOR: 'MENTOR',
+  MENTEE: 'MENTEE',
+} as const;
+
+export interface UserDto {
+  id?: string;
+  userName?: string;
+  name?: Name;
+  address?: Address;
+  contact?: Contact;
+  role?: UserDtoRole;
+  createdAt?: string;
+  lastLoginAt?: string;
 }
 
 export type CreateUserRequestRoleType =
@@ -63,13 +91,6 @@ export interface CreateUserRequest {
   contact?: Contact;
   address?: Address;
   roleType?: CreateUserRequestRoleType;
-}
-
-export interface Name {
-  title?: string;
-  firstName?: string;
-  middleName?: string;
-  lastName?: string;
 }
 
 export interface CreateUserResponse {
@@ -104,8 +125,8 @@ export interface User {
   createdAt?: string;
   lastLoginAt?: string;
   authorities?: GrantedAuthority[];
-  username?: string;
   password?: string;
+  username?: string;
   enabled?: boolean;
   accountNonExpired?: boolean;
   accountNonLocked?: boolean;
@@ -116,44 +137,8 @@ export interface UpdateUserResponse {
   updatedUser?: UserDto;
 }
 
-export type UserDtoRole = (typeof UserDtoRole)[keyof typeof UserDtoRole];
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const UserDtoRole = {
-  NONE: 'NONE',
-  MENTOR: 'MENTOR',
-  MENTEE: 'MENTEE',
-} as const;
-
-export interface UserDto {
-  id?: string;
-  userName?: string;
-  address?: Address;
-  role?: UserDtoRole;
-  createdAt?: string;
-  lastLoginAt?: string;
-}
-
-export type ListUsersRequestRoleType =
-  (typeof ListUsersRequestRoleType)[keyof typeof ListUsersRequestRoleType];
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const ListUsersRequestRoleType = {
-  NONE: 'NONE',
-  MENTOR: 'MENTOR',
-  MENTEE: 'MENTEE',
-} as const;
-
-export interface ListUsersRequest {
-  roleType?: ListUsersRequestRoleType;
-}
-
 export interface ListUsersResponse {
   users?: UserDto[];
-}
-
-export interface GetUserRequest {
-  userId?: string;
 }
 
 export interface GetUserResponse {
@@ -169,11 +154,21 @@ export interface DeleteUserResponse {
 }
 
 export type ListUsersParams = {
-  request: ListUsersRequest;
+  roleType: ListUsersRoleType;
 };
 
+export type ListUsersRoleType =
+  (typeof ListUsersRoleType)[keyof typeof ListUsersRoleType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ListUsersRoleType = {
+  NONE: 'NONE',
+  MENTOR: 'MENTOR',
+  MENTEE: 'MENTEE',
+} as const;
+
 export type GetUserParams = {
-  req: GetUserRequest;
+  userId: string;
 };
 
 export const loginUser = (

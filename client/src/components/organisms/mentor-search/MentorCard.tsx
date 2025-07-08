@@ -1,7 +1,11 @@
-import { Button, Card, Col, Divider, Row, Space, Tag } from 'antd';
+import { Button, Card, Space } from 'antd';
 import '@/components/organisms/mentor-search/MentorCard.css';
 import { useNavigate } from '@tanstack/react-router';
-import type { MentorCategory, MentorProfile, Skill } from '@/api/mentor';
+import type { MentorProfile } from '@/api/mentor';
+import { MentorCategoryPill } from '@/components/atoms/MentorCategoryPill';
+import { MentorSkillsSection } from '@/components/atoms/MentorSkillsSection';
+import { useGetUser } from '@/api/user';
+import { getFullName } from '@/utils/getFullName';
 
 interface MentorCardProps {
   mentor: MentorProfile;
@@ -9,23 +13,21 @@ interface MentorCardProps {
 
 export function MentorCard({ mentor }: MentorCardProps) {
   // getAverageRating(mentorId)
-  // getNumberOfReviews(mentorId)
-  // getMentor(mentorId): should include categories, skills, bio, etc.
 
-  // const {data: userData} = useGetUser({req: {userId: mentor.id}});
+  const { data: userData } = useGetUser(
+    { userId: mentor.mentorId! },
+    { query: { enabled: !!mentor.mentorId } },
+  );
 
   return (
     <Card
       title={
-        <Row>
-          {/* TODO: add name once its updated in schema */}
-          {/* <Col span={24}>{userData?.data.user?.userName}</Col> */}
+        <Space direction="horizontal" size={'large'}>
+          {getFullName(userData?.data?.user?.name)}
           {mentor.mentorCategory !== undefined && (
-            <Col span={24}>
-              <MentorCategoryPill category={mentor.mentorCategory} />
-            </Col>
+            <MentorCategoryPill category={mentor.mentorCategory} />
           )}
-        </Row>
+        </Space>
       }
     >
       <Space direction="vertical">
@@ -33,46 +35,15 @@ export function MentorCard({ mentor }: MentorCardProps) {
           <div style={{ fontWeight: 'bold' }}>About</div>
           <div className="mentorBio">{mentor.bio}</div>
         </div>
-        {mentor.skills !== undefined && <MentorSkills skills={mentor.skills} />}
-        <ViewProfileButton mentor={mentor} />
+        {mentor.skills !== undefined && (
+          <MentorSkillsSection skills={mentor.skills} />
+        )}
+        <div style={{ marginTop: 10 }}>
+          <ViewProfileButton mentor={mentor} />
+        </div>
       </Space>
     </Card>
   );
-}
-
-interface MentorSkillsProps {
-  skills: Skill[];
-}
-
-function MentorSkills({ skills }: MentorSkillsProps) {
-  return (
-    <div>
-      <div style={{ fontWeight: 'bold' }}>Skills</div>
-      {skills?.map((skill) => <SkillPill key={skill?.id} skill={skill} />)}
-    </div>
-  );
-}
-
-interface MentorCategoryPillProps {
-  category: MentorCategory;
-}
-
-function MentorCategoryPill({ category }: MentorCategoryPillProps) {
-  return (
-    <Tag>
-      {category.category?.name}
-      <Divider type="vertical" size="large" />
-      {category.yearsOfExperience} years
-    </Tag>
-  );
-}
-
-interface SkillPillProps {
-  skill: Skill;
-}
-
-function SkillPill({ skill }: SkillPillProps) {
-  return <Tag>{skill.name}</Tag>;
 }
 
 interface ViewProfileButtonProps {
@@ -83,20 +54,18 @@ function ViewProfileButton({ mentor }: ViewProfileButtonProps) {
   const navigate = useNavigate();
 
   return (
-    <div style={{ textAlign: 'right' }}>
-      <Button
-        type="primary"
-        onClick={() => {
-          if (mentor.mentorId !== undefined) {
-            navigate({
-              to: '/mentor/$mentorId',
-              params: { mentorId: mentor.mentorId },
-            });
-          }
-        }}
-      >
-        View Profile
-      </Button>
-    </div>
+    <Button
+      type="primary"
+      onClick={() => {
+        if (mentor.mentorId !== undefined) {
+          navigate({
+            to: '/mentor/$mentorId',
+            params: { mentorId: mentor.mentorId },
+          });
+        }
+      }}
+    >
+      View Profile
+    </Button>
   );
 }

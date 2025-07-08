@@ -45,6 +45,7 @@ export interface MentorApplication {
   mentorId?: string;
   menteeId?: string;
   applicationMessage?: string;
+  summarizedApplicationMessage?: string;
   status?: MentorApplicationStatus;
   appliedOn?: string;
   session?: MentorSession;
@@ -130,15 +131,6 @@ export interface Skill {
   name?: string;
 }
 
-export interface ListApplicationRequest {
-  mentors?: string[];
-  mentees?: string[];
-}
-
-export interface ListApplicationResponse {
-  applications?: MentorApplication[];
-}
-
 export interface CreateSkillRequest {
   id?: string;
   skill?: string;
@@ -191,6 +183,10 @@ export interface ListCategoryResponse {
   categories?: Category[];
 }
 
+export interface ListApplicationResponse {
+  applications?: MentorApplication[];
+}
+
 export interface GetMentorProfileResponse {
   profile?: MentorProfile;
 }
@@ -206,6 +202,11 @@ export interface DeleteMentorProfileRequest {
 export interface DeleteMentorProfileResponse {
   mentorProfile?: MentorProfile;
 }
+
+export type ListApplicationsParams = {
+  mentorId?: string;
+  menteeId?: string;
+};
 
 export type GetMentorProfileParams = {
   mentorId: string;
@@ -527,86 +528,6 @@ export const useListMentorProfiles = <
   TContext
 > => {
   const mutationOptions = getListMentorProfilesMutationOptions(options);
-
-  return useMutation(mutationOptions, queryClient);
-};
-
-export const listApplication = (
-  listApplicationRequest: ListApplicationRequest,
-  options?: AxiosRequestConfig,
-): Promise<AxiosResponse<ListApplicationResponse>> => {
-  return axios.default.post(
-    `http://localhost:8310/api/mentorship/listApplication`,
-    listApplicationRequest,
-    options,
-  );
-};
-
-export const getListApplicationMutationOptions = <
-  TError = AxiosError<unknown>,
-  TContext = unknown,
->(options?: {
-  mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof listApplication>>,
-    TError,
-    { data: ListApplicationRequest },
-    TContext
-  >;
-  axios?: AxiosRequestConfig;
-}): UseMutationOptions<
-  Awaited<ReturnType<typeof listApplication>>,
-  TError,
-  { data: ListApplicationRequest },
-  TContext
-> => {
-  const mutationKey = ['listApplication'];
-  const { mutation: mutationOptions, axios: axiosOptions } = options
-    ? options.mutation &&
-      'mutationKey' in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey }, axios: undefined };
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof listApplication>>,
-    { data: ListApplicationRequest }
-  > = (props) => {
-    const { data } = props ?? {};
-
-    return listApplication(data, axiosOptions);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type ListApplicationMutationResult = NonNullable<
-  Awaited<ReturnType<typeof listApplication>>
->;
-export type ListApplicationMutationBody = ListApplicationRequest;
-export type ListApplicationMutationError = AxiosError<unknown>;
-
-export const useListApplication = <
-  TError = AxiosError<unknown>,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof listApplication>>,
-      TError,
-      { data: ListApplicationRequest },
-      TContext
-    >;
-    axios?: AxiosRequestConfig;
-  },
-  queryClient?: QueryClient,
-): UseMutationResult<
-  Awaited<ReturnType<typeof listApplication>>,
-  TError,
-  { data: ListApplicationRequest },
-  TContext
-> => {
-  const mutationOptions = getListApplicationMutationOptions(options);
 
   return useMutation(mutationOptions, queryClient);
 };
@@ -1254,6 +1175,170 @@ export function useListCategories<
   queryKey: DataTag<QueryKey, TData, TError>;
 } {
   const queryOptions = getListCategoriesQueryOptions(options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+export const listApplications = (
+  params?: ListApplicationsParams,
+  options?: AxiosRequestConfig,
+): Promise<AxiosResponse<ListApplicationResponse>> => {
+  return axios.default.get(
+    `http://localhost:8310/api/mentorship/listApplications`,
+    {
+      ...options,
+      params: { ...params, ...options?.params },
+    },
+  );
+};
+
+export const getListApplicationsQueryKey = (
+  params?: ListApplicationsParams,
+) => {
+  return [
+    `http://localhost:8310/api/mentorship/listApplications`,
+    ...(params ? [params] : []),
+  ] as const;
+};
+
+export const getListApplicationsQueryOptions = <
+  TData = Awaited<ReturnType<typeof listApplications>>,
+  TError = AxiosError<unknown>,
+>(
+  params?: ListApplicationsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof listApplications>>,
+        TError,
+        TData
+      >
+    >;
+    axios?: AxiosRequestConfig;
+  },
+) => {
+  const { query: queryOptions, axios: axiosOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getListApplicationsQueryKey(params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof listApplications>>
+  > = ({ signal }) => listApplications(params, { signal, ...axiosOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof listApplications>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type ListApplicationsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listApplications>>
+>;
+export type ListApplicationsQueryError = AxiosError<unknown>;
+
+export function useListApplications<
+  TData = Awaited<ReturnType<typeof listApplications>>,
+  TError = AxiosError<unknown>,
+>(
+  params: undefined | ListApplicationsParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof listApplications>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listApplications>>,
+          TError,
+          Awaited<ReturnType<typeof listApplications>>
+        >,
+        'initialData'
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useListApplications<
+  TData = Awaited<ReturnType<typeof listApplications>>,
+  TError = AxiosError<unknown>,
+>(
+  params?: ListApplicationsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof listApplications>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof listApplications>>,
+          TError,
+          Awaited<ReturnType<typeof listApplications>>
+        >,
+        'initialData'
+      >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useListApplications<
+  TData = Awaited<ReturnType<typeof listApplications>>,
+  TError = AxiosError<unknown>,
+>(
+  params?: ListApplicationsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof listApplications>>,
+        TError,
+        TData
+      >
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+
+export function useListApplications<
+  TData = Awaited<ReturnType<typeof listApplications>>,
+  TError = AxiosError<unknown>,
+>(
+  params?: ListApplicationsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof listApplications>>,
+        TError,
+        TData
+      >
+    >;
+    axios?: AxiosRequestConfig;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getListApplicationsQueryOptions(params, options);
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<
     TData,

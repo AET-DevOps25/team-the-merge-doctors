@@ -86,7 +86,7 @@ public class UserService implements UserDetailsService {
                                 existingUser.getId(),
                                 existingUser.getRoleType())
                         : "";
-        return new LoginUserResponse(authenticated, token);
+        return new LoginUserResponse(authenticated, token, existingUser.toUserDto());
     }
 
     @Transactional

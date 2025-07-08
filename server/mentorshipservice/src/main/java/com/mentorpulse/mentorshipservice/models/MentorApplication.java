@@ -14,9 +14,7 @@ import java.util.UUID;
 @Data
 public class MentorApplication {
 
-    @Id
-    @GeneratedValue
-    UUID id;
+    @Id @GeneratedValue UUID id;
 
     UUID mentorId;
 
@@ -24,6 +22,9 @@ public class MentorApplication {
 
     @Column(columnDefinition = "text")
     String applicationMessage;
+
+    @Column(columnDefinition = "text")
+    String summarizedApplicationMessage;
 
     ApplicationStatus status;
 

@@ -11,6 +11,8 @@ const queryClient = new QueryClient();
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen';
+import { App } from 'antd';
+import axios from 'axios';
 
 // Create a new router instance
 const router = createRouter({ routeTree });
@@ -22,11 +24,27 @@ declare module '@tanstack/react-router' {
   }
 }
 
+axios.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const parsedToken = JSON.parse(token);
+      config.headers.Authorization = `Bearer ${parsedToken}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  },
+);
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <AuthProvider>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
+        <App>
+          <RouterProvider router={router} />
+        </App>
       </QueryClientProvider>
     </AuthProvider>
   </StrictMode>,
