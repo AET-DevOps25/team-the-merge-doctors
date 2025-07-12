@@ -4,4 +4,4 @@ import com.mentorpulse.mentorshipservice.models.MentorProfile;
 
 import java.util.List;
 
-public record ListMentorProfileResponse (List<MentorProfile> mentorProfile) { }
+public record ListMentorProfileResponse (List<MentorProfile> mentorProfiles) { }
