@@ -1,0 +1,7 @@
+node_modules
+dist
+
+playwright_report
+test_results
+
+*.log
