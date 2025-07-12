@@ -19,7 +19,7 @@ jobs:
 
       - name: Start Docker Containers
         run: |
-          docker-compose up --build -d
+          docker compose up --build -d
 
       - name: Wait for Docker Containers to be Ready
         run: |
