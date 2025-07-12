@@ -1,6 +1,7 @@
 package com.mentorpulse.userservice.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,6 +19,7 @@ public class JWTKeyConfig {
     private String secretFilePath;
 
     @Bean
+    @ConditionalOnMissingBean(Key.class)
     public Key jwtSigningKey() throws IOException {
         byte[] secretBytes = Files.readAllBytes(Paths.get(secretFilePath));
         String secret = new String(secretBytes, StandardCharsets.UTF_8).trim();
