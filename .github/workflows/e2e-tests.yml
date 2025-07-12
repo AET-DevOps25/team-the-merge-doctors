@@ -16,6 +16,9 @@ jobs:
           node-version: lts/*
 
       - uses: docker/setup-compose-action@v1
+      - name: Setup .env
+        run: |
+          cp docker/backend_config_files/.env.template docker/backend_config_files/.env
 
       - name: Start Docker Containers
         run: |
@@ -25,7 +28,7 @@ jobs:
         run: |
           echo "Waiting for Docker containers to be ready..."
           for i in {1..30}; do
-            if docker-compose ps | grep -q "healthy"; then
+            if docker compose ps | grep -q "healthy"; then
               echo "Containers are ready!"
               break
             fi
