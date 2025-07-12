@@ -1,6 +1,6 @@
 import { test as setup } from '@playwright/test';
 import {
-  createApplication,
+  // createApplication,
   createCategory,
   createMentorProfile,
   createSkill,
@@ -9,7 +9,7 @@ import { skills } from 'tests/resources/skills';
 import { categories } from 'tests/resources/categories';
 import { rateMentor } from '@/api/rating';
 import { ratings } from 'tests/resources/ratings';
-import { applications } from 'tests/resources/applications';
+// import { applications } from 'tests/resources/applications';
 import { users } from 'tests/resources/users';
 import { createUser } from '@/api/user';
 import { mentorProfiles } from 'tests/resources/profiles';
