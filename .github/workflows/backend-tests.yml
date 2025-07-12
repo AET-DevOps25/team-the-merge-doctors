@@ -1,9 +1,6 @@
-name: Backend Tests
+name: Backend tests
 
 on:
-  push:
-    branches: [main]
-  pull_request:
   workflow_call:
 
 permissions: write-all
@@ -33,8 +30,8 @@ jobs:
         working-directory: ./server/ratingservice
         run: ./gradlew test
 
-      - name: Archive test reports
-        uses: actions/upload-artifact@v3
+      - name: Upload backend test reports
+        uses: actions/upload-artifact@v4
         with:
           name: backend-test-reports
           path: |
