@@ -33,7 +33,7 @@ public class MentorApplicationService {
                 .applicationMessage(request.applicationMessage());
         if (!ObjectUtils.isEmpty(request.applicationMessage()) && !ObjectUtils.isEmpty(request.applicationMessage().trim())) {
             String summarizedApplicationText = summarizationClient.summarize(request.applicationMessage()).summarizedText();
-            mentorApplicationBuilder.summarizedApplicationText(summarizedApplicationText);
+            mentorApplicationBuilder.summarizedApplicationMessage(summarizedApplicationText);
         }
         MentorApplication mentorApplication = mentorApplicationRepository.save(mentorApplicationBuilder.build());
         return new CreateApplicationResponse(mentorApplication);

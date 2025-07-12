@@ -15,12 +15,12 @@ import java.util.UUID;
 public class MentorProfile {
 
     @Id
-//    @GeneratedValue
     UUID id;
 
     @Column(unique = true, nullable = false)
     UUID mentorId;
 
+    @Column(columnDefinition = "text")
     String bio;
 
     @ManyToMany
