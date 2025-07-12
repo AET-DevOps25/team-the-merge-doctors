@@ -15,6 +15,8 @@ jobs:
         with:
           node-version: lts/*
 
+      - uses: docker/setup-compose-action@v1
+
       - name: Start Docker Containers
         run: |
           docker-compose up --build -d
