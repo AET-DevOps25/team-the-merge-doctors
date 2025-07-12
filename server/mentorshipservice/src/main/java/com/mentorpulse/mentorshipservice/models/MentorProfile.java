@@ -12,6 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Table(name = "mentor_profiles_table")
 public class MentorProfile {
 
     @Id

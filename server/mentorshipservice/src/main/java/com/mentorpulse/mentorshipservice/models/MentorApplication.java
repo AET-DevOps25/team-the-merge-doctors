@@ -12,6 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Table(name = "applications_table")
 public class MentorApplication {
 
     @Id @GeneratedValue UUID id;

@@ -6,5 +6,5 @@ interface SkillPillProps {
 }
 
 export function SkillPill({ skill }: SkillPillProps) {
-  return <Tag>{skill.name}</Tag>;
+  return <Tag data-testid="skill-pill">{skill.name}</Tag>;
 }
