@@ -7,7 +7,7 @@ interface MentorCategoryPillProps {
 
 export function MentorCategoryPill({ category }: MentorCategoryPillProps) {
   return (
-    <Tag>
+    <Tag data-testid="mentor-category-pill">
       {category.category?.name}
       <Divider type="vertical" size="large" />
       {category.yearsOfExperience}+ years
