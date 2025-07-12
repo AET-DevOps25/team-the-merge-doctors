@@ -1,6 +1,6 @@
 # Generate Users and Load Users Script
 
-# Installation
+## Installation
 
 1. Create a virtual environment 
 ```
