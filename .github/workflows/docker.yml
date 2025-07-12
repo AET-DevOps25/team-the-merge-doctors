@@ -9,7 +9,10 @@ on:
 permissions: write-all
 
 jobs:
+  backend-tests:
+    uses: ./.github/workflows/backend-tests.yml
   publish-docker-images:
+    needs: backend-tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -48,18 +51,6 @@ jobs:
           context: ./genai/ollama
           push: true
           tags: ghcr.io/aet-devops25/team-the-merge-doctors/ollama:latest
-
-      - name: Run User Service tests
-        working-directory: ./server/userservice
-        run: ./gradlew test
-
-      - name: Run Mentorship Service tests
-        working-directory: ./server/mentorshipservice
-        run: ./gradlew test
-
-      - name: Run Rating Service tests
-        working-directory: ./server/ratingservice
-        run: ./gradlew test
 
       - name: Build & push User Service image
         uses: docker/build-push-action@v4
