@@ -20,6 +20,10 @@ jobs:
         run: |
           cp docker/backend_config_files/.env.template docker/backend_config_files/.env
 
+      - name: Generate JWT Key
+        run: |
+          ./docker/backend_config_files/jwk-key-generator.sh
+
       - name: Start Docker Containers
         run: |
           docker compose up --build -d
@@ -35,10 +39,6 @@ jobs:
       #       echo "Waiting for containers to be healthy..."
       #       sleep 10
       #     done
-
-      - name: Generate JWT Key
-        run: |
-          bash docker/backend_config_files/jwk-key-generator.sh
 
       - name: Change Directory to Client
         run: cd client
