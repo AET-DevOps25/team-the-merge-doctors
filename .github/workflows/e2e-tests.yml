@@ -24,17 +24,17 @@ jobs:
         run: |
           docker compose up --build -d
 
-      - name: Wait for Docker Containers to be Ready
-        run: |
-          echo "Waiting for Docker containers to be ready..."
-          for i in {1..30}; do
-            if docker compose ps | grep -q "healthy"; then
-              echo "Containers are ready!"
-              break
-            fi
-            echo "Waiting for containers to be healthy..."
-            sleep 10
-          done
+      # - name: Wait for Docker Containers to be Ready
+      #   run: |
+      #     echo "Waiting for Docker containers to be ready..."
+      #     for i in {1..30}; do
+      #       if docker compose ps | grep -q "healthy"; then
+      #         echo "Containers are ready!"
+      #         break
+      #       fi
+      #       echo "Waiting for containers to be healthy..."
+      #       sleep 10
+      #     done
 
       - name: Generate JWT Key
         run: |
