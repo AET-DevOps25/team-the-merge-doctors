@@ -25,9 +25,6 @@ public class Rolefilter extends OncePerRequestFilter {
                     new SimpleGrantedAuthority("ROLE_" + role)    // ROLE_MENTOR || ROLE_MENTEE.
             );
 
-            System.out.println("Aly authorityList" + authorityList);
-            System.out.println("Aly role" + role);
-
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(null, null, authorityList);
 
