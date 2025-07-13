@@ -9,7 +9,10 @@ on:
 permissions: write-all
 
 jobs:
+  backend-tests:
+    uses: ./.github/workflows/backend-tests.yml
   publish-docker-images:
+    needs: backend-tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

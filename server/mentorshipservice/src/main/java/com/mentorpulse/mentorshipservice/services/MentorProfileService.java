@@ -64,7 +64,7 @@ public class MentorProfileService {
         if (categoryName == null || categoryName.trim().isEmpty()) {
             throw new InvalidArgumentsException("category");
         }
-        if (skillRepository.existsSkillByName(categoryName)) {
+        if (categoryRepository.existsCategoryByName(categoryName)) {
             throw new AlreadyExistsException("category", categoryName);
         }
         Category category =
