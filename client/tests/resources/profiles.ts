@@ -1,0 +1,262 @@
+import type { MentorProfile } from '@/api/mentor';
+
+export const mentorProfiles: MentorProfile[] = [
+  {
+    id: '3b4c5d6e-7f80-9123-4b5c-6d7e8f901234',
+    mentorId: '66b9fd2a-4cf9-40a7-98bb-e1da57db953d',
+    bio: 'Cloud architect with AWS certifications and DB tuning skills.',
+    skills: [
+      {
+        id: '1a2b3c4d-5e6f-7b8c-9d0e-567890cdef12',
+        name: 'AWS',
+      },
+      {
+        id: 'a1b2c3d4-5e6f-7a8b-9c0d-34567890bcde',
+        name: 'Databases',
+      },
+    ],
+    isAvailable: true,
+    mentorCategory: {
+      category: {
+        id: 'd1e2f3a4-b5c6-7d8e-9f0a-1b2c3d4e5f6a',
+        name: 'Consulting',
+      },
+      yearsOfExperience: 8,
+    },
+  },
+  {
+    id: '4c5d6e7f-8091-2345-6c7d-8e9f01234567',
+    mentorId: '1af6b5da-3b5e-43b7-9df0-f17e715fbd01',
+    bio: 'Java & Python polyglot with 10 years in enterprise apps.',
+    skills: [
+      {
+        id: 'e4f3a1b2-9c7d-4e20-a8b1-1234567890ab',
+        name: 'Java',
+      },
+      {
+        id: '7d5c2e89-0f3a-4b8e-b6c4-234567890abc',
+        name: 'Python',
+      },
+      {
+        id: 'f0e1d2c3-b4a5-6789-0abc-4567890cdef1',
+        name: 'Spring',
+      },
+    ],
+    isAvailable: false,
+    mentorCategory: {
+      category: {
+        id: 'd3b07384-d9a1-4fda-8f78-1a2b3c4d5e6f',
+        name: 'Technical',
+      },
+      yearsOfExperience: 10,
+    },
+  },
+  {
+    id: '9f1c2b3a-4d5e-6f70-8a9b-1c2d3e4f5a6b',
+    mentorId: 'dad02741-84d9-4300-8e8a-a8c47fb690af',
+    bio: "Full-stack Java engineer with deep Spring expertise and 7+ years of experience building enterprise-grade applications.",
+    skills: [
+      {
+        id: 'e4f3a1b2-9c7d-4e20-a8b1-1234567890ab',
+        name: 'Java',
+      },
+      {
+        id: 'f0e1d2c3-b4a5-6789-0abc-4567890cdef1',
+        name: 'Spring',
+      },
+    ],
+    isAvailable: true,
+    mentorCategory: {
+      category: {
+        id: 'd3b07384-d9a1-4fda-8f78-1a2b3c4d5e6f',
+        name: 'Technical',
+      },
+      yearsOfExperience: 7,
+    },
+  },
+  {
+    id: '2a3b4c5d-6e7f-8091-2a3b-4c5d6e7f8091',
+    mentorId: 'c61132a7-304d-48d9-a550-3eee77f2325d',
+    bio: "Data scientist with 5 years of experience transforming complex datasets into actionable business insights. I specialize in Python-based machine learning pipelines and have designed robust database architectures for companies ranging from startups to multinational corporations. My expertise includes statistical analysis, predictive modeling, and data visualization using tools like pandas, scikit-learn, and TensorFlow. I'm passionate about helping aspiring data scientists navigate the transition from traditional programming to data-driven decision making. I've mentored over 20 professionals in developing their analytical thinking, understanding business requirements, and communicating technical findings to non-technical stakeholders. My approach focuses on building strong fundamentals in statistics, SQL optimization, and Python programming while also developing the soft skills necessary for career advancement in data science.",
+    skills: [
+      {
+        id: '7d5c2e89-0f3a-4b8e-b6c4-234567890abc',
+        name: 'Python',
+      },
+      {
+        id: 'a1b2c3d4-5e6f-7a8b-9c0d-34567890bcde',
+        name: 'Databases',
+      },
+    ],
+    isAvailable: false,
+    mentorCategory: {
+      category: {
+        id: 'f1e2d3c4-b5a6-7f8e-9d0c-1b2a3c4d5e6f',
+        name: 'Career Development',
+      },
+      yearsOfExperience: 5,
+    },
+  },
+  {
+    id: '5d6e7f80-9123-4567-7d8e-9f0123456789',
+    mentorId: '0499bfbd-e913-4a3f-880a-7cf8b86d316e',
+    bio: 'AWS DevOps specialist focused on scalable microservices.',
+    skills: [
+      {
+        id: '1a2b3c4d-5e6f-7b8c-9d0e-567890cdef12',
+        name: 'AWS',
+      },
+      {
+        id: 'f0e1d2c3-b4a5-6789-0abc-4567890cdef1',
+        name: 'Spring',
+      },
+    ],
+    isAvailable: true,
+    mentorCategory: {
+      category: {
+        id: 'f1e2d3c4-b5a6-7f8e-9d0c-1b2a3c4d5e6f',
+        name: 'Career Development',
+      },
+      yearsOfExperience: 3,
+    },
+  },
+  {
+    id: '6e7f8091-2345-6789-8e9f-0123456789ab',
+    mentorId: '7b8e4c9f-12a3-4d5e-8f90-1a2b3c4d5e6f',
+    bio: 'Senior software engineer with expertise in full-stack development and team leadership.',
+    skills: [
+      {
+        id: 'e4f3a1b2-9c7d-4e20-a8b1-1234567890ab',
+        name: 'Java',
+      },
+      {
+        id: '7d5c2e89-0f3a-4b8e-b6c4-234567890abc',
+        name: 'Python',
+      },
+      {
+        id: 'b2c3d4e5-f6a7-8b9c-0d1e-456789abcdef',
+        name: 'React',
+      },
+    ],
+    isAvailable: true,
+    mentorCategory: {
+      category: {
+        id: 'a5f5c6d7-8e9f-4b1a-9b2c-3d4e5f6a7b8c',
+        name: 'Leadership',
+      },
+      yearsOfExperience: 6,
+    },
+  },
+  {
+    id: '7f809123-4567-89ab-9f01-23456789abcd',
+    mentorId: '2d3e4f5a-6b7c-8d9e-0f1a-2b3c4d5e6f7a',
+    bio: 'Machine learning researcher with focus on AI applications in healthcare.',
+    skills: [
+      {
+        id: '7d5c2e89-0f3a-4b8e-b6c4-234567890abc',
+        name: 'Python',
+      },
+      {
+        id: 'c3d4e5f6-a7b8-9c0d-1e2f-56789abcdef0',
+        name: 'Machine Learning',
+      },
+      {
+        id: 'a1b2c3d4-5e6f-7a8b-9c0d-34567890bcde',
+        name: 'Databases',
+      },
+    ],
+    isAvailable: true,
+    mentorCategory: {
+      category: {
+        id: 'd3b07384-d9a1-4fda-8f78-1a2b3c4d5e6f',
+        name: 'Technical',
+      },
+      yearsOfExperience: 9,
+    },
+  },
+  {
+    id: '80912345-6789-abcd-0123-456789abcdef',
+    mentorId: '8f9a0b1c-2d3e-4f5a-6b7c-8d9e0f1a2b3c',
+    bio: 'Product manager with strong technical background in mobile app development.',
+    skills: [
+      {
+        id: 'e4f3a1b2-9c7d-4e20-a8b1-1234567890ab',
+        name: 'Java',
+      },
+      {
+        id: 'b2c3d4e5-f6a7-8b9c-0d1e-456789abcdef',
+        name: 'React',
+      },
+      {
+        id: 'd4e5f6a7-b8c9-0d1e-2f3a-6789abcdef01',
+        name: 'Product Management',
+      },
+    ],
+    isAvailable: false,
+    mentorCategory: {
+      category: {
+        id: 'e2f3a4b5-c6d7-8e9f-0a1b-2c3d4e5f6a7b',
+        name: 'Entrepreneurship',
+      },
+      yearsOfExperience: 7,
+    },
+  },
+  {
+    id: '91234567-89ab-cdef-1234-56789abcdef0',
+    mentorId: '4b5c6d7e-8f9a-0b1c-2d3e-4f5a6b7c8d9e',
+    bio: 'Software architect specializing in distributed systems and microservices.',
+    skills: [
+      {
+        id: 'e4f3a1b2-9c7d-4e20-a8b1-1234567890ab',
+        name: 'Java',
+      },
+      {
+        id: 'f0e1d2c3-b4a5-6789-0abc-4567890cdef1',
+        name: 'Spring',
+      },
+      {
+        id: '1a2b3c4d-5e6f-7b8c-9d0e-567890cdef12',
+        name: 'AWS',
+      },
+    ],
+    isAvailable: true,
+    mentorCategory: {
+      category: {
+        id: 'd3b07384-d9a1-4fda-8f78-1a2b3c4d5e6f',
+        name: 'Technical',
+      },
+      yearsOfExperience: 12,
+    },
+  },
+  {
+    id: 'a2345678-9abc-def0-2345-6789abcdef01',
+    mentorId: '0d1e2f3a-4b5c-6d7e-8f9a-0b1c2d3e4f5a',
+    bio: 'Professor of Computer Science with expertise in algorithms and data structures.',
+    skills: [
+      {
+        id: 'e4f3a1b2-9c7d-4e20-a8b1-1234567890ab',
+        name: 'Java',
+      },
+      {
+        id: '7d5c2e89-0f3a-4b8e-b6c4-234567890abc',
+        name: 'Python',
+      },
+      {
+        id: 'a1b2c3d4-5e6f-7a8b-9c0d-34567890bcde',
+        name: 'Databases',
+      },
+      {
+        id: 'e5f6a7b8-c9d0-1e2f-3a4b-789abcdef012',
+        name: 'Algorithms',
+      },
+    ],
+    isAvailable: true,
+    mentorCategory: {
+      category: {
+        id: 'f1e2d3c4-b5a6-7f8e-9d0c-1b2a3c4d5e6f',
+        name: 'Career Development',
+      },
+      yearsOfExperience: 15,
+    },
+  },
+];

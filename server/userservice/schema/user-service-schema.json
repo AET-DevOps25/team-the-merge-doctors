@@ -348,14 +348,6 @@
           }
         }
       },
-      "GrantedAuthority": {
-        "type": "object",
-        "properties": {
-          "authority": {
-            "type": "string"
-          }
-        }
-      },
       "UpdateUserRequest": {
         "type": "object",
         "properties": {
@@ -370,6 +362,10 @@
           "id": {
             "type": "string",
             "format": "uuid"
+          },
+          "userName": {
+            "type": "string",
+            "writeOnly": true
           },
           "passwordHash": {
             "type": "string"
@@ -398,12 +394,6 @@
           "lastLoginAt": {
             "type": "string",
             "format": "date-time"
-          },
-          "authorities": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/GrantedAuthority"
-            }
           },
           "password": {
             "type": "string"

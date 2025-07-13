@@ -98,10 +98,6 @@ export interface CreateUserResponse {
   token?: string;
 }
 
-export interface GrantedAuthority {
-  authority?: string;
-}
-
 export interface UpdateUserRequest {
   user?: User;
 }
@@ -117,6 +113,7 @@ export const UserRoleType = {
 
 export interface User {
   id?: string;
+  userName?: string;
   passwordHash?: string;
   name?: Name;
   address?: Address;
@@ -124,7 +121,6 @@ export interface User {
   roleType?: UserRoleType;
   createdAt?: string;
   lastLoginAt?: string;
-  authorities?: GrantedAuthority[];
   password?: string;
   username?: string;
   enabled?: boolean;

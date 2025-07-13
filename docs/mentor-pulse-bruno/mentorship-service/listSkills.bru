@@ -1,0 +1,11 @@
+meta {
+  name: listSkills
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{method}}://{{mentorship-service-endpoint}}{{mentorship-path}}listSkills
+  body: none
+  auth: inherit
+}

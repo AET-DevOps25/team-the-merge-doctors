@@ -37,10 +37,12 @@ export function SearchFilter<T extends ItemType>({
         value={filterInput}
         onChange={(e) => setFilterInput(e.target.value)}
         allowClear
+        data-testid="search-filter-input"
       />
       {filteredItems.map((item) => (
         <Checkbox
           key={item.id}
+          data-testid="search-filter-option"
           onChange={(e) => {
             if (e.target.checked) {
               setSelectedItems([...selectedItems, item]);

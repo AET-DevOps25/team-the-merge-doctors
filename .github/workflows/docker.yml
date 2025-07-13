@@ -1,18 +1,12 @@
 name: CI – Build & Publish
 
 on:
-  push:
-    branches: [main]
-  pull_request:
   workflow_call:
 
 permissions: write-all
 
 jobs:
-  backend-tests:
-    uses: ./.github/workflows/backend-tests.yml
   publish-docker-images:
-    needs: backend-tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

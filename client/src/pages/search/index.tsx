@@ -79,6 +79,7 @@ export function Search() {
                 setSelectedItems={setSelectedCategories}
                 items={listCategoriesData?.data.categories ?? []}
                 title="Categories"
+                data-test-id={'categories-filter'}
               />
               <Divider />
               <SearchFilter
@@ -87,6 +88,7 @@ export function Search() {
                 setSelectedItems={setSelectedSkills}
                 items={listSkillsData?.data.skills ?? []}
                 title="Skills"
+                data-test-id={'skills-filter'}
               />
               <Divider />
               <YearsOfExperienceFilter
@@ -109,7 +111,7 @@ export function Search() {
           }}
         >
           <List
-            dataSource={listMentorsData?.data?.mentorProfile}
+            dataSource={listMentorsData?.data?.mentorProfiles}
             loading={listProfilesIsPending}
             locale={{ emptyText: 'No mentors found' }}
             size="large"
