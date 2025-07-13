@@ -1,4 +1,4 @@
-package com.mentorpulse.ratingservice.repository;
+package com.mentorpulse.ratingservice.repositories;
 
 import com.mentorpulse.ratingservice.models.Rating;
 import org.springframework.data.jpa.repository.JpaRepository;

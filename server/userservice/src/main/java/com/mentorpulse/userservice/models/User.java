@@ -1,5 +1,6 @@
 package com.mentorpulse.userservice.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mentorpulse.userservice.dto.UserDto;
 import com.mentorpulse.userservice.exceptions.PermissionDeniedException;
 import jakarta.persistence.*;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 @Table(name = "user_table")
 public class User implements UserDetails {
 
@@ -44,6 +46,7 @@ public class User implements UserDetails {
 
     @SneakyThrows
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (roleType == null || roleType == RoleType.NONE) {
             throw new PermissionDeniedException(
