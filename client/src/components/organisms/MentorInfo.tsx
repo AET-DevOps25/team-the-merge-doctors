@@ -12,25 +12,29 @@ import {
 } from 'antd';
 import {
   EnvironmentOutlined,
+  StarFilled,
   TeamOutlined,
   UserOutlined,
 } from '@ant-design/icons';
 import type { UserDto } from '@/api/user';
 import { getLocation } from '@/utils/getLocation';
 import { getFullName } from '@/utils/getFullName';
+import type { Rating } from '@/api/rating';
 
 const { Title, Text } = Typography;
 
 interface MentorInfoProps {
   isAvailable: boolean;
-  user: UserDto | undefined;
-  // rating: number;
-  // totalReviews: number;
+  mentorUser: UserDto | undefined;
+  ratings: Rating[];
+  averageRating: string | undefined;
 }
 
 export const MentorInfo: React.FC<MentorInfoProps> = ({
   isAvailable,
-  user,
+  mentorUser,
+  ratings,
+  averageRating,
 }: MentorInfoProps) => (
   <Card style={{ borderRadius: 16 }}>
     <Row align="middle" gutter={24}>
@@ -43,7 +47,7 @@ export const MentorInfo: React.FC<MentorInfoProps> = ({
         <Space direction="vertical" size="small">
           <div>
             <Title level={2} style={{ margin: 0, marginBottom: 4 }}>
-              {getFullName(user?.name)}
+              {getFullName(mentorUser?.name)}
               {isAvailable && (
                 <Tag color="green" style={{ marginLeft: 12, borderRadius: 12 }}>
                   Available
@@ -54,15 +58,17 @@ export const MentorInfo: React.FC<MentorInfoProps> = ({
           <Space size="middle">
             <Space>
               <EnvironmentOutlined />
-              <Text>{getLocation(user?.address)}</Text>
+              <Text>{getLocation(mentorUser?.address)}</Text>
             </Space>
-            <Space>
-              {/* TODO: show rating */}
-              {/* <Rate disabled defaultValue={props.rating} /> */}
-              {/* <Text>
-                {props.rating} ({props.totalReviews} reviews)
-              </Text> */}
-            </Space>
+            <Text>
+              <div style={{ fontWeight: 'bold', marginLeft: 'auto' }}>
+                {ratings.length === 0 ? undefined : (
+                  <div style={{ color: '#FFD700' }}>
+                    {averageRating} <StarFilled /> ({ratings.length} reviews)
+                  </div>
+                )}
+              </div>
+            </Text>
           </Space>
         </Space>
       </Col>

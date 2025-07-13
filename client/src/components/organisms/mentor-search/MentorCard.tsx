@@ -6,24 +6,45 @@ import { MentorCategoryPill } from '@/components/atoms/MentorCategoryPill';
 import { MentorSkillsSection } from '@/components/atoms/MentorSkillsSection';
 import { useGetUser } from '@/api/user';
 import { getFullName } from '@/utils/getFullName';
+import { useGetAverageRating, useGetRatingsByMentor } from '@/api/rating';
+import { StarFilled } from '@ant-design/icons';
 
 interface MentorCardProps {
   mentor: MentorProfile;
 }
 
 export function MentorCard({ mentor }: MentorCardProps) {
-  // getAverageRating(mentorId)
+  const { data: averageRatingData } = useGetAverageRating(mentor?.mentorId!, {
+    query: { enabled: !!mentor.mentorId },
+  });
+
+  const { data: ratingsData } = useGetRatingsByMentor(mentor?.mentorId!, {
+    query: { enabled: !!mentor.mentorId },
+  });
+
 
   const { data: userData } = useGetUser(
     { userId: mentor.mentorId! },
     { query: { enabled: !!mentor.mentorId } },
   );
 
+  const ratings = ratingsData?.data ?? [];
+  const averageRating = averageRatingData?.data?.averageRating?.toFixed(1);
+
   return (
     <Card
       title={
-        <Space direction="horizontal" size={'large'}>
-          {getFullName(userData?.data?.user?.name)}
+        <Space direction="vertical" style={{ padding: 10 }}>
+          <Space direction="horizontal" size={'large'}>
+            {getFullName(userData?.data?.user?.name)}
+            <div style={{ fontWeight: 'bold', marginLeft: 'auto' }}>
+              {ratings.length === 0 ? undefined : (
+                <div style={{ color: '#FFD700' }}>
+                  {averageRating} <StarFilled />
+                </div>
+              )}
+            </div>
+          </Space>
           {mentor.mentorCategory !== undefined && (
             <MentorCategoryPill category={mentor.mentorCategory} />
           )}
