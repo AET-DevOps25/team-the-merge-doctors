@@ -111,7 +111,7 @@ export function Search() {
           }}
         >
           <List
-            dataSource={listMentorsData?.data?.mentorProfile}
+            dataSource={listMentorsData?.data?.mentorProfiles}
             loading={listProfilesIsPending}
             locale={{ emptyText: 'No mentors found' }}
             size="large"

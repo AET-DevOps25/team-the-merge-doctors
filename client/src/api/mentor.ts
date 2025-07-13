@@ -109,7 +109,7 @@ export interface Category {
 }
 
 export interface ListMentorProfileResponse {
-  mentorProfile?: MentorProfile[];
+  mentorProfiles?: MentorProfile[];
 }
 
 export interface MentorCategory {
