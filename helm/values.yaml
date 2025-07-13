@@ -12,6 +12,30 @@ userMicroservice:
   selector: user-microservice-selector
   replicaCount: 1
 
+mentorshipMicroservice:
+  image:
+    repository: ghcr.io/aet-devops25/team-the-merge-doctors/server/mentorship-service
+    tag: latest
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    port: 8310
+    targetPort: 8310
+  selector: mentorship-microservice-selector
+  replicaCount: 1
+
+ratingMicroservice:
+  image:
+    repository: ghcr.io/aet-devops25/team-the-merge-doctors/rating-service
+    tag: latest
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    port: 8410
+    targetPort: 8410
+  selector: rating-microservice-selector
+  replicaCount: 1
+
 genaiMicroservice:
   image:
     repository: ghcr.io/aet-devops25/team-the-merge-doctors/genai

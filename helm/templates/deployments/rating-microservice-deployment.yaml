@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rating-microservice-deployment
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.ratingMicroservice.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.ratingMicroservice.selector }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.ratingMicroservice.selector }}
+    spec:
+      containers:
+        - name: user-microservice-container
+          image: "{{ .Values.ratingMicroservice.image.repository }}:{{ .Values.ratingMicroservice.image.tag }}"
+          imagePullPolicy: {{ .Values.ratingMicroservice.image.pullPolicy }}
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+            requests:
+              cpu: "50m"
+              memory: "50Mi"
+          ports:
+            - containerPort: {{ .Values.ratingMicroservice.service.targetPort }}
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.backendEnvironmentConfigMapName }}
+            - secretRef:
+                name: {{ .Values.secretsName }}

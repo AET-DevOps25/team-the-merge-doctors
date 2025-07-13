@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mentorship-microservice-service
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    app: {{ .Values.mentorshipMicroservice.selector }}
+  ports:
+    - port: {{ .Values.mentorshipMicroservice.service.port }}
+      targetPort: {{ .Values.mentorshipMicroservice.service.targetPort }}
+      protocol: TCP
+  type: {{ .Values.mentorshipMicroservice.service.type }}
