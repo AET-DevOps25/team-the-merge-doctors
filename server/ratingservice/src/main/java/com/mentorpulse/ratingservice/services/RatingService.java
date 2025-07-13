@@ -2,7 +2,7 @@ package com.mentorpulse.ratingservice.services;
 
 import com.mentorpulse.ratingservice.dto.MentorAverageRating;
 import com.mentorpulse.ratingservice.models.Rating;
-import com.mentorpulse.ratingservice.repository.RatingRepository;
+import com.mentorpulse.ratingservice.repositories.RatingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
