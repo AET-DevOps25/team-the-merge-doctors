@@ -23,7 +23,7 @@ WORKDIR /gateway-app
 COPY --from=build /gateway-app/build/libs/*.jar app.jar
 
 # Expose the port the app runs on
-EXPOSE 8210
+EXPOSE 8610
 
 # Command to run the application
 ENTRYPOINT sh -c 'java -jar app.jar'
