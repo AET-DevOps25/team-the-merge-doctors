@@ -3,6 +3,7 @@ package com.mentorpulse.gateway.controller;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -20,6 +21,8 @@ public class AuthController {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Value("${services.user.url}")
+    private String userServiceBaseUrl;
 
     @RequestMapping("/api/auth")
     public ResponseEntity<Void> authenticate(HttpServletRequest request) {
@@ -31,7 +34,7 @@ public class AuthController {
         try {
             // Forward the request to user-service -> auth status endpoint
             // Internal service-to-service communication.
-            String userServiceUrl = "http://user-service:8210/api/user/auth/status";
+            String userServiceUrl = userServiceBaseUrl + "/api/user/auth/status";
 
             HttpHeaders headers = new HttpHeaders();
             headers.set("Authorization", authHeader);

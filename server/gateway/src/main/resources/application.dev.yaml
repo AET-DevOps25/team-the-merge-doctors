@@ -6,9 +6,9 @@ server:
 
 services:
   user:
-    url: http://user-service:8210
+    url: http://localhost:8210
 
 info:
   title: Gateway Service.
-  description: Gateway Service for Mentorpulse microservices.
+  description: Gateway Service for Mentorpulse microservices (dev).
   version: 1.0.0
