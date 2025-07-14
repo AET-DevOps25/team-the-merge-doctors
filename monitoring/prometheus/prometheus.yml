@@ -1,0 +1,17 @@
+global:
+  # How frequently to scrape targets (collect metrics)
+  scrape_interval: 15s
+  # How frequently to evaluate recording and alerting rules
+  evaluation_interval: 15s
+
+scrape_configs:
+  # Prometheus itself
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Mentorship Service
+  - job_name: 'mentorship-service'
+    static_configs:
+      - targets: ['mentorship-service:8310']
+    metrics_path: '/actuator/prometheus'
