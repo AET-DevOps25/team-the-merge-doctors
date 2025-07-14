@@ -121,6 +121,7 @@ function RateMentorModal({
     <Modal
       title="Rate Mentor"
       open={isOpen}
+      okText="Submit Rating"
       onOk={() => {
         handleOk();
       }}

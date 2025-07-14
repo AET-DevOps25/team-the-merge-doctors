@@ -22,7 +22,6 @@ export function MentorCard({ mentor }: MentorCardProps) {
     query: { enabled: !!mentor.mentorId },
   });
 
-
   const { data: userData } = useGetUser(
     { userId: mentor.mentorId! },
     { query: { enabled: !!mentor.mentorId } },
@@ -76,6 +75,7 @@ function ViewProfileButton({ mentor }: ViewProfileButtonProps) {
 
   return (
     <Button
+      data-testid={`view-mentor-profile-${mentor.id}`}
       type="primary"
       onClick={() => {
         if (mentor.mentorId !== undefined) {

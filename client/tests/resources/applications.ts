@@ -13,4 +13,5 @@ export const applications: MentorApplication[] = [
     applicationMessage:
       "Dear Mr. Pitts, I'm Nancy Mccarty, and I'm looking for guidance in my professional journey. Your experience would be invaluable in helping me achieve my career goals. I've been researching potential mentors in my field and your background particularly stands out to me. I'm currently facing several challenges in my career path and would greatly benefit from the wisdom and perspective of someone who has successfully navigated similar situations. I'm particularly interested in learning about strategic career planning, professional networking, and leadership development. I would be thrilled to have the opportunity to learn from your experiences and gain insights that could help shape my future career decisions. I'm prepared to invest the time and effort necessary to make our mentorship relationship productive and meaningful.",
   },
+  // TODO: add some dummy applications
 ];
