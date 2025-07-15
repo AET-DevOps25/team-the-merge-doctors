@@ -54,3 +54,10 @@ spec:
                 name: {{ .Values.genaiMicroservice.service.name }}
                 port:
                   number: {{ .Values.genaiMicroservice.service.port }}
+          # - path: /api/ollama
+          #   pathType: Prefix
+          #   backend:
+          #     service:
+          #       name: {{ .Values.ollama.service.name }}
+          #       port:
+          #         number: {{ .Values.ollama.service.port }}

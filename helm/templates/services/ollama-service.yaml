@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ollama-service
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    app: {{ .Values.ollama.selector }}
+  ports:
+    - port: {{ .Values.ollama.service.port }}
+      targetPort: {{ .Values.ollama.service.targetPort }}
+      protocol: TCP
+  type: {{ .Values.ollama.service.type }}

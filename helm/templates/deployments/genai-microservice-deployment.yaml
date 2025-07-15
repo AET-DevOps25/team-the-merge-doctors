@@ -27,6 +27,9 @@ spec:
           ports:
             - containerPort:
                 {{ .Values.genaiMicroservice.service.targetPort }}
+          env:
+            - name: OLLAMA_BASE_URL
+              value: "http://ollama-service:11434"
           envFrom:
             - configMapRef:
                 name: {{ .Values.backendEnvironmentConfigMapName }}

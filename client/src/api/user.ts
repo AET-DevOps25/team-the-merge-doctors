@@ -171,11 +171,7 @@ export const loginUser = (
   loginUserRequest: LoginUserRequest,
   options?: AxiosRequestConfig,
 ): Promise<AxiosResponse<LoginUserResponse>> => {
-  return axios.default.post(
-    `http://localhost:8210/api/user/login`,
-    loginUserRequest,
-    options,
-  );
+  return axios.default.post(`/api/user/login`, loginUserRequest, options);
 };
 
 export const getLoginUserMutationOptions = <
@@ -248,11 +244,7 @@ export const createUser = (
   createUserRequest: CreateUserRequest,
   options?: AxiosRequestConfig,
 ): Promise<AxiosResponse<CreateUserResponse>> => {
-  return axios.default.post(
-    `http://localhost:8210/api/user/createUser`,
-    createUserRequest,
-    options,
-  );
+  return axios.default.post(`/api/user/createUser`, createUserRequest, options);
 };
 
 export const getCreateUserMutationOptions = <
@@ -326,7 +318,7 @@ export const updateUser = (
   options?: AxiosRequestConfig,
 ): Promise<AxiosResponse<UpdateUserResponse>> => {
   return axios.default.patch(
-    `http://localhost:8210/api/user/updateUser`,
+    `/api/user/updateUser`,
     updateUserRequest,
     options,
   );
@@ -402,17 +394,14 @@ export const listUsers = (
   params: ListUsersParams,
   options?: AxiosRequestConfig,
 ): Promise<AxiosResponse<ListUsersResponse>> => {
-  return axios.default.get(`http://localhost:8210/api/user/listUsers`, {
+  return axios.default.get(`/api/user/listUsers`, {
     ...options,
     params: { ...params, ...options?.params },
   });
 };
 
 export const getListUsersQueryKey = (params: ListUsersParams) => {
-  return [
-    `http://localhost:8210/api/user/listUsers`,
-    ...(params ? [params] : []),
-  ] as const;
+  return [`/api/user/listUsers`, ...(params ? [params] : [])] as const;
 };
 
 export const getListUsersQueryOptions = <
@@ -540,17 +529,14 @@ export const getUser = (
   params: GetUserParams,
   options?: AxiosRequestConfig,
 ): Promise<AxiosResponse<GetUserResponse>> => {
-  return axios.default.get(`http://localhost:8210/api/user/getUser`, {
+  return axios.default.get(`/api/user/getUser`, {
     ...options,
     params: { ...params, ...options?.params },
   });
 };
 
 export const getGetUserQueryKey = (params: GetUserParams) => {
-  return [
-    `http://localhost:8210/api/user/getUser`,
-    ...(params ? [params] : []),
-  ] as const;
+  return [`/api/user/getUser`, ...(params ? [params] : [])] as const;
 };
 
 export const getGetUserQueryOptions = <
@@ -678,7 +664,7 @@ export const deleteUser = (
   deleteUserRequest: DeleteUserRequest,
   options?: AxiosRequestConfig,
 ): Promise<AxiosResponse<DeleteUserResponse>> => {
-  return axios.default.delete(`http://localhost:8210/api/user/deleteUser`, {
+  return axios.default.delete(`/api/user/deleteUser`, {
     data: deleteUserRequest,
     ...options,
   });

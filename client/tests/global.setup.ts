@@ -13,6 +13,9 @@ import { applications } from 'tests/resources/applications';
 import { users } from 'tests/resources/users';
 import { createUser } from '@/api/user';
 import { mentorProfiles } from 'tests/resources/profiles';
+import axios from 'axios';
+
+axios.defaults.baseURL = 'http://localhost:80';
 
 setup('setup system with mock users, skills, categories, etc.', async ({}) => {
   setup.setTimeout(240_000);

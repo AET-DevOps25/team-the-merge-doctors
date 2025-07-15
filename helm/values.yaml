@@ -80,6 +80,19 @@ ingress:
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
 
+ollama:
+  image:
+    repository: ghcr.io/aet-devops25/team-the-merge-doctors/ollama
+    tag: latest
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    port: 11434
+    targetPort: 11434
+    name: ollama-service
+  selector: ollama-selector
+  replicaCount: 1
+
 secrets:
   postgresUser: postgres
   postgresPassword: postgres_password

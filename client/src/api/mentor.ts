@@ -217,7 +217,7 @@ export const scheduleSession = (
   options?: AxiosRequestConfig,
 ): Promise<AxiosResponse<ScheduleSessionResponse>> => {
   return axios.default.put(
-    `http://localhost:8310/api/mentorship/scheduleSession`,
+    `/api/mentorship/scheduleSession`,
     scheduleSessionRequest,
     options,
   );
@@ -297,7 +297,7 @@ export const rejectApplication = (
   options?: AxiosRequestConfig,
 ): Promise<AxiosResponse<RejectApplicationResponse>> => {
   return axios.default.put(
-    `http://localhost:8310/api/mentorship/rejectApplication/${id}`,
+    `/api/mentorship/rejectApplication/${id}`,
     undefined,
     options,
   );
@@ -377,7 +377,7 @@ export const acceptApplication = (
   options?: AxiosRequestConfig,
 ): Promise<AxiosResponse<AcceptApplicationResponse>> => {
   return axios.default.put(
-    `http://localhost:8310/api/mentorship/acceptApplication/${id}`,
+    `/api/mentorship/acceptApplication/${id}`,
     undefined,
     options,
   );
@@ -457,7 +457,7 @@ export const listMentorProfiles = (
   options?: AxiosRequestConfig,
 ): Promise<AxiosResponse<ListMentorProfileResponse>> => {
   return axios.default.post(
-    `http://localhost:8310/api/mentorship/listMentorProfiles`,
+    `/api/mentorship/listMentorProfiles`,
     listMentorProfileRequest,
     options,
   );
@@ -537,7 +537,7 @@ export const createSkill = (
   options?: AxiosRequestConfig,
 ): Promise<AxiosResponse<CreateSkillResponse>> => {
   return axios.default.post(
-    `http://localhost:8310/api/mentorship/createSkill`,
+    `/api/mentorship/createSkill`,
     createSkillRequest,
     options,
   );
@@ -617,7 +617,7 @@ export const createMentorProfile = (
   options?: AxiosRequestConfig,
 ): Promise<AxiosResponse<CreateMentorProfileResponse>> => {
   return axios.default.post(
-    `http://localhost:8310/api/mentorship/createMentorProfile`,
+    `/api/mentorship/createMentorProfile`,
     createMentorProfileRequest,
     options,
   );
@@ -697,7 +697,7 @@ export const createCategory = (
   options?: AxiosRequestConfig,
 ): Promise<AxiosResponse<CreateCategoryResponse>> => {
   return axios.default.post(
-    `http://localhost:8310/api/mentorship/createCategory`,
+    `/api/mentorship/createCategory`,
     createCategoryRequest,
     options,
   );
@@ -777,7 +777,7 @@ export const createApplication = (
   options?: AxiosRequestConfig,
 ): Promise<AxiosResponse<CreateApplicationResponse>> => {
   return axios.default.post(
-    `http://localhost:8310/api/mentorship/createApplication`,
+    `/api/mentorship/createApplication`,
     createApplicationRequest,
     options,
   );
@@ -857,7 +857,7 @@ export const updateMentorProfile = (
   options?: AxiosRequestConfig,
 ): Promise<AxiosResponse<UpdateMentorProfileResponse>> => {
   return axios.default.patch(
-    `http://localhost:8310/api/mentorship/updateMentorProfile`,
+    `/api/mentorship/updateMentorProfile`,
     updateMentorProfileRequest,
     options,
   );
@@ -935,14 +935,11 @@ export const useUpdateMentorProfile = <
 export const listSkills = (
   options?: AxiosRequestConfig,
 ): Promise<AxiosResponse<ListSkillResponse>> => {
-  return axios.default.get(
-    `http://localhost:8310/api/mentorship/listSkills`,
-    options,
-  );
+  return axios.default.get(`/api/mentorship/listSkills`, options);
 };
 
 export const getListSkillsQueryKey = () => {
-  return [`http://localhost:8310/api/mentorship/listSkills`] as const;
+  return [`/api/mentorship/listSkills`] as const;
 };
 
 export const getListSkillsQueryOptions = <
@@ -1062,14 +1059,11 @@ export function useListSkills<
 export const listCategories = (
   options?: AxiosRequestConfig,
 ): Promise<AxiosResponse<ListCategoryResponse>> => {
-  return axios.default.get(
-    `http://localhost:8310/api/mentorship/listCategories`,
-    options,
-  );
+  return axios.default.get(`/api/mentorship/listCategories`, options);
 };
 
 export const getListCategoriesQueryKey = () => {
-  return [`http://localhost:8310/api/mentorship/listCategories`] as const;
+  return [`/api/mentorship/listCategories`] as const;
 };
 
 export const getListCategoriesQueryOptions = <
@@ -1190,20 +1184,17 @@ export const listApplications = (
   params?: ListApplicationsParams,
   options?: AxiosRequestConfig,
 ): Promise<AxiosResponse<ListApplicationResponse>> => {
-  return axios.default.get(
-    `http://localhost:8310/api/mentorship/listApplications`,
-    {
-      ...options,
-      params: { ...params, ...options?.params },
-    },
-  );
+  return axios.default.get(`/api/mentorship/listApplications`, {
+    ...options,
+    params: { ...params, ...options?.params },
+  });
 };
 
 export const getListApplicationsQueryKey = (
   params?: ListApplicationsParams,
 ) => {
   return [
-    `http://localhost:8310/api/mentorship/listApplications`,
+    `/api/mentorship/listApplications`,
     ...(params ? [params] : []),
   ] as const;
 };
@@ -1354,18 +1345,15 @@ export const getMentorProfile = (
   params: GetMentorProfileParams,
   options?: AxiosRequestConfig,
 ): Promise<AxiosResponse<GetMentorProfileResponse>> => {
-  return axios.default.get(
-    `http://localhost:8310/api/mentorship/getMentorProfile`,
-    {
-      ...options,
-      params: { ...params, ...options?.params },
-    },
-  );
+  return axios.default.get(`/api/mentorship/getMentorProfile`, {
+    ...options,
+    params: { ...params, ...options?.params },
+  });
 };
 
 export const getGetMentorProfileQueryKey = (params: GetMentorProfileParams) => {
   return [
-    `http://localhost:8310/api/mentorship/getMentorProfile`,
+    `/api/mentorship/getMentorProfile`,
     ...(params ? [params] : []),
   ] as const;
 };
@@ -1516,14 +1504,11 @@ export const getApplication = (
   id: string,
   options?: AxiosRequestConfig,
 ): Promise<AxiosResponse<GetApplicationResponse>> => {
-  return axios.default.get(
-    `http://localhost:8310/api/mentorship/application/${id}`,
-    options,
-  );
+  return axios.default.get(`/api/mentorship/application/${id}`, options);
 };
 
 export const getGetApplicationQueryKey = (id: string) => {
-  return [`http://localhost:8310/api/mentorship/application/${id}`] as const;
+  return [`/api/mentorship/application/${id}`] as const;
 };
 
 export const getGetApplicationQueryOptions = <
@@ -1656,10 +1641,10 @@ export const deleteMentorProfile = (
   deleteMentorProfileRequest: DeleteMentorProfileRequest,
   options?: AxiosRequestConfig,
 ): Promise<AxiosResponse<DeleteMentorProfileResponse>> => {
-  return axios.default.delete(
-    `http://localhost:8310/api/mentorship/deleteMentorProfile`,
-    { data: deleteMentorProfileRequest, ...options },
-  );
+  return axios.default.delete(`/api/mentorship/deleteMentorProfile`, {
+    data: deleteMentorProfileRequest,
+    ...options,
+  });
 };
 
 export const getDeleteMentorProfileMutationOptions = <
