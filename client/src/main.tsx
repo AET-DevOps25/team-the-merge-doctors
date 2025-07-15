@@ -24,6 +24,8 @@ declare module '@tanstack/react-router' {
   }
 }
 
+// TODO: update base url for deployment (base on env config)
+
 axios.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');

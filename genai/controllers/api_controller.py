@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from services.summarization_service import SummarizationService
 
-api = Blueprint('api', __name__, url_prefix='/api')
+api = Blueprint('api', __name__, url_prefix='/api/genai')
 
 @api.route('/summarize', methods=['POST'])
 def summarize():

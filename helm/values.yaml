@@ -9,6 +9,7 @@ userMicroservice:
     type: ClusterIP
     port: 8210
     targetPort: 8210
+    name: user-microservice-service
   selector: user-microservice-selector
   replicaCount: 1
 
@@ -21,6 +22,7 @@ mentorshipMicroservice:
     type: ClusterIP
     port: 8310
     targetPort: 8310
+    name: mentorship-microservice-service
   selector: mentorship-microservice-selector
   replicaCount: 1
 
@@ -33,6 +35,7 @@ ratingMicroservice:
     type: ClusterIP
     port: 8410
     targetPort: 8410
+    name: rating-microservice-service
   selector: rating-microservice-selector
   replicaCount: 1
 
@@ -45,6 +48,7 @@ genaiMicroservice:
     type: ClusterIP
     port: 5001
     targetPort: 5001
+    name: genai-microservice-service
   selector: genai-microservice-selector
   replicaCount: 1
 
@@ -57,8 +61,24 @@ client:
     type: ClusterIP
     port: 3000
     targetPort: 80
+    name: client-microservice-service
   replicaCount: 1
   selector: client-selector
+
+postgresDb:
+  selector: postgres-db
+  persistentVolume: postgres-persistent-volume
+  replicaCount: 1
+  port: 5432
+  dataVolumeName: postgresdata
+
+ingress:
+  enabled: true
+  className: "nginx"
+  host: mentor-pulse-devops25.student.k8s.aet.cit.tum.de
+  tls: true
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 
 secrets:
   postgresUser: postgres

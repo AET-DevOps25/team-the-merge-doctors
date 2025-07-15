@@ -17,7 +17,7 @@ public class LlmClientConfig {
 
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
-        String url = String.format("http://%s:%s/api", host, port);
+        String url = String.format("http://%s:%s/api/genai", host, port);
         System.out.println(url);
         return builder
                 .rootUri(url)

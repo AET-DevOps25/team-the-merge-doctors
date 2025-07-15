@@ -12,3 +12,11 @@ Run the following command in this directory to deploy the application to the clu
 ```
 helm upgrade --install mentor-pulse . --namespace team-the-merge-doctors
 ```
+
+## Remove Deployment
+
+To remove the deployment and delete everything from cluster, execute the following command.
+
+```
+kubectl delete all --all -n team-the-merge-doctors
+```

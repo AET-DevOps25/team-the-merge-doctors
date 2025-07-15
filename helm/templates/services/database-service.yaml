@@ -1,1 +1,13 @@
-# TODO: add database service
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-db
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    app: {{ .Values.postgresDb.selector }}
+  ports:
+    - port: {{ .Values.postgresDb.port }}
+      targetPort: {{ .Values.postgresDb.port }}
+      protocol: TCP
+  type: ClusterIP

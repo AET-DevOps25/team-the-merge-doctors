@@ -31,3 +31,12 @@ spec:
                 name: {{ .Values.backendEnvironmentConfigMapName }}
             - secretRef:
                 name: {{ .Values.secretsName }}
+          volumeMounts:
+            - name: jwt-secret-volume
+              mountPath: /home/cnf/mentorpulse-certificates
+              readOnly: true
+      volumes:
+        - name: jwt-secret-volume
+          hostPath:
+            path: /Users/justus/mentorpulse-certificates
+            type: Directory
