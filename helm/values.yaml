@@ -28,7 +28,7 @@ mentorshipMicroservice:
 
 ratingMicroservice:
   image:
-    repository: ghcr.io/aet-devops25/team-the-merge-doctors/rating-service
+    repository: ghcr.io/aet-devops25/team-the-merge-doctors/server/rating-service
     tag: latest
     pullPolicy: Always
   service:
@@ -59,8 +59,8 @@ client:
     pullPolicy: Always
   service:
     type: ClusterIP
-    port: 3000
-    targetPort: 80
+    port: 80
+    targetPort: 3000
     name: client-microservice-service
   replicaCount: 1
   selector: client-selector

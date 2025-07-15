@@ -37,6 +37,5 @@ spec:
               readOnly: true
       volumes:
         - name: jwt-secret-volume
-          hostPath:
-            path: /Users/justus/mentorpulse-certificates
-            type: Directory
+          secret:
+            secretName: jwt-secret

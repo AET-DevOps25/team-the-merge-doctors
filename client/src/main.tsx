@@ -24,7 +24,10 @@ declare module '@tanstack/react-router' {
   }
 }
 
-// TODO: update base url for deployment (base on env config)
+if (process.env.NODE_ENV === 'production-kubernetes') {
+  axios.defaults.baseURL =
+    'https://mentor-pulse-devops25.student.k8s.aet.cit.tum.de';
+}
 
 axios.interceptors.request.use(
   (config) => {

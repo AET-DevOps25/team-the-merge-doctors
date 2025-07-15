@@ -26,3 +26,6 @@ spec:
               memory: "50Mi"
           ports:
             - containerPort: {{ .Values.client.service.targetPort }}
+          env:
+            - name: NODE_ENV
+              value: "production-kubernetes"
