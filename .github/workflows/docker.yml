@@ -32,6 +32,15 @@ jobs:
           push: true
           tags: ghcr.io/aet-devops25/team-the-merge-doctors/client:latest
 
+      - name: Build & push Client image (Kubernetes Production)
+        uses: docker/build-push-action@v4
+        with:
+          context: ./client
+          push: true
+          tags: ghcr.io/aet-devops25/team-the-merge-doctors/client-kubernetes-production:latest
+          build-args: |
+            NODE_ENV=production-kubernetes
+
       - name: Build & push GenAI image
         uses: docker/build-push-action@v4
         with:
