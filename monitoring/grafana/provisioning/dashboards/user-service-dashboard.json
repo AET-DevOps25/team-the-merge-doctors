@@ -55,7 +55,7 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "expr": "up{job=\"mentorship-service\"}",
+          "expr": "up{job=\"user-service\"}",
           "refId": "A"
         }
       ],
@@ -137,11 +137,93 @@
       },
       "targets": [
         {
-          "expr": "rate(http_server_requests_seconds_count{job=\"mentorship-service\"}[5m])",
+          "expr": "rate(http_server_requests_seconds_count{job=\"user-service\"}[5m])",
           "refId": "A"
         }
       ],
       "title": "Request Rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "Prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "vis": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        }
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "id": 3,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "expr": "custom_user_registrations_total{job=\"user-service\"}",
+          "refId": "A"
+        }
+      ],
+      "title": "Total Users Created",
       "type": "timeseries"
     }
   ],
@@ -158,8 +240,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Mentorship Service Dashboard (Spring Boot Metrics)",
-  "uid": "mentorship-service",
+  "title": "User Service Dashboard",
+  "uid": "user-service",
   "version": 1,
   "weekStart": ""
 }

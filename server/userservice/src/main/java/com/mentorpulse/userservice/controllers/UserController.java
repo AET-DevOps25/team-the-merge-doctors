@@ -3,6 +3,9 @@ package com.mentorpulse.userservice.controllers;
 import com.mentorpulse.userservice.dto.*;
 import com.mentorpulse.userservice.models.RoleType;
 import com.mentorpulse.userservice.services.UserService;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -22,11 +25,26 @@ public class UserController {
 
     @Autowired private UserService userService;
 
+    @Autowired private MeterRegistry meterRegistry;
+
+    private Counter userCreationCounter;
+
+    // Initialize the counter in a @PostConstruct method
+    @PostConstruct
+    public void init() {
+        this.userCreationCounter = Counter.builder("custom_user_registrations_total")
+                .description("Custom counter for user registrations total number")
+                .register(meterRegistry);
+    }
+
     @PostMapping("/createUser")
     public ResponseEntity<CreateUserResponse> createUser(
             @RequestBody @Valid CreateUserRequest request) {
         try {
             CreateUserResponse created = userService.createUser(request);
+            
+            // Increment the counter after successful user creation
+            userCreationCounter.increment();
             return ResponseEntity.status(HttpStatus.CREATED).body(created);
         } catch (InvalidAttributeValueException ex) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);

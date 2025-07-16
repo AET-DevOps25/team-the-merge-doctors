@@ -7,6 +7,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - 3000:3000
+    networks:
+      - internal
 
   postgres-db:
     platform: linux/amd64
@@ -19,12 +21,18 @@ services:
       - db_data:/var/lib/postgresql/data
       - ./docker/backend_config_files/postgres-init.sh:/docker-entrypoint-initdb.d/init.sh:ro
       - ./docker/backend_config_files/pg-hba.conf:/etc/postgresql/pg_hba.conf:ro
+    networks:
+      - internal
 
   user-service:
     platform: linux/amd64
     image: ghcr.io/aet-devops25/team-the-merge-doctors/server/user-service:latest
     ports:
       - 8210:8210
+    expose:
+      - "8211"  # Management port (internal monitoring only - don't expose in production), Only accessible to other containers in the network 
+    networks:
+      - internal
     build:
       context: server/userservice
       dockerfile: Dockerfile
@@ -46,6 +54,8 @@ services:
     volumes:
       - ollama_data:/root/.ollama
     restart: always
+    networks:
+      - internal
 
   genai:
     platform: linux/amd64
@@ -67,6 +77,9 @@ services:
       - postgres-db
       - ollama
     restart: always
+    networks:
+      - internal
+
 
   mentorship-service:
     platform: linux/amd64
@@ -79,6 +92,8 @@ services:
     depends_on:
       - postgres-db
     restart: on-failure:3
+    networks:
+      - internal
 
   rating-service:
     platform: linux/amd64
@@ -91,6 +106,8 @@ services:
     depends_on:
       - postgres-db
     restart: on-failure:3
+    networks:
+      - internal
 
   prometheus:
     platform: linux/amd64
@@ -100,6 +117,7 @@ services:
       - "9090:9090"
     volumes:
       - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus/rules.yml:/etc/prometheus/rules.yml:ro
       - prometheus_data:/prometheus
     command:
       # Path to Prometheus configuration file
@@ -112,6 +130,8 @@ services:
       - '--web.console.templates=/etc/prometheus/consoles'
       # Enable HTTP endpoints for graceful shutdown and reload
       - '--web.enable-lifecycle'
+    networks:
+      - internal
     restart: unless-stopped
 
   grafana:
@@ -123,13 +143,17 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/provisioning/notifiers:/etc/grafana/provisioning/notifiers:ro
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_ALERTING_ENABLED=true  
     depends_on:
       - prometheus
     restart: unless-stopped
+    networks:
+      - internal
   
 
 volumes:
@@ -137,3 +161,7 @@ volumes:
   prometheus_data:
   grafana_data:
   ollama_data:
+
+networks:
+  internal:
+    driver: bridge
