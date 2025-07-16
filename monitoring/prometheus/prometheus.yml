@@ -19,5 +19,8 @@ scrape_configs:
   # User Service
   - job_name: 'user-service'
     static_configs:
-      - targets: ['user-service:8210']
+      - targets: ['user-service:8211']
     metrics_path: '/actuator/prometheus'
+
+rule_files:
+  - rules.yml

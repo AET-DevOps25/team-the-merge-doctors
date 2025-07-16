@@ -1,0 +1,19 @@
+groups:
+ - name: user-service-rules
+   rules:
+    - alert: UserServiceDown
+      expr: up{job="user-service"} == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "user-service is down"
+        description: "Prometheus has not been able to scrape user-service for at least 1 minute."
+    - alert: MentorshipServiceDown
+      expr: up{job="mentorship-service"} == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "mentorship-service is down"
+        description: "Prometheus has not been able to scrape mentorship-service for at least 1 minute."
