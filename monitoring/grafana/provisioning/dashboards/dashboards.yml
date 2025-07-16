@@ -1,0 +1,9 @@
+apiVersion: 1
+
+providers:
+  # Default provider for automatically loading dashboard JSON files
+  - name: 'spring-boot-dashboard'
+    type: file
+    options:
+      # Path where dashboard JSON files are stored (mounted from host)
+      path: /etc/grafana/provisioning/dashboards

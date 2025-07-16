@@ -9,6 +9,24 @@ genai:
   host: genai
   port: 5001
 
+# Actuator and Prometheus configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+      
+  endpoint:
+    health:
+      probes:
+        enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
 springdoc:
   api-docs:
     path: /v3/api-docs
