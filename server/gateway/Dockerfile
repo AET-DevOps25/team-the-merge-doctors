@@ -5,7 +5,7 @@ FROM gradle:8.14-jdk21 AS build
 WORKDIR /gateway-app
 
 # Copy gradle configuration files
-COPY build.gradle settings.gradle ./
+COPY build.gradle.kts settings.gradle.kts ./
 COPY gradle ./gradle
 
 # Copy source code
