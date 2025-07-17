@@ -6,7 +6,7 @@ services:
       context: ./client
       dockerfile: Dockerfile
     ports:
-      - 3000:80
+      - 3000:3000
 
   postgres-db:
     platform: linux/amd64
@@ -21,18 +21,31 @@ services:
       - ./docker/backend_config_files/pg-hba.conf:/etc/postgresql/pg_hba.conf:ro
 
   user-service:
-     platform: linux/amd64
-     image: ghcr.io/aet-devops25/team-the-merge-doctors/server/user-service:latest
-     ports:
-       - 8210:8210
-     build:
-       context: server/userservice
-       dockerfile: Dockerfile
-     volumes:
-       - $HOME/mentorpulse-certificates/jwt-secret.key:/home/cnf/mentorpulse-certificates/jwt-secret.key:ro
-     depends_on:
-       - postgres-db
-     restart: on-failure:3
+    platform: linux/amd64
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/user-service:latest
+    ports:
+      - 8210:8210
+    build:
+      context: server/userservice
+      dockerfile: Dockerfile
+    volumes:
+      - $HOME/mentorpulse-certificates/jwt-secret.key:/home/cnf/mentorpulse-certificates/jwt-secret.key:ro
+    depends_on:
+      - postgres-db
+    restart: on-failure:3
+
+  ollama:
+    platform: linux/amd64
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/ollama:latest
+    build:
+      context: ./genai/ollama
+      dockerfile: Dockerfile
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: always
 
   genai:
     platform: linux/amd64
@@ -40,17 +53,19 @@ services:
     build:
       context: genai
       dockerfile: Dockerfile
-    command: gunicorn -b 0.0.0.0:5001 app:app
+    command: gunicorn -b 0.0.0.0:5001 --config gunicorn.conf.py app:app
     volumes:
       - ./genai:/app
     ports:
       - "5001:5001"
     environment:
-    - POSTGRES_HOST=postgres-db
+      - POSTGRES_HOST=postgres-db
+      - OLLAMA_BASE_URL=http://ollama:11434
     env_file:
       - ./docker/backend_config_files/.env
     depends_on:
       - postgres-db
+      - ollama
     restart: always
 
   mentorship-service:
@@ -77,17 +92,6 @@ services:
       - postgres-db
     restart: on-failure:3
 
-  appointment-service:
-    platform: linux/amd64
-    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/appointment-service:latest
-    build:
-      context: server/appointmentservice
-      dockerfile: Dockerfile
-    ports:
-      - 8510:8510
-    depends_on:
-      - postgres-db
-    restart: on-failure:3
-
 volumes:
   db_data:
+  ollama_data:

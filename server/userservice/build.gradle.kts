@@ -41,6 +41,8 @@ dependencies {
 	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")
 
+	testImplementation("com.h2database:h2")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
@@ -50,7 +52,7 @@ dependencies {
 openApi {
 	apiDocsUrl.set("http://localhost:8210/v3/api-docs")
 	outputDir.set(file("$projectDir/schema"))
-	outputFileName.set("user-service-schema.yaml")
+	outputFileName.set("user-service-schema.json")
 
 	customBootRun {
 		environment = mapOf("SPRING_PROFILES_ACTIVE" to "dev")

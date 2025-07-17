@@ -1,7 +1,6 @@
 package com.mentorpulse.mentorshipservice.repositories;
 
-import com.mentorpulse.mentorshipservice.dto.ComparisonFilter;
-import com.mentorpulse.mentorshipservice.dto.ListMentorProfileRequest;
+import com.mentorpulse.mentorshipservice.dto.service.*;
 import com.mentorpulse.mentorshipservice.models.*;
 import com.mentorpulse.mentorshipservice.models.MentorProfile;
 import jakarta.persistence.criteria.Join;

@@ -1,8 +1,9 @@
+import type { Skill } from '@/api/mentor';
 import { Tag } from 'antd';
 
 interface SkillTagProps {
-  skill: string;
-  onRemove: (skill: string) => void;
+  skill: Skill;
+  onRemove: (skill: Skill) => void;
   closable?: boolean;
 }
 
@@ -24,7 +25,7 @@ export const SkillTag = ({
         fontSize: 13,
       }}
     >
-      {skill}
+      {skill?.name}
     </Tag>
   );
 };

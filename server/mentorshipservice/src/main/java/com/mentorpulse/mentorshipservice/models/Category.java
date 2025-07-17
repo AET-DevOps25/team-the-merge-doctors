@@ -2,6 +2,7 @@ package com.mentorpulse.mentorshipservice.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.*;
 
 import java.util.UUID;
@@ -12,6 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Data
+@Table(name = "categories_table")
 public class Category {
 
     @Id

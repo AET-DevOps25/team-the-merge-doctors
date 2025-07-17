@@ -1,6 +1,6 @@
 package com.mentorpulse.mentorshipservice.services;
 
-import com.mentorpulse.mentorshipservice.dto.*;
+import com.mentorpulse.mentorshipservice.dto.service.*;
 import com.mentorpulse.mentorshipservice.exceptions.AlreadyExistsException;
 import com.mentorpulse.mentorshipservice.exceptions.InvalidArgumentsException;
 import com.mentorpulse.mentorshipservice.exceptions.NotFoundException;
@@ -30,7 +30,8 @@ public class MentorProfileService {
     private final SkillRepository skillRepository;
 
     @Transactional
-    public CreateSkillResponse createSkill(CreateSkillRequest request) throws InvalidArgumentsException, AlreadyExistsException {
+    public CreateSkillResponse createSkill(CreateSkillRequest request)
+            throws InvalidArgumentsException, AlreadyExistsException {
         String skillName = request.skill() == null ? null : request.skill().trim();
         if (skillName == null || skillName.trim().isEmpty()) {
             throw new InvalidArgumentsException("skill");
@@ -38,46 +39,56 @@ public class MentorProfileService {
         if (skillRepository.existsSkillByName(skillName)) {
             throw new AlreadyExistsException("skill", skillName);
         }
-        Skill skill = Skill.builder()
-                .id(ObjectUtils.isEmpty(request.id()) ? UUID.randomUUID() : UUID.fromString(request.id()))
-                .name(skillName)
-                .build();
+        Skill skill =
+                Skill.builder()
+                        .id(
+                                ObjectUtils.isEmpty(request.id())
+                                        ? UUID.randomUUID()
+                                        : UUID.fromString(request.id()))
+                        .name(skillName)
+                        .build();
         skill = skillRepository.save(skill);
         return new CreateSkillResponse(skill);
     }
 
     @Transactional(readOnly = true)
-    public ListSkillResponse listSkills(ListSkillRequest request) {
+    public ListSkillResponse listSkills() {
         List<Skill> skills = skillRepository.findAll();
         return new ListSkillResponse(skills);
     }
 
     @Transactional
-    public CreateCategoryResponse createCategory(CreateCategoryRequest request) throws InvalidArgumentsException, AlreadyExistsException {
+    public CreateCategoryResponse createCategory(CreateCategoryRequest request)
+            throws InvalidArgumentsException, AlreadyExistsException {
         String categoryName = request.category() == null ? null : request.category().trim();
         if (categoryName == null || categoryName.trim().isEmpty()) {
             throw new InvalidArgumentsException("category");
         }
-        if (skillRepository.existsSkillByName(categoryName)) {
+        if (categoryRepository.existsCategoryByName(categoryName)) {
             throw new AlreadyExistsException("category", categoryName);
         }
-        Category category = Category.builder()
-                .id(ObjectUtils.isEmpty(request.id()) ? UUID.randomUUID() : UUID.fromString(request.id()))
-                .name(categoryName)
-                .build();
+        Category category =
+                Category.builder()
+                        .id(
+                                ObjectUtils.isEmpty(request.id())
+                                        ? UUID.randomUUID()
+                                        : UUID.fromString(request.id()))
+                        .name(categoryName)
+                        .build();
         category = categoryRepository.save(category);
         return new CreateCategoryResponse(category);
     }
 
     @Transactional(readOnly = true)
-    public ListCategoryResponse listCategories(ListCategoryRequest request) {
+    public ListCategoryResponse listCategories() {
         List<Category> categories = categoryRepository.findAll();
         return new ListCategoryResponse(categories);
     }
 
     @Transactional
-    public CreateMentorProfileResponse createMentorProfile(CreateMentorProfileRequest request) throws AlreadyExistsException, InvalidArgumentsException {
-        UUID mentorId = request.mentorProfile().getMentorId();;
+    public CreateMentorProfileResponse createMentorProfile(CreateMentorProfileRequest request)
+            throws AlreadyExistsException, InvalidArgumentsException {
+        UUID mentorId = request.mentorProfile().getMentorId();
         if (mentorId == null) {
             throw new InvalidArgumentsException("mentorId");
         }
@@ -93,9 +104,17 @@ public class MentorProfileService {
     }
 
     @Transactional
-    public UpdateMentorProfileResponse updateMentorProfile(UpdateMentorProfileRequest request) throws InvalidAttributeValueException, InvalidArgumentsException {
-        MentorProfile existingProfile = mentorProfileRepository.findById(request.mentorProfile().getId())
-                .orElseThrow(() -> new InvalidAttributeValueException("Mentor Profile ID: " + request.mentorProfile().getId() +" doesn't exist in our system."));
+    public UpdateMentorProfileResponse updateMentorProfile(UpdateMentorProfileRequest request)
+            throws InvalidAttributeValueException, InvalidArgumentsException {
+        MentorProfile existingProfile =
+                mentorProfileRepository
+                        .findById(request.mentorProfile().getId())
+                        .orElseThrow(
+                                () ->
+                                        new InvalidAttributeValueException(
+                                                "Mentor Profile ID: "
+                                                        + request.mentorProfile().getId()
+                                                        + " doesn't exist in our system."));
         MentorProfile newProfile = request.mentorProfile();
         if (!Objects.equals(newProfile.getMentorId(), existingProfile.getMentorId())) {
             throw new InvalidArgumentsException("mentorId");
@@ -105,29 +124,41 @@ public class MentorProfileService {
     }
 
     @Transactional
-    public DeleteMentorProfileResponse deleteMentorProfile(DeleteMentorProfileRequest request) throws InvalidAttributeValueException {
-        MentorProfile existingProfile = mentorProfileRepository.findById(request.profileId())
-                .orElseThrow(() -> new InvalidAttributeValueException("Mentor Profile ID: " + request.profileId() +" doesn't exist in our system."));
+    public DeleteMentorProfileResponse deleteMentorProfile(DeleteMentorProfileRequest request)
+            throws InvalidAttributeValueException {
+        MentorProfile existingProfile =
+                mentorProfileRepository
+                        .findById(request.profileId())
+                        .orElseThrow(
+                                () ->
+                                        new InvalidAttributeValueException(
+                                                "Mentor Profile ID: "
+                                                        + request.profileId()
+                                                        + " doesn't exist in our system."));
         mentorProfileRepository.delete(existingProfile);
         return new DeleteMentorProfileResponse(existingProfile);
     }
 
     @Transactional(readOnly = true)
-    public GetMentorProfileResponse getMentorProfile(GetMentorProfileRequest request) throws InvalidArgumentsException, NotFoundException {
-        UUID mentorId = request.mentorId();
+    public GetMentorProfileResponse getMentorProfile(UUID mentorId)
+            throws InvalidArgumentsException, NotFoundException {
         if (mentorId == null) {
             throw new InvalidArgumentsException("mentorId");
         }
-        MentorProfile mentorProfile = mentorProfileRepository.findByMentorId(mentorId)
-                .orElseThrow(() -> new NotFoundException("mentorProfile"));
+        MentorProfile mentorProfile =
+                mentorProfileRepository
+                        .findByMentorId(mentorId)
+                        .orElseThrow(() -> new NotFoundException("mentorProfile"));
 
         return new GetMentorProfileResponse(mentorProfile);
     }
 
     @Transactional(readOnly = true)
     public ListMentorProfileResponse listMentorProfiles(ListMentorProfileRequest request) {
-        Specification<MentorProfile> mentorProfileSpecification = MentorProfileRepository.createMentorProfileSpecification(request);
-        List<MentorProfile> mentorProfiles = mentorProfileRepository.findAll(mentorProfileSpecification);
+        Specification<MentorProfile> mentorProfileSpecification =
+                MentorProfileRepository.createMentorProfileSpecification(request);
+        List<MentorProfile> mentorProfiles =
+                mentorProfileRepository.findAll(mentorProfileSpecification);
         return new ListMentorProfileResponse(mentorProfiles);
     }
 }

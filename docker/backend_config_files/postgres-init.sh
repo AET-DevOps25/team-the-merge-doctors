@@ -12,7 +12,6 @@ psql -v ON_ERROR_STOP=1 <<-EOSQL
     CREATE DATABASE genai_backend WITH OWNER merge_doctor_backend;
     CREATE DATABASE user_backend WITH OWNER merge_doctor_backend;
     CREATE DATABASE rating_backend WITH OWNER merge_doctor_backend;
-    CREATE DATABASE appointment_backend WITH OWNER merge_doctor_backend;
     CREATE DATABASE mentorship_backend WITH OWNER merge_doctor_backend;
     GRANT ALL PRIVILEGES ON DATABASE genai_backend TO merge_doctor_backend;
     \c genai_backend
@@ -20,4 +19,7 @@ psql -v ON_ERROR_STOP=1 <<-EOSQL
     GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO merge_doctor_backend;
     GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO merge_doctor_backend;
     GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO merge_doctor_backend;
+    GRANT ALL PRIVILEGES ON DATABASE user_backend TO merge_doctor_backend;
+    GRANT ALL PRIVILEGES ON DATABASE rating_backend TO merge_doctor_backend;
+    GRANT ALL PRIVILEGES ON DATABASE mentorship_backend TO merge_doctor_backend;
 EOSQL

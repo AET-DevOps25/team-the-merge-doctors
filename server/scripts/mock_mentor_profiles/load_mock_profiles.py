@@ -5,10 +5,12 @@ from pathlib import Path
 
 # Change the endpoint if it will be used for production
 BASE_URL = "http://localhost:8310/api/mentorship"
+BASE_URL
 ENDPOINTS = {
     "skill":    f"{BASE_URL}/createSkill",
     "category": f"{BASE_URL}/createCategory",
-    "profile":  f"{BASE_URL}/createMentorProfile"
+    "profile":  f"{BASE_URL}/createMentorProfile",
+    "application": f"{BASE_URL}/createApplication",
 }
 HEADERS = {"Content-Type": "application/json"}
 
@@ -34,11 +36,16 @@ def post_profile(profile):
     payload = {"mentorProfile": profile}
     return requests.post(ENDPOINTS["profile"], json=payload, headers=HEADERS)
 
+def post_application(application):
+    payload = {"mentorId": application["mentorId"], "menteeId": application["menteeId"], "applicationMessage": application["applicationMessage"]}
+    return requests.post(ENDPOINTS["application"], json=payload, headers=HEADERS)
+
 
 if __name__ == "__main__":
     skills = load_json("./skills.json")
     categories = load_json("./categories.json")
     profiles = load_json("./profiles.json")
+    applications = load_json('./applications.json')
 
     print("=== Creating Skills ===")
     for s in skills:
@@ -56,3 +63,8 @@ if __name__ == "__main__":
         mid = p["mentorId"]
         r = post_profile(p)
         print(f"Mentor {mid}: {r.status_code} {r.text}")
+
+    print("\n=== Creating Applications ===")
+    for application in applications:
+        r = post_application(application)
+        print(f"Mentor {application["mentorId"]}, Mentee {application["menteeId"]}: {r.status_code} {r.text}")

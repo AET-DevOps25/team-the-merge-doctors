@@ -1,5 +1,3 @@
 package com.mentorpulse.userservice.dto;
 
-import com.mentorpulse.userservice.models.User;
-
-public record GetUserResponse(UserDto user) { }
+public record GetUserResponse(UserDto user) {}

@@ -1,8 +1,9 @@
+import type { Skill } from '@/api/mentor';
 import { PlusOutlined } from '@ant-design/icons';
 
 interface SkillSuggestionItemProps {
-  skill: string;
-  onSelect: (skill: string) => void;
+  skill: Skill;
+  onSelect: (skill: Skill) => void;
 }
 
 export const SkillSuggestionItem = ({
@@ -27,7 +28,7 @@ export const SkillSuggestionItem = ({
       onClick={() => onSelect(skill)}
     >
       <PlusOutlined style={{ marginRight: 8, color: '#1890ff' }} />
-      {skill}
+      {skill?.name}
     </div>
   );
 };
