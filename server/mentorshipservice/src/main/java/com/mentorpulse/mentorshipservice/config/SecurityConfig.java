@@ -17,7 +17,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(
                 authorizeRequests -> authorizeRequests
                         .requestMatchers("/api/mentorship/**")
-                        .hasAnyRole("MENTOR")
+                        .hasAnyRole("MENTOR", "MENTEE")
                         .anyRequest().denyAll());
 
         return http.build();
