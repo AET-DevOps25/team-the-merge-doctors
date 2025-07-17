@@ -6,13 +6,15 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
+      - "--accesslog=true"
+      - "--log.level=DEBUG"
     ports:
       - "80:80"
       - "8081:8080"  # Traefik dashboard
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
-      - traefik-network
+      - internal
   gateway:
     platform: linux/amd64
     build:
@@ -25,24 +27,22 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.gateway.rule=Host(`localhost`) && Path(`/api/auth`)"
       - "traefik.http.routers.gateway.entrypoints=web"
-      - "traefik.http.services.gateway.loadbalancer.server.port=8080"
+      - "traefik.http.services.gateway.loadbalancer.server.port=8610"
     networks:
-      - traefik-network
+      - internal
   client:
     platform: linux/amd64
     image: ghcr.io/aet-devops25/team-the-merge-doctors/client:latest
     build:
       context: ./client
       dockerfile: Dockerfile
-    # ports:
-    #   - 3000:80
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.client.rule=Host(`localhost`) && PathPrefix(`/`)"
       - "traefik.http.routers.client.entrypoints=web"
-      - "traefik.http.services.client.loadbalancer.server.port=80"
+      - "traefik.http.services.client.loadbalancer.server.port=3000"
     networks:
-      - traefik-network
+      - internal
 
   postgres-db:
     platform: linux/amd64
@@ -56,7 +56,7 @@ services:
       - ./docker/backend_config_files/postgres-init.sh:/docker-entrypoint-initdb.d/init.sh:ro
       - ./docker/backend_config_files/pg-hba.conf:/etc/postgresql/pg_hba.conf:ro
     networks:
-      - traefik-network
+      - internal
 
   user-service:
     platform: linux/amd64
@@ -77,11 +77,11 @@ services:
       - "traefik.http.routers.user-protected.service=user-service"
       
       - "traefik.http.services.user-service.loadbalancer.server.port=8210"
-      - "traefik.http.middlewares.auth-middleware.forwardauth.address=http://gateway:8080/api/auth"
+      - "traefik.http.middlewares.auth-middleware.forwardauth.address=http://gateway:8610/api/auth"
       # Forward these headers to downstream services.
       - "traefik.http.middlewares.auth-middleware.forwardauth.authResponseHeaders=X-User-Id,X-Username,X-User-Role"
     networks:
-      - traefik-network
+      - internal
     volumes:
       - $HOME/mentorpulse-certificates/jwt-secret.key:/home/cnf/mentorpulse-certificates/jwt-secret.key:ro
     depends_on:
@@ -104,13 +104,13 @@ services:
       - "traefik.http.services.mentorship-service.loadbalancer.server.port=8310"
 
     networks:
-      - traefik-network
+      - internal
     depends_on:
       - postgres-db
     restart: on-failure:3
 
 networks:
-  traefik-network:
+  internal:
     driver: bridge    
 
 volumes:
