@@ -41,11 +41,7 @@ export const rateMentor = (
   rating: Rating,
   options?: AxiosRequestConfig,
 ): Promise<AxiosResponse<Rating>> => {
-  return axios.default.post(
-    `http://localhost:8410/api/rating/rateMentor`,
-    rating,
-    options,
-  );
+  return axios.default.post(`/api/rating/rateMentor`, rating, options);
 };
 
 export const getRateMentorMutationOptions = <
@@ -118,16 +114,11 @@ export const getRatingsByMentor = (
   mentorId: string,
   options?: AxiosRequestConfig,
 ): Promise<AxiosResponse<Rating[]>> => {
-  return axios.default.get(
-    `http://localhost:8410/api/rating/mentor/${mentorId}/ratings`,
-    options,
-  );
+  return axios.default.get(`/api/rating/mentor/${mentorId}/ratings`, options);
 };
 
 export const getGetRatingsByMentorQueryKey = (mentorId: string) => {
-  return [
-    `http://localhost:8410/api/rating/mentor/${mentorId}/ratings`,
-  ] as const;
+  return [`/api/rating/mentor/${mentorId}/ratings`] as const;
 };
 
 export const getGetRatingsByMentorQueryOptions = <
@@ -281,16 +272,11 @@ export const getAverageRating = (
   mentorId: string,
   options?: AxiosRequestConfig,
 ): Promise<AxiosResponse<MentorAverageRating>> => {
-  return axios.default.get(
-    `http://localhost:8410/api/rating/mentor/${mentorId}/average`,
-    options,
-  );
+  return axios.default.get(`/api/rating/mentor/${mentorId}/average`, options);
 };
 
 export const getGetAverageRatingQueryKey = (mentorId: string) => {
-  return [
-    `http://localhost:8410/api/rating/mentor/${mentorId}/average`,
-  ] as const;
+  return [`/api/rating/mentor/${mentorId}/average`] as const;
 };
 
 export const getGetAverageRatingQueryOptions = <
