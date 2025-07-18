@@ -19,4 +19,4 @@ jobs:
   deploy-to-kubernetes:
     needs:
       - build-publish-images
-    uses: ./.githube/workflows/helm.yml
+    uses: ./.github/workflows/helm.yml
