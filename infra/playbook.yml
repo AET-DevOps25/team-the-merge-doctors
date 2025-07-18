@@ -57,6 +57,14 @@
         create: yes
         mode: '0644'
 
+    - name: Copy backend config .env to remote
+      ansible.builtin.copy:
+        src: ./docker/backend_config_files/.env
+        dest: /home/ubuntu/docker/backend_config_files/.env
+        owner: ubuntu
+        group: ubuntu
+        mode: '0644'
+
     - name: Clean images
       community.docker.docker_compose_v2:
         project_src: "{{ compose_dir }}"
