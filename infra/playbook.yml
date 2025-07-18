@@ -74,4 +74,4 @@
           - compose.prod.yml
         state: present
         env_files:
-          - .env.production
+          - "{{ compose_dir }}/.env.production"
