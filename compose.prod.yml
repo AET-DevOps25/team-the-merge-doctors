@@ -92,7 +92,7 @@ services:
 
   mentorship-service:
     platform: linux/amd64
-    # image: ghcr.io/aet-devops25/team-the-merge-doctors/server/mentorship-service:latest
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/mentorship-service:latest
     build:
       context: server/mentorshipservice
       dockerfile: Dockerfile
