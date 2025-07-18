@@ -73,6 +73,22 @@
         group: ubuntu
         mode: '0644'
 
+    - name: Copy postgres-init.sh to remote
+      ansible.builtin.copy:
+        src: ../docker/backend_config_files/postgres-init.sh
+        dest: /home/ubuntu/docker/backend_config_files/postgres-init.sh
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+
+    - name: Copy pg-hba.conf to remote
+      ansible.builtin.copy:
+        src: ../docker/backend_config_files/pg-hba.conf
+        dest: /home/ubuntu/docker/backend_config_files/pg-hba.conf
+        owner: ubuntu
+        group: ubuntu
+        mode: '0644'
+
     - name: Clean images
       community.docker.docker_compose_v2:
         project_src: "{{ compose_dir }}"
