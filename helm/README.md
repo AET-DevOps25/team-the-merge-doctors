@@ -27,7 +27,7 @@ kubectl create secret generic jwt-secret \
 3. Deploy to cluster
 
 ```
-helm upgrade --install mentor-pulse . --namespace team-the-merge-doctors
+helm upgrade --install mentor-pulse . --namespace team-the-merge-doctors --set tag=<branch_name>
 ```
 
 ## Remove Deployment

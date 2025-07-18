@@ -17,13 +17,6 @@ spec:
         - name: user-microservice-container
           image: "{{ .Values.ratingMicroservice.image.repository }}:{{ .Values.tag }}"
           imagePullPolicy: {{ .Values.ratingMicroservice.image.pullPolicy }}
-          resources:
-            limits:
-              cpu: "500m"
-              memory: "256Mi"
-            requests:
-              cpu: "50m"
-              memory: "50Mi"
           ports:
             - containerPort: {{ .Values.ratingMicroservice.service.targetPort }}
           envFrom:

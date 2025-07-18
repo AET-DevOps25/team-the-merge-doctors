@@ -4,8 +4,14 @@ meta {
   seq: 1
 }
 
-get {
+post {
   url: https://mentor-pulse-devops25.student.k8s.aet.cit.tum.de/api/genai/summarize
-  body: none
+  body: json
   auth: inherit
+}
+
+body:json {
+  {
+    "textToSummarize": 'test',
+  }
 }

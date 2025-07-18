@@ -17,13 +17,6 @@ spec:
         - name: genai-microservice-container
           image: "{{ .Values.genaiMicroservice.image.repository }}:{{ .Values.tag }}"
           imagePullPolicy: {{ .Values.genaiMicroservice.image.pullPolicy }}
-          resources:
-            limits:
-              cpu: "500m"
-              memory: "512Mi"
-            requests:
-              cpu: "50m"
-              memory: "256Mi"
           ports:
             - containerPort:
                 {{ .Values.genaiMicroservice.service.targetPort }}

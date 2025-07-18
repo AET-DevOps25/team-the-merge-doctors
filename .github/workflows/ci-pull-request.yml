@@ -12,7 +12,11 @@ jobs:
   backend-tests:
     uses: ./.github/workflows/backend-tests.yml
   build-publish-images:
-    # needs:
-    #   - e2e-tests
-    #   - backend-tests
+    needs:
+      - e2e-tests
+      - backend-tests
     uses: ./.github/workflows/docker.yml
+  deploy-to-kubernetes:
+    needs:
+      - build-publish-images
+    uses: ./.githube/workflows/helm.yml
