@@ -26,7 +26,7 @@ services:
     restart: on-failure:3
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.gateway.rule=Host(`localhost`) && Path(`/api/auth`)"
+      - "traefik.http.routers.gateway.rule=Host(`${PUBLIC_IP}`) && Path(`/api/auth`)"
       - "traefik.http.routers.gateway.entrypoints=web"
       - "traefik.http.services.gateway.loadbalancer.server.port=8610"
     networks:
@@ -40,7 +40,7 @@ services:
       dockerfile: Dockerfile
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.client.rule=Host(`localhost`) && PathPrefix(`/`)"
+      - "traefik.http.routers.client.rule=Host(`${PUBLIC_IP}`) && PathPrefix(`/`)"
       - "traefik.http.routers.client.entrypoints=web"
       - "traefik.http.services.client.loadbalancer.server.port=3000"
     networks:
@@ -68,12 +68,12 @@ services:
       dockerfile: Dockerfile
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.user-public.rule=Host(`localhost`) && (Path(`/api/user/login`) || Path(`/api/user/createUser`))"
+      - "traefik.http.routers.user-public.rule=Host(`${PUBLIC_IP}`) && (Path(`/api/user/login`) || Path(`/api/user/createUser`))"
       - "traefik.http.routers.user-public.entrypoints=web"
       - "traefik.http.routers.user-public.service=user-service"
 
       # Protected routes (auth required) - for future use
-      - "traefik.http.routers.user-protected.rule=Host(`localhost`) && PathPrefix(`/api/user/`) && !Path(`/api/user/login`) && !Path(`/api/user/createUser`)"
+      - "traefik.http.routers.user-protected.rule=Host(`${PUBLIC_IP}`) && PathPrefix(`/api/user/`) && !Path(`/api/user/login`) && !Path(`/api/user/createUser`)"
       - "traefik.http.routers.user-protected.entrypoints=web"
       - "traefik.http.routers.user-protected.middlewares=auth-middleware"
       - "traefik.http.routers.user-protected.service=user-service"
@@ -98,7 +98,7 @@ services:
       dockerfile: Dockerfile
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.mentorship-service.rule=Host(`localhost`) && PathPrefix(`/api/mentorship`)"
+      - "traefik.http.routers.mentorship-service.rule=Host(`${PUBLIC_IP}`) && PathPrefix(`/api/mentorship`)"
       - "traefik.http.routers.mentorship-service.entrypoints=web"
       - "traefik.http.routers.mentorship-service.middlewares=auth-middleware"
       - "traefik.http.routers.mentorship-service.service=mentorship-service"

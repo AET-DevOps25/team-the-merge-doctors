@@ -3,7 +3,7 @@
   hosts: all # Target all hosts in the inventory file for this playbook run.
   become: true # Elevate privilege using sudo or the appropriate privilege escalation method.
   vars:
-    vm_user: ubuntu
+    compose_dir: /home/ubuntu
   vars_files:
     - packages.yml
     - keys.yml
@@ -44,15 +44,24 @@
 
     - name: Copy compose file to remote
       ansible.builtin.copy:
-        src: ./compose.yml
-        dest: /home/ubuntu/docker-compose.yml
+        src: ./compose.prod.yml
+        dest: "/home/ubuntu/compose.prod.yml"
         owner: ubuntu
         group: ubuntu
         mode: '0644'
 
+    - name: Write public IP to .env.production
+      ansible.builtin.lineinfile:
+        path: "{{ compose_dir }}/.env.production"
+        line: "PUBLIC_IP={{ hostvars[inventory_hostname]['ansible_host'] }}"
+        create: yes
+        mode: '0644'
+
     - name: Clean images
       community.docker.docker_compose_v2:
-        project_src: .
+        project_src: "{{ compose_dir }}"
+        files:
+          - compose.prod.yml
         state: absent
         remove_images: local
         remove_volumes: true
@@ -60,12 +69,9 @@
 
     - name: Run application
       community.docker.docker_compose_v2:
-        project_src: .
+        project_src: "{{ compose_dir }}"
+        files:
+          - compose.prod.yml
         state: present
-
-    - name: Write public IP to .env.production
-      ansible.builtin.lineinfile:
-        path: /home/ubuntu/.env.production
-        line: "PUBLIC_IP={{ hostvars[inventory_hostname]['ansible_host'] }}"
-        create: yes
-        mode: '0644' # file permission rw-r-r for .env.production
+        env_files:
+          - .env.production
