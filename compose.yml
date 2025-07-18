@@ -76,6 +76,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8310:8310
+    environment:
+      - AUTHORIZATION_ENABLED=false
     depends_on:
       - postgres-db
     restart: on-failure:3
@@ -91,6 +93,19 @@ services:
     depends_on:
       - postgres-db
     restart: on-failure:3
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/backend_config_files/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - client
+      - user-service
+      - mentorship-service
+      - rating-service
+      - genai
 
 volumes:
   db_data:
