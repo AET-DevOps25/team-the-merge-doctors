@@ -62,3 +62,10 @@
       community.docker.docker_compose_v2:
         project_src: .
         state: present
+
+    - name: Write public IP to .env.production
+      ansible.builtin.lineinfile:
+        path: /home/ubuntu/.env.production
+        line: "PUBLIC_IP={{ hostvars[inventory_hostname]['ansible_host'] }}"
+        create: yes
+        mode: '0644' # file permission rw-r-r for .env.production
