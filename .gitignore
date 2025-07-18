@@ -292,6 +292,7 @@ celerybeat.pid
 # Environments
 .secrets.env
 .env
+!docker/backend_config_files/.env
 .venv
 env/
 venv/
