@@ -1,0 +1,129 @@
+{
+  "swagger": "2.0",
+  "basePath": "/",
+  "paths": {
+    "/api/genai/summarize": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/SummarizeResponse"
+            }
+          }
+        },
+        "summary": "Endpoint for letting LLM summarize text",
+        "operationId": "post_summarize",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/SummarizeRequest"
+            }
+          },
+          {
+            "name": "X-Fields",
+            "in": "header",
+            "type": "string",
+            "format": "mask",
+            "description": "An optional fields mask"
+          }
+        ],
+        "tags": [
+          "GenAI"
+        ]
+      }
+    },
+    "/api/genai/summarize/history": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/SummarizeResponse"
+              }
+            }
+          }
+        },
+        "summary": "Endpoint for listing the history of all summarize commands",
+        "operationId": "get_summarize_history",
+        "parameters": [
+          {
+            "name": "X-Fields",
+            "in": "header",
+            "type": "string",
+            "format": "mask",
+            "description": "An optional fields mask"
+          }
+        ],
+        "tags": [
+          "GenAI"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "GenAI Service",
+    "version": "1.0",
+    "description": "API for text summarization"
+  },
+  "produces": [
+    "application/json"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "tags": [
+    {
+      "name": "GenAI",
+      "description": "Endpoints for text summarization"
+    }
+  ],
+  "definitions": {
+    "SummarizeRequest": {
+      "required": [
+        "textToSummarize"
+      ],
+      "properties": {
+        "textToSummarize": {
+          "type": "string",
+          "description": "Text to be summarized"
+        }
+      },
+      "type": "object"
+    },
+    "SummarizeResponse": {
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "Log ID"
+        },
+        "textToSummarize": {
+          "type": "string",
+          "description": "Original text"
+        },
+        "summarizedText": {
+          "type": "string",
+          "description": "Summarized text"
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "Timestamp of summarization"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "responses": {
+    "ParseError": {
+      "description": "When a mask can't be parsed"
+    },
+    "MaskError": {
+      "description": "When any error occurs on mask"
+    }
+  }
+}
