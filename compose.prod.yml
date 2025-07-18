@@ -10,7 +10,7 @@ services:
       - "--log.level=DEBUG"
     ports:
       - "80:80"
-      - "8081:8080"  # Traefik dashboard
+      - "8081:8080" # Traefik dashboard
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
@@ -31,7 +31,7 @@ services:
       - "traefik.http.services.gateway.loadbalancer.server.port=8610"
     networks:
       - internal
-  
+
   client:
     platform: linux/amd64
     image: ghcr.io/aet-devops25/team-the-merge-doctors/client:latest
@@ -77,7 +77,7 @@ services:
       - "traefik.http.routers.user-protected.entrypoints=web"
       - "traefik.http.routers.user-protected.middlewares=auth-middleware"
       - "traefik.http.routers.user-protected.service=user-service"
-      
+
       - "traefik.http.services.user-service.loadbalancer.server.port=8210"
       - "traefik.http.middlewares.auth-middleware.forwardauth.address=http://gateway:8610/api/auth"
       # Forward these headers to downstream services.
@@ -107,13 +107,15 @@ services:
 
     networks:
       - internal
+    environment:
+      - AUTHORIZATION_ENABLED=true
     depends_on:
       - postgres-db
     restart: on-failure:3
 
 networks:
   internal:
-    driver: bridge    
+    driver: bridge
 
 volumes:
   db_data:
