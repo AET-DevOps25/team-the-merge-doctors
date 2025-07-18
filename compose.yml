@@ -75,6 +75,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8310:8310
+    environment:
+      - AUTHORIZATION_ENABLED=false
     depends_on:
       - postgres-db
     restart: on-failure:3
