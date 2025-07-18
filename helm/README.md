@@ -37,3 +37,19 @@ To remove the deployment and delete everything from cluster, execute the followi
 ```
 kubectl delete all --all -n team-the-merge-doctors
 ```
+
+## Debugging
+
+Some helpful commands for debugging.
+
+Inspect the logs of a pod.
+
+```
+kubectl logs <deployment name (see rancher)> -n team-the-merge-doctors
+```
+
+ssh into a pod.
+
+```
+kubectl exec -it <deployment name (see rancher)> -n team-the-merge-doctors -- /bin/sh
+```
