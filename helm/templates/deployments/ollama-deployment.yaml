@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: ollama-container
-          image: "{{ .Values.ollama.image.repository }}:{{ .Values.ollama.image.tag }}"
+          image: "{{ .Values.ollama.image.repository }}:{{ .Values.tag }}"
           imagePullPolicy: {{ .Values.ollama.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.ollama.service.targetPort }}

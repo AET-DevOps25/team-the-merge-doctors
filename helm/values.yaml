@@ -3,7 +3,6 @@ namespace: team-the-merge-doctors
 userMicroservice:
   image:
     repository: ghcr.io/aet-devops25/team-the-merge-doctors/server/user-service
-    tag: latest
     pullPolicy: Always
   service:
     type: ClusterIP
@@ -16,7 +15,6 @@ userMicroservice:
 mentorshipMicroservice:
   image:
     repository: ghcr.io/aet-devops25/team-the-merge-doctors/server/mentorship-service
-    tag: latest
     pullPolicy: Always
   service:
     type: ClusterIP
@@ -29,7 +27,6 @@ mentorshipMicroservice:
 ratingMicroservice:
   image:
     repository: ghcr.io/aet-devops25/team-the-merge-doctors/server/rating-service
-    tag: latest
     pullPolicy: Always
   service:
     type: ClusterIP
@@ -42,7 +39,6 @@ ratingMicroservice:
 genaiMicroservice:
   image:
     repository: ghcr.io/aet-devops25/team-the-merge-doctors/genai
-    tag: latest
     pullPolicy: Always
   service:
     type: ClusterIP
@@ -55,7 +51,6 @@ genaiMicroservice:
 client:
   image:
     repository: ghcr.io/aet-devops25/team-the-merge-doctors/client-kubernetes-production
-    tag: latest
     pullPolicy: Always
   service:
     type: ClusterIP
@@ -83,7 +78,6 @@ ingress:
 ollama:
   image:
     repository: ghcr.io/aet-devops25/team-the-merge-doctors/ollama
-    tag: latest
     pullPolicy: Always
   service:
     type: ClusterIP
@@ -92,6 +86,8 @@ ollama:
     name: ollama-service
   selector: ollama-selector
   replicaCount: 1
+
+tag: latest
 
 secrets:
   postgresUser: postgres

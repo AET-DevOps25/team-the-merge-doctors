@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: client
-          image: "{{ .Values.client.image.repository }}:{{ .Values.client.image.tag }}"
+          image: "{{ .Values.client.image.repository }}:{{ .Values.tag }}"
           imagePullPolicy: {{ .Values.client.image.pullPolicy }}
           resources:
             limits:

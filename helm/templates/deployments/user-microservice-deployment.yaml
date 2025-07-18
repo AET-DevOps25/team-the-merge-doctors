@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: user-microservice-container
-          image: "{{ .Values.userMicroservice.image.repository }}:{{ .Values.userMicroservice.image.tag }}"
+          image: "{{ .Values.userMicroservice.image.repository }}:{{ .Values.tag }}"
           imagePullPolicy: {{ .Values.userMicroservice.image.pullPolicy }}
           resources:
             limits:

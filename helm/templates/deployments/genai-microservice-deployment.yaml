@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: genai-microservice-container
-          image: "{{ .Values.genaiMicroservice.image.repository }}:{{ .Values.genaiMicroservice.image.tag }}"
+          image: "{{ .Values.genaiMicroservice.image.repository }}:{{ .Values.tag }}"
           imagePullPolicy: {{ .Values.genaiMicroservice.image.pullPolicy }}
           resources:
             limits:
