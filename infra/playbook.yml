@@ -57,6 +57,14 @@
         create: yes
         mode: '0644'
 
+    - name: Create docker backend config files directory
+      ansible.builtin.file:
+        path: /home/ubuntu/docker/backend_config_files
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+
     - name: Copy backend config .env to remote
       ansible.builtin.copy:
         src: ../docker/backend_config_files/.env
