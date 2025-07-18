@@ -15,6 +15,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - internal
+
   gateway:
     platform: linux/amd64
     build:
@@ -30,6 +31,7 @@ services:
       - "traefik.http.services.gateway.loadbalancer.server.port=8610"
     networks:
       - internal
+  
   client:
     platform: linux/amd64
     image: ghcr.io/aet-devops25/team-the-merge-doctors/client:latest
