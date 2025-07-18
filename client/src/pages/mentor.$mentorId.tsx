@@ -14,6 +14,8 @@ import { useGetMentorProfile } from '@/api/mentor';
 import { SkillPill } from '@/components/atoms/SkillPill';
 import { SolutionOutlined, TrophyOutlined } from '@ant-design/icons';
 import { useGetUser } from '@/api/user';
+import { useGetAverageRating, useGetRatingsByMentor } from '@/api/rating';
+import { MentorReviews } from '@/components/organisms/MentorReviews';
 
 const { Content } = Layout;
 const { Title, Paragraph } = Typography;
@@ -50,6 +52,17 @@ function MentorProfilePage() {
     },
   );
 
+  const { data: averageRatingData } = useGetAverageRating(mentorId, {
+    query: { enabled: !!mentorId },
+  });
+
+  const { data: ratingsData } = useGetRatingsByMentor(mentorId, {
+    query: { enabled: !!mentorId },
+  });
+
+  const ratings = ratingsData?.data ?? [];
+  const averageRating = averageRatingData?.data?.averageRating?.toFixed(1);
+
   return (
     <Layout style={{ minHeight: '100vh', backgroundColor: '#fafafa' }}>
       <Content style={{ padding: '40px 24px', justifyContent: 'center' }}>
@@ -58,9 +71,9 @@ function MentorProfilePage() {
             <Row gutter={[16, 16]}>
               <Col span={24}>
                 <MentorInfo
-                  user={getUserData?.data?.user}
-                  // rating={mentorData.rating}
-                  // totalReviews={mentorData.totalReviews}
+                  mentorUser={getUserData?.data?.user}
+                  ratings={ratings}
+                  averageRating={averageRating}
                   isAvailable={mentorProfile?.isAvailable ?? false}
                 />
               </Col>
@@ -99,7 +112,6 @@ function MentorProfilePage() {
                 </Card>
               </Col>
               <Col span={24}>
-                {/* Skills Section */}
                 <Card style={{ borderRadius: 16 }}>
                   <Title level={4}>Skills</Title>
                   {mentorProfile?.skills?.map((skill) => (
@@ -107,8 +119,9 @@ function MentorProfilePage() {
                   ))}
                 </Card>
               </Col>
-              {/* TODO: add reviews back in */}
-              {/* <MentorReviews reviews={reviews} /> */}
+              <Col span={24}>
+                <MentorReviews ratings={ratings} />
+              </Col>
             </Row>
           </Col>
         </Flex>
