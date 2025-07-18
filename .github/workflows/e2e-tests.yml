@@ -1,0 +1,51 @@
+name: E2E (UI) Tests
+
+on:
+  workflow_call:
+
+jobs:
+  run-e2e-tests:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout
+
+      - uses: actions/setup-node@v4
+        name: Setup Node
+        with:
+          node-version: lts/*
+
+      - uses: docker/setup-compose-action@v1
+        name: Setup Docker
+
+      - name: Setup .env
+        run: |
+          cp docker/backend_config_files/.env.template docker/backend_config_files/.env
+
+      - name: Generate JWT Key
+        run: |
+          ./docker/backend_config_files/jwk-key-generator.sh
+
+      - name: Start Docker Containers
+        run: |
+          docker compose up --build -d
+
+      - name: Install dependencies
+        working-directory: ./client
+        run: npm install -g pnpm && pnpm install
+
+      - name: Install Playwright Browsers
+        working-directory: ./client
+        run: pnpm exec playwright install --with-deps
+
+      - name: Run Playwright tests
+        working-directory: ./client
+        run: pnpm exec playwright test
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: ./client/playwright-report/
+          retention-days: 30

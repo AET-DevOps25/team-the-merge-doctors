@@ -1,8 +1,6 @@
 name: CI – Build & Publish
 
 on:
-  push:
-  pull_request:
   workflow_call:
 
 permissions: write-all
@@ -41,9 +39,30 @@ jobs:
           push: true
           tags: ghcr.io/aet-devops25/team-the-merge-doctors/genai:latest
 
+      - name: Build & push Ollama image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./genai/ollama
+          push: true
+          tags: ghcr.io/aet-devops25/team-the-merge-doctors/ollama:latest
+
       - name: Build & push User Service image
         uses: docker/build-push-action@v4
         with:
-          context: ./server/user
+          context: ./server/userservice
           push: true
           tags: ghcr.io/aet-devops25/team-the-merge-doctors/server/user-service:latest
+
+      - name: Build & push Mentorship Service image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./server/mentorshipservice
+          push: true
+          tags: ghcr.io/aet-devops25/team-the-merge-doctors/server/mentorship-service:latest
+
+      - name: Build & push Rating Service image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./server/ratingservice
+          push: true
+          tags: ghcr.io/aet-devops25/team-the-merge-doctors/server/rating-service:latest

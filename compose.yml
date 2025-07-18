@@ -1,21 +1,15 @@
 services:
   client:
+    platform: linux/amd64
     image: ghcr.io/aet-devops25/team-the-merge-doctors/client:latest
     build:
       context: ./client
       dockerfile: Dockerfile
     ports:
-      - 3000:80
-
-  user-service:
-    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/user:latest
-    build:
-      context: server/user
-      dockerfile: Dockerfile
-    ports:
-      - 8000:8080
+      - 3000:3000
 
   postgres-db:
+    platform: linux/amd64
     image: postgres:15
     ports:
       - "5432:5432"
@@ -26,22 +20,93 @@ services:
       - ./docker/backend_config_files/postgres-init.sh:/docker-entrypoint-initdb.d/init.sh:ro
       - ./docker/backend_config_files/pg-hba.conf:/etc/postgresql/pg_hba.conf:ro
 
+  user-service:
+    platform: linux/amd64
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/user-service:latest
+    ports:
+      - 8210:8210
+    build:
+      context: server/userservice
+      dockerfile: Dockerfile
+    volumes:
+      - $HOME/mentorpulse-certificates/jwt-secret.key:/home/cnf/mentorpulse-certificates/jwt-secret.key:ro
+    depends_on:
+      - postgres-db
+    restart: on-failure:3
+
+  ollama:
+    platform: linux/amd64
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/ollama:latest
+    build:
+      context: ./genai/ollama
+      dockerfile: Dockerfile
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: always
+
   genai:
+    platform: linux/amd64
     image: ghcr.io/aet-devops25/team-the-merge-doctors/genai:latest
     build:
       context: genai
       dockerfile: Dockerfile
-    command: gunicorn -b 0.0.0.0:5001 app:app
+    command: gunicorn -b 0.0.0.0:5001 --config gunicorn.conf.py app:app
     volumes:
       - ./genai:/app
     ports:
       - "5001:5001"
     environment:
-    - POSTGRES_HOST=postgres-db
+      - POSTGRES_HOST=postgres-db
+      - OLLAMA_BASE_URL=http://ollama:11434
     env_file:
       - ./docker/backend_config_files/.env
     depends_on:
       - postgres-db
+      - ollama
+    restart: always
+
+  mentorship-service:
+    platform: linux/amd64
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/mentorship-service:latest
+    build:
+      context: server/mentorshipservice
+      dockerfile: Dockerfile
+    ports:
+      - 8310:8310
+    environment:
+      - AUTHORIZATION_ENABLED=false
+    depends_on:
+      - postgres-db
+    restart: on-failure:3
+
+  rating-service:
+    platform: linux/amd64
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/rating-service:latest
+    build:
+      context: server/ratingservice
+      dockerfile: Dockerfile
+    ports:
+      - 8410:8410
+    depends_on:
+      - postgres-db
+    restart: on-failure:3
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/backend_config_files/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - client
+      - user-service
+      - mentorship-service
+      - rating-service
+      - genai
 
 volumes:
   db_data:
+  ollama_data:

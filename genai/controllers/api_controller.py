@@ -1,33 +1,52 @@
-from flask import Blueprint, request, jsonify
-from services.query_service import QueryService
+from flask import request, jsonify
+from flask_restx import Namespace, Resource, fields
+from services.summarization_service import SummarizationService
 
-api = Blueprint('api', __name__, url_prefix='/api')
+api = Namespace('GenAI', description='Endpoints for text summarization')
 
-@api.route('/ask', methods=['POST'])
-def ask():
-    data = request.get_json(force=True)
-    question = data.get('question')
-    if not question:
-        return jsonify({'error': 'Question field is required.'}), 400
+# Define request and response models
+summarize_request = api.model('SummarizeRequest', {
+    'textToSummarize': fields.String(required=True, description='Text to be summarized')
+})
 
-    log = QueryService.handle_question(question)
-    return jsonify({
-        'id': log.id,
-        'question': log.question,
-        'answer': log.answer,
-        'timestamp': log.timestamp.isoformat()
-    }), 200
+summarize_response = api.model('SummarizeResponse', {
+    'id': fields.Integer(description='Log ID'),
+    'textToSummarize': fields.String(description='Original text'),
+    'summarizedText': fields.String(description='Summarized text'),
+    'timestamp': fields.String(description='Timestamp of summarization')
+})
 
+@api.route('/summarize')
+class Summarize(Resource):
+    @api.expect(summarize_request)
+    @api.marshal_with(summarize_response, code=200)
+    def post(self):
+        '''Endpoint for letting LLM summarize text'''
+        data = request.get_json(force=True)
+        text_to_summarize = data.get('textToSummarize')
+        if not text_to_summarize:
+            return {'error': 'textToSummarize field is required.'}, 400
 
-@api.route('/history', methods=['GET'])
-def history():
-    logs = QueryService.list_history()
-    return jsonify([
-        {
-            'id': l.id,
-            'question': l.question,
-            'answer': l.answer,
-            'timestamp': l.timestamp.isoformat()
+        log = SummarizationService.handle_summarization(text_to_summarize)
+        return {
+            'id': log.id,
+            'textToSummarize': log.text_to_summarize,
+            'summarizedText': log.summarized_text,
+            'timestamp': log.timestamp.isoformat()
         }
-        for l in logs
-    ])
+
+@api.route('/summarize/history')
+class SummarizeHistory(Resource):
+    @api.marshal_list_with(summarize_response, code=200)
+    def get(self):
+        '''Endpoint for listing the history of all summarize commands'''
+        logs = SummarizationService.list_history()
+        return [
+            {
+                'id': log.id,
+                'textToSummarize': log.text_to_summarize,
+                'summarizedText': log.summarized_text,
+                'timestamp': log.timestamp.isoformat()
+            }
+            for log in logs
+        ]

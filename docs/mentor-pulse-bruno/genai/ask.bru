@@ -1,0 +1,15 @@
+meta {
+  name: ask
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{method}}://{{genai-base-endpoint}}/api/ask
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {"question": "How are you today?"}
+}

@@ -5,6 +5,7 @@ python-dotenv
 langchain
 langchain-community
 langchain-openai
+langchain-ollama
 openai
 gunicorn
 flask
@@ -15,3 +16,4 @@ langchain
 langchain-community
 langchain-openai
 openai
+flask-restx

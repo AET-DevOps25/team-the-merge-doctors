@@ -1,9 +1,10 @@
 from flask import Flask
+from flask_restx import Api
 from config import Config
-from models.query_log import db
+from database import db
 
-# Import the blueprint object
-from controllers.api_controller import api
+# Import the namespace object
+from controllers.api_controller import api as genai_namespace
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -11,8 +12,11 @@ app.config.from_object(Config)
 # Init extensions
 db.init_app(app)
 
-# Register your API blueprint
-app.register_blueprint(api)
+# Initialize Flask-RESTX API
+api = Api(app, title='GenAI Service', version='1.0', description='API for text summarization')
+
+# Register your namespace
+api.add_namespace(genai_namespace, path='/api/genai')
 
 # Initialize DB tables
 with app.app_context():

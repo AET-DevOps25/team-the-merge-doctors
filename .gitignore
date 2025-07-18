@@ -290,6 +290,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
+.secrets.env
 .env
 .venv
 env/
@@ -380,3 +381,5 @@ sketch
 
 
 token.yml
+# Helm
+values.yaml

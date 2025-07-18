@@ -18,4 +18,4 @@ COPY . /app/
 
 EXPOSE 5001
 
-CMD ["gunicorn", "-b", "0.0.0.0:5001", "app:app"]
+CMD ["gunicorn", "-b", "0.0.0.0:5001", "--config", "gunicorn.conf.py", "app:app"]

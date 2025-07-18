@@ -1,0 +1,10 @@
+postgres:
+  ip: localhost
+
+genai:
+  host: localhost
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop

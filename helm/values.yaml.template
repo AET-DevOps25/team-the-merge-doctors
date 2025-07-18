@@ -1,0 +1,44 @@
+namespace: team-the-merge-doctors
+
+userMicroservice:
+  image:
+    repository: ghcr.io/aet-devops25/team-the-merge-doctors/server/user-service
+    tag: latest
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    port: 8210
+    targetPort: 8210
+  selector: user-microservice-selector
+  replicaCount: 1
+
+genaiMicroservice:
+  image:
+    repository: ghcr.io/aet-devops25/team-the-merge-doctors/genai
+    tag: latest
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    port: 5001
+    targetPort: 5001
+  selector: genai-microservice-selector
+  replicaCount: 1
+
+client:
+  image:
+    repository: ghcr.io/aet-devops25/team-the-merge-doctors/client
+    tag: latest
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    port: 3000
+    targetPort: 80
+  replicaCount: 1
+  selector: client-selector
+
+secrets:
+  postgresUser: postgres
+  postgresPassword: postgres_password
+
+backendEnvironmentConfigMapName: backend-environment-config-map
+secretsName: secrets
