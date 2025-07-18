@@ -1,24 +1,19 @@
 import { List } from 'antd';
 import { ReviewItem } from '@/components/atoms/ReviewItem';
-import type { Review } from '@/types/review';
+import type { Rating } from '@/api/rating';
 
 interface ReviewsListProps {
-  reviews: Review[];
+  ratings: Rating[];
 }
 
-export const ReviewsList = ({ reviews }: ReviewsListProps) => {
+export const ReviewsList = ({ ratings }: ReviewsListProps) => {
   return (
     <List
-      dataSource={reviews}
-      renderItem={(review) => (
+      dataSource={ratings}
+      locale={{ emptyText: 'No reviews' }}
+      renderItem={(rating) => (
         <List.Item style={{ border: 'none', padding: 0 }}>
-          <ReviewItem
-            name={review.name}
-            rating={review.rating}
-            date={review.date}
-            text={review.text}
-            avatar={review.avatar}
-          />
+          <ReviewItem rating={rating} />
         </List.Item>
       )}
     />

@@ -16,3 +16,4 @@ langchain
 langchain-community
 langchain-openai
 openai
+flask-restx
