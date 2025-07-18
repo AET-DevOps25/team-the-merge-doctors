@@ -18,6 +18,7 @@ services:
 
   gateway:
     platform: linux/amd64
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/gateway-service:latest
     depends_on:
       - user-service
     restart: on-failure:3
