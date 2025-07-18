@@ -1,11 +1,7 @@
 name: Manual k8s (Helm) deployment
 
 on:
-  workflow_dispatch:
-    inputs:
-      open_api_key:
-        description: "Your Open API key"
-        required: true
+  workflow_call:
 
 jobs:
   kubernetes_deployment:
