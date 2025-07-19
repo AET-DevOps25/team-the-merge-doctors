@@ -26,15 +26,9 @@ jobs:
       - name: Set up kubeconfig
         run: |
           mkdir -p $HOME/.kube
-          echo "YXBpVmVyc2lvbjogdjEKa2luZDogQ29uZmlnCmNsdXN0ZXJzOgotIG5hbWU6ICJzdHVkZW50IgogIGNsdXN0ZXI6CiAgICBzZXJ2ZXI6ICJodHRwczovL3JhbmNoZXIuYXNlLmNpdC50dW0uZGUvazhzL2NsdXN0ZXJzL2MtbS1uaGNmamc5aCIKCnVzZXJzOgotIG5hbWU6ICJzdHVkZW50IgogIHVzZXI6CiAgICB0b2tlbjogImt1YmVjb25maWctdS1pa2VlZ3liMnZ6aDJrdms6dnF4dmxqbGhxaGpuejhoaHZrMjdiODl0ajJud2t6N3Rxd21kcnBjNjk0aDJ4cHM5cmo5c3poIgoKCmNvbnRleHRzOgotIG5hbWU6ICJzdHVkZW50IgogIGNvbnRleHQ6CiAgICB1c2VyOiAic3R1ZGVudCIKICAgIGNsdXN0ZXI6ICJzdHVkZW50IgoKY3VycmVudC1jb250ZXh0OiAic3R1ZGVudCIK" | base64 --decode > $HOME/.kube/config
+          echo ${{secrets.KUBECONFIG}} | base64 --decode > $HOME/.kube/config
           chmod 600 $HOME/.kube/config
           echo "KUBECONFIG=$HOME/.kube/config" >> $GITHUB_ENV
-          cd $HOME/.kube
-          ls -la
-          cat $HOME/.kube/config
-
-      # - name: Test Kubernetes connectivity
-      #   run: kubectl get nodes
 
       - name: Deploy using Helm
         run: |
