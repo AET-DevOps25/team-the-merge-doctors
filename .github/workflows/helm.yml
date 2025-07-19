@@ -40,6 +40,11 @@ jobs:
         env:
           KUBECONFIG_64: ${{ secrets.KUBECONFIG }}
 
+      - name: Verify cluster access
+        run: |
+          kubectl version --short
+          kubectl get nodes
+
       - name: Deploy using Helm
         run: |
           helm upgrade --install mentor-pulse ./helm/ \
