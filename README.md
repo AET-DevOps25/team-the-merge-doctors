@@ -6,6 +6,14 @@ TODO: short introduction what mentor pulse is
 
 TODO: documentation to add for project setup (e.g. how to start with docker)
 
+```
+docker compose up --build
+```
+
+```
+docker compose down -v
+```
+
 ### Loading Mock Data
 
 TODO: add link to mock data scripts
