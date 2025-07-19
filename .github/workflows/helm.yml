@@ -6,8 +6,6 @@ on:
 jobs:
   kubernetes_deployment:
     runs-on: ubuntu-latest
-    env:
-      KUBECONFIG: $HOME/.kube/config
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -43,3 +41,5 @@ jobs:
             --namespace team-the-merge-doctors \
             --set tag=latest
             --debug
+        env:
+          KUBECONFIG: $HOME/.kube/config
