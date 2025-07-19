@@ -25,10 +25,10 @@ jobs:
 
       - name: Debug kubeconfig secret
         run: |
-          echo test
+          echo test123
           echo "${{ secrets.STUDENTKUBECONFIG }}" | wc -c
           echo "${{ secrets.STUDENTKUBECONFIG }}"
-          echo test
+          echo test123
 
       - name: Set up kubeconfig
         run: |
