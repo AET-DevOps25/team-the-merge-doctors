@@ -44,6 +44,9 @@ jobs:
           echo "$KUBECONFIG_B64" | base64 --decode > ~/.kube/config
           chmod 600 ~/.kube/config
           echo "KUBECONFIG=~/.kube/config" >> $GITHUB_ENV
+          echo "┌── Decoded kubeconfig ─────────────────────────────"
+          cat "$HOME/.kube/config"
+          echo "└───────────────────────────────────────────────────"
         env:
           KUBECONFIG_B64: ${{ secrets.KUBECONFIG }}
 
