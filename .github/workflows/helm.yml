@@ -23,11 +23,18 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Debug kubeconfig secret
+        run: |
+          echo "${{ secrets.STUDENTKUBECONFIG }}" | wc -c
+          echo "${{ secrets.STUDENTKUBECONFIG }}"
+
       - name: Set up kubeconfig
         run: |
           mkdir $HOME/.kube
           printf '%s' "${{ secrets.STUDENTKUBECONFIG }}" > $HOME/.kube/config
           chmod 600 $HOME/.kube/config
+        env:
+          KUBECONFIG: $HOME/.kube/config
 
       - name: Debug kubeconfig
         run: cat $HOME/.kube/config
