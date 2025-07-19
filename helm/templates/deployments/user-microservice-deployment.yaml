@@ -15,15 +15,8 @@ spec:
     spec:
       containers:
         - name: user-microservice-container
-          image: "{{ .Values.userMicroservice.image.repository }}:{{ .Values.userMicroservice.image.tag }}"
+          image: "{{ .Values.userMicroservice.image.repository }}:{{ .Values.tag }}"
           imagePullPolicy: {{ .Values.userMicroservice.image.pullPolicy }}
-          resources:
-            limits:
-              cpu: "500m"
-              memory: "256Mi"
-            requests:
-              cpu: "50m"
-              memory: "50Mi"
           ports:
             - containerPort: {{ .Values.userMicroservice.service.targetPort }}
           envFrom:
@@ -31,3 +24,11 @@ spec:
                 name: {{ .Values.backendEnvironmentConfigMapName }}
             - secretRef:
                 name: {{ .Values.secretsName }}
+          volumeMounts:
+            - name: jwt-secret-volume
+              mountPath: /home/cnf/mentorpulse-certificates
+              readOnly: true
+      volumes:
+        - name: jwt-secret-volume
+          secret:
+            secretName: jwt-secret

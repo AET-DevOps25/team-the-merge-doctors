@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 def _get_llm():
     """Get Ollama LLM instance"""
     try:
-        base_url = os.getenv('OLLAMA_BASE_URL', 'http://localhost:11434')
+        base_url = os.getenv('OLLAMA_BASE_URL', 'http://ollama-service:11434')
         return OllamaLLM(model="llama3.2", base_url=base_url)
     except Exception as e:
         logger.error(f"Failed to initialize Ollama LLM: {e}")

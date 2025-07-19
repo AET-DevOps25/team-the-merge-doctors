@@ -31,7 +31,7 @@ The client is tested using E2E/UI tests. We use playwright as the framework for 
 3. Run Tests: `pnpm exec playwright test`
 4. Show Report: `pnpm exec playwright show-report`
 
-## Execute tests with UI
+### Execute tests with UI
 
 Alternatively, you can also execute the tests using a UI.
 

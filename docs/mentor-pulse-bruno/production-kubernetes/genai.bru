@@ -1,0 +1,17 @@
+meta {
+  name: genai
+  type: http
+  seq: 1
+}
+
+post {
+  url: https://mentor-pulse-devops25.student.k8s.aet.cit.tum.de/api/genai/summarize
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "textToSummarize": 'test',
+  }
+}

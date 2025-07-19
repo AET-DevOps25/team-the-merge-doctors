@@ -13,6 +13,9 @@ RUN pnpm install --frozen-lockfile
 
 COPY . .
 
+ARG NODE_ENV=development
+ENV NODE_ENV=${NODE_ENV}
+
 RUN pnpm run build
 
 # Stage 2
@@ -26,6 +29,9 @@ RUN npm install -g serve
 COPY --from=build /app/dist ./dist
 
 EXPOSE 3000
+
+ARG NODE_ENV=development
+ENV NODE_ENV=${NODE_ENV}
 
 CMD ["serve", "-s", "dist", "-l", "3000"]
 
