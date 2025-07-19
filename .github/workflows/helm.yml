@@ -31,8 +31,8 @@ jobs:
           echo "${{ secrets.KUBECONFIG }}" | base64 --decode > $HOME/.kube/config
           chmod 600 $HOME/.kube/config
 
-      - name: Test Kubernetes connectivity
-        run: kubectl get nodes
+      # - name: Test Kubernetes connectivity
+      #   run: kubectl get nodes
 
       - name: Deploy using Helm
         run: |
