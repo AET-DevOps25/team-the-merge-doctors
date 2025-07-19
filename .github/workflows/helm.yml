@@ -43,4 +43,4 @@ jobs:
           helm upgrade --install mentor-pulse ./helm/ \
             --namespace team-the-merge-doctors \
             --set tag=latest \
-            -f helm/values.yaml
+            --debug
