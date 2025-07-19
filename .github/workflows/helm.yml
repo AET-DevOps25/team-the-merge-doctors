@@ -6,6 +6,8 @@ on:
 jobs:
   kubernetes_deployment:
     runs-on: ubuntu-latest
+    env:
+      KUBECONFIG: $HOME/.kube/config
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -25,9 +27,9 @@ jobs:
 
       - name: Set up kubeconfig
         run: |
-          mkdir $HOME/.kube
-          echo "${{ secrets.KUBECONFIG }}" | base64 -d > $HOME/.kube/config
-          cat $HOME/.kube/config
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.KUBECONFIG }}" | base64 --decode > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
 
       - name: Test Kubernetes connectivity
         run: kubectl get nodes
@@ -38,5 +40,3 @@ jobs:
             --namespace team-the-merge-doctors \
             --set tag=latest
             --debug
-        env:
-          KUBECONFIG: $HOME/.kube/config
