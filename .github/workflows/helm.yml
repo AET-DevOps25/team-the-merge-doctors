@@ -29,9 +29,17 @@ jobs:
           printf '%s' "${{ secrets.STUDENTKUBECONFIG }}" > $HOME/.kube/config
           chmod 600 $HOME/.kube/config
 
-      # TODO: we are currently just using the latest containers without building them beforehand. Maybe add deployment as step of the pipeline on commits on the main branch
+      - name: Debug kubeconfig
+        run: cat $HOME/.kube/config
+        env:
+          KUBECONFIG: $HOME/.kube/config
+
+      - name: Test Kubernetes connectivity
+        run: kubectl get nodes
+
       - name: Deploy using Helm
         run: |
           helm upgrade --install mentor-pulse ./helm/ \
             --namespace team-the-merge-doctors \
-            --set tag=${{ github.sha }}
+            --set tag=latest
+            --debug

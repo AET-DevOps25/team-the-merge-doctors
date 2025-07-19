@@ -17,6 +17,6 @@ jobs:
     #   - backend-tests
     uses: ./.github/workflows/docker.yml
   deploy-to-kubernetes:
-    needs:
-      - build-publish-images
+    # needs:
+    #   - build-publish-images
     uses: ./.github/workflows/helm.yml

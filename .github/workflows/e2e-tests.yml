@@ -19,10 +19,6 @@ jobs:
       - uses: docker/setup-compose-action@v1
         name: Setup Docker
 
-      # - name: Setup .env
-      #   run: |
-      #     cp docker/backend_config_files/.env.template docker/backend_config_files/.env
-
       - name: Generate JWT Key
         run: |
           ./docker/backend_config_files/jwk-key-generator.sh
