@@ -99,6 +99,12 @@ jobs:
           head -n 1 priv.pem
           echo "Attempting SSH connection..."
           ssh -v -o StrictHostKeyChecking=no -i priv.pem ubuntu@$IP 'echo "SSH connection successful!"'
+          
+      - name: Write jwt-secret.key from secret
+        run: |
+          mkdir -p mentorpulse-certificates
+          printf "%s" "${{ secrets.JWT_SECRET_KEY_RAW }}" > mentorpulse-certificates/jwt-secret.key
+          chmod 600 mentorpulse-certificates/jwt-secret.key
 
       - name: Provision EC2
         run: |
