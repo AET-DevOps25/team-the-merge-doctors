@@ -44,7 +44,7 @@ jobs:
 
       - name: Verify cluster access
         run: |
-          kubectl version --short
+          kubectl version
           kubectl get nodes
         env:
           KUBECONFIG: $HOME/.kube/config
