@@ -35,17 +35,17 @@ jobs:
 
       - name: Set up kubeconfig
         run: |
-          mkdir -p $HOME/.kube
-          echo "${{ secrets.KUBECONFIG }}" | base64 --decode > $HOME/.kube/config
-          chmod 600 $HOME/.kube/config
-          echo "KUBECONFIG=$HOME/.kube/config" >> $GITHUB_ENV
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG }}" | base64 --decode > ~/.kube/config
+          chmod 600 ~/.kube/config
+          echo "KUBECONFIG=~/.kube/config" >> $GITHUB_ENV
 
       - name: Verify cluster access
         run: |
           kubectl version
           kubectl get nodes
         env:
-          KUBECONFIG: $HOME/.kube/config
+          KUBECONFIG: ~/.kube/config
 
       - name: Deploy using Helm
         run: |
