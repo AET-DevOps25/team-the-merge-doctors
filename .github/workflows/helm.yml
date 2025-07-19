@@ -3,7 +3,7 @@ name: k8s (Helm) deployment
 on:
   workflow_call:
     secrets:
-      KUBECONF:
+      KUBECONFIG:
         description: "Base64‑encoded kubeconfig file"
         required: true
 
@@ -29,31 +29,31 @@ jobs:
 
       - name: Debug secret access
         run: |
-          echo "${{ secrets.KUBECONF }}" || echo "Failed to access KUBECONF secret."
+          echo "${{ secrets.KUBECONFIG }}" || echo "Failed to access KUBECONFIG secret."
 
       - name: Debug kubeconfig decoding
         run: |
-          echo "${{ secrets.KUBECONF }}" | base64 --decode || echo "Failed to decode KUBECONF secret."
+          echo "${{ secrets.KUBECONFIG }}" | base64 --decode || echo "Failed to decode KUBECONFIG secret."
 
       - name: Set up kubeconfig
         run: |
           mkdir -p ~/.kube
-          echo "${{ secrets.KUBECONF }}" | base64 --decode > ~/.kube/config
+          echo "${{ secrets.KUBECONFIG }}" | base64 --decode > ~/.kube/config
           chmod 600 ~/.kube/config
-          echo "KUBECONF=~/.kube/config" >> $GITHUB_ENV
+          echo "KUBECONFIG=~/.kube/config" >> $GITHUB_ENV
 
       - name: Set up kubeconfig
         run: |
           mkdir -p ~/.kube
-          echo "$KUBECONF_B64" | base64 --decode > ~/.kube/config
+          echo "$KUBECONFIG_B64" | base64 --decode > ~/.kube/config
           chmod 600 ~/.kube/config
-          echo "KUBECONF=~/.kube/config" >> $GITHUB_ENV
+          echo "KUBECONFIG=~/.kube/config" >> $GITHUB_ENV
         env:
-          KUBECONF_B64: ${{ secrets.KUBECONF }}
+          KUBECONFIG_B64: ${{ secrets.KUBECONFIG }}
 
       - name: Deploy using Helm
         env:
-          KUBECONF: ${{ runner.home }}/.kube/config
+          KUBECONFIG: ${{ runner.home }}/.kube/config
         run: |
           helm upgrade --install mentor-pulse ./helm/ \
             --namespace team-the-merge-doctors \
