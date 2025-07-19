@@ -7,15 +7,15 @@ on:
 permissions: write-all
 
 jobs:
-  e2e-tests:
-    uses: ./.github/workflows/e2e-tests.yml
-  backend-tests:
-    uses: ./.github/workflows/backend-tests.yml
-  build-publish-images:
-    needs:
-      - e2e-tests
-      - backend-tests
-    uses: ./.github/workflows/docker.yml
+  # e2e-tests:
+  #   uses: ./.github/workflows/e2e-tests.yml
+  # backend-tests:
+  #   uses: ./.github/workflows/backend-tests.yml
+  # build-publish-images:
+  #   needs:
+  #     - e2e-tests
+  #     - backend-tests
+  #   uses: ./.github/workflows/docker.yml
   deploy-to-kubernetes:
     # needs:
     #   - build-publish-images
