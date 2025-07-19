@@ -44,8 +44,8 @@
 
     - name: Copy compose file to remote
       ansible.builtin.copy:
-        src: ./compose.prod.yml
-        dest: "/home/ubuntu/compose.prod.yml"
+        src: ./compose.aws.yml
+        dest: "/home/ubuntu/compose.aws.yml"
         owner: ubuntu
         group: ubuntu
         mode: '0644'
@@ -108,7 +108,7 @@
       community.docker.docker_compose_v2:
         project_src: "{{ compose_dir }}"
         files:
-          - compose.prod.yml
+          - compose.aws.yml
         state: absent
         remove_images: local
         remove_volumes: true
@@ -118,7 +118,7 @@
       community.docker.docker_compose_v2:
         project_src: "{{ compose_dir }}"
         files:
-          - compose.prod.yml
+          - compose.aws.yml
         state: present
         env_files:
           - "{{ compose_dir }}/.env.production"
