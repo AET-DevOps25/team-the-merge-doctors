@@ -3,7 +3,7 @@ name: k8s (Helm) deployment
 on:
   workflow_call:
     secrets:
-      KUBECONFIG:
+      KUBECONF:
         description: "Base64‑encoded kubeconfig file"
         required: true
 
@@ -29,34 +29,34 @@ jobs:
 
       - name: Debug secret access
         run: |
-          echo "${{ secrets.KUBECONFIG }}" || echo "Failed to access KUBECONFIG secret."
+          echo "${{ secrets.KUBECONF }}" || echo "Failed to access KUBECONF secret."
 
       - name: Debug kubeconfig decoding
         run: |
-          echo "${{ secrets.KUBECONFIG }}" | base64 --decode || echo "Failed to decode KUBECONFIG secret."
+          echo "${{ secrets.KUBECONF }}" | base64 --decode || echo "Failed to decode KUBECONF secret."
 
       - name: Set up kubeconfig
         run: |
           mkdir -p ~/.kube
-          echo "${{ secrets.KUBECONFIG }}" | base64 --decode > ~/.kube/config
+          echo "${{ secrets.KUBECONF }}" | base64 --decode > ~/.kube/config
           chmod 600 ~/.kube/config
-          echo "KUBECONFIG=~/.kube/config" >> $GITHUB_ENV
+          echo "KUBECONF=~/.kube/config" >> $GITHUB_ENV
 
       - name: Set up kubeconfig
         run: |
           mkdir -p ~/.kube
-          echo "$KUBECONFIG_B64" | base64 --decode > ~/.kube/config
+          echo "$KUBECONF_B64" | base64 --decode > ~/.kube/config
           chmod 600 ~/.kube/config
-          echo "KUBECONFIG=~/.kube/config" >> $GITHUB_ENV
+          echo "KUBECONF=~/.kube/config" >> $GITHUB_ENV
           echo "┌── Decoded kubeconfig ─────────────────────────────"
           cat "$HOME/.kube/config"
           echo "└───────────────────────────────────────────────────"
         env:
-          KUBECONFIG_B64: ${{ secrets.KUBECONFIG }}
+          KUBECONF_B64: ${{ secrets.KUBECONF }}
 
       - name: Deploy using Helm
         env:
-          KUBECONFIG: ${{ runner.home }}/.kube/config
+          KUBECONF: ${{ runner.home }}/.kube/config
         run: |
           helm upgrade --install mentor-pulse ./helm/ \
             --namespace team-the-merge-doctors \
