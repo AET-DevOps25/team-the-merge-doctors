@@ -23,30 +23,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Debug kubeconfig secret
-        run: |
-          echo test123
-          echo "${{ secrets.STUDENTKUBECONFIG }}" | wc -c
-          echo "${{ secrets.STUDENTKUBECONFIG }}"
-          echo test123
-
       - name: Set up kubeconfig
         run: |
-          mkdir $HOME/.kube
-          printf '%s' "${{ secrets.STUDENTKUBECONFIG }}" > $HOME/.kube/config
-          chmod 600 $HOME/.kube/config
-        env:
-          KUBECONFIG: $HOME/.kube/config
-
-      - name: Debug kubeconfig
-        run: cat $HOME/.kube/config
-        env:
-          KUBECONFIG: $HOME/.kube/config
+          echo "${{ secrets.STUDENTKUBECONFIG }}" | base64 -d > $HOME/.kube/config
 
       - name: Test Kubernetes connectivity
         run: kubectl get nodes
-        env:
-          KUBECONFIG: $HOME/.kube/config
 
       - name: Deploy using Helm
         run: |
