@@ -2,6 +2,10 @@ name: k8s (Helm) deployment
 
 on:
   workflow_call:
+    secrets:
+      KUBECONFIG:
+        description: "Base64‑encoded kubeconfig file"
+        required: true
 
 jobs:
   kubernetes_deployment:
