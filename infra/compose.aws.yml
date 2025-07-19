@@ -4,14 +4,24 @@ services:
     command:
       - "--api.insecure=true"
       - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.exposedbydefault=false" # prevent docker containers from being exposed by default(label needed to be added per service).
+      - "--entrypoints.websecure.address=:443"
+      # certificate resolve (myresolver).
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=devops@aet.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json" # place where to store certificate data.
+      # redirect http to https.
       - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
       - "--accesslog=true"
       - "--log.level=DEBUG"
     ports:
       - "80:80"
+      - "443:443"
       - "8081:8080" # Traefik dashboard
     volumes:
+      - /letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - internal
@@ -23,9 +33,10 @@ services:
       - user-service
     restart: on-failure:3
     labels:
-      - "traefik.enable=true"
+      - "traefik.enable=true" # needed cuz default exposure is disabled.
       - "traefik.http.routers.gateway.rule=Host(`${PUBLIC_IP}`) && Path(`/api/auth`)"
-      - "traefik.http.routers.gateway.entrypoints=web"
+      - "traefik.http.routers.gateway.entrypoints=websecure"
+      - "traefik.http.routers.gateway.tls.certresolver=myresolver"
       - "traefik.http.services.gateway.loadbalancer.server.port=8610"
     networks:
       - internal
@@ -36,7 +47,8 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.client.rule=Host(`${PUBLIC_IP}`) && PathPrefix(`/`)"
-      - "traefik.http.routers.client.entrypoints=web"
+      - "traefik.http.routers.client.entrypoints=websecure"
+      - "traefik.http.routers.client.tls.certresolver=myresolver"
       - "traefik.http.services.client.loadbalancer.server.port=3000"
     networks:
       - internal
@@ -61,12 +73,14 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.user-public.rule=Host(`${PUBLIC_IP}`) && (Path(`/api/user/login`) || Path(`/api/user/createUser`))"
-      - "traefik.http.routers.user-public.entrypoints=web"
+      - "traefik.http.routers.user-public.entrypoints=websecure"
+      - "traefik.http.routers.user-public.tls.certresolver=myresolver"
       - "traefik.http.routers.user-public.service=user-service"
 
       # Protected routes (auth required) - for future use
       - "traefik.http.routers.user-protected.rule=Host(`${PUBLIC_IP}`) && PathPrefix(`/api/user/`) && !Path(`/api/user/login`) && !Path(`/api/user/createUser`)"
-      - "traefik.http.routers.user-protected.entrypoints=web"
+      - "traefik.http.routers.user-protected.entrypoints=websecure"
+      - "traefik.http.routers.user-protected.tls.certresolver=myresolver"
       - "traefik.http.routers.user-protected.middlewares=auth-middleware"
       - "traefik.http.routers.user-protected.service=user-service"
 
@@ -88,7 +102,8 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.mentorship-service.rule=Host(`${PUBLIC_IP}`) && PathPrefix(`/api/mentorship`)"
-      - "traefik.http.routers.mentorship-service.entrypoints=web"
+      - "traefik.http.routers.mentorship-service.entrypoints=websecure"
+      - "traefik.http.routers.mentorship-service.tls.certresolver=myresolver"
       - "traefik.http.routers.mentorship-service.middlewares=auth-middleware"
       - "traefik.http.routers.mentorship-service.service=mentorship-service"
 
@@ -108,3 +123,4 @@ networks:
 
 volumes:
   db_data:
+  letsencrypt:
