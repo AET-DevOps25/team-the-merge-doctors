@@ -34,11 +34,22 @@ jobs:
       - name: Set up kubeconfig
         run: |
           mkdir -p ~/.kube
-          echo "${{ secrets.KUBECONFIG }}" | base64 -d > ~/.kube/config
+          echo "${{ secrets.KUBECONFIG }}" | base64 --decode > ~/.kube/config
           chmod 600 ~/.kube/config
           echo "KUBECONFIG=~/.kube/config" >> $GITHUB_ENV
 
+      - name: Set up kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "$KUBECONFIG_B64" | base64 --decode > ~/.kube/config
+          chmod 600 ~/.kube/config
+          echo "KUBECONFIG=~/.kube/config" >> $GITHUB_ENV
+        env:
+          KUBECONFIG_B64: ${{ secrets.KUBECONFIG }}
+
       - name: Deploy using Helm
+        env:
+          KUBECONFIG: ${{ runner.home }}/.kube/config
         run: |
           helm upgrade --install mentor-pulse ./helm/ \
             --namespace team-the-merge-doctors \
