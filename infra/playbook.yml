@@ -89,16 +89,16 @@
         group: ubuntu
         mode: '0644'
 
-    - name: Copy jwt-key-generator.sh to remote
+    - name: Copy jwk-key-generator.sh to remote
       ansible.builtin.copy:
-        src: ../docker/backend_config_files/jwt-key-generator.sh
-        dest: /home/ubuntu/docker/backend_config_files/jwt-key-generator.sh
+        src: ../docker/backend_config_files/jwk-key-generator.sh
+        dest: /home/ubuntu/docker/backend_config_files/jwk-key-generator.sh
         owner: ubuntu
         group: ubuntu
         mode: '0755'
 
-    - name: Run jwt-key-generator.sh script
-      ansible.builtin.shell: bash /home/ubuntu/docker/backend_config_files/jwt-key-generator.sh
+    - name: Run jwk-key-generator.sh script
+      ansible.builtin.shell: bash /home/ubuntu/docker/backend_config_files/jwk-key-generator.sh
       args:
         chdir: /home/ubuntu/docker/backend_config_files
       become: true
