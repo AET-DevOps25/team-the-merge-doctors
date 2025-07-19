@@ -29,6 +29,7 @@ jobs:
           echo "${{secrets.KUBECONFIG}}" | base64 --decode > $HOME/.kube/config
           chmod 600 $HOME/.kube/config
           echo "KUBECONFIG=$HOME/.kube/config" >> $GITHUB_ENV
+          echo $KUBECONFIG
 
       - name: Deploy using Helm
         run: |
