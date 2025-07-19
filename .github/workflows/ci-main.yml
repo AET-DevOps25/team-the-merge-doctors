@@ -22,5 +22,5 @@ jobs:
       - build-publish-images
     uses: ./.github/workflows/helm.yml
     secrets:
-      KUBECONF: ${{ secrets.KUBECONF }}
+      KUBECONFIG: ${{ secrets.KUBECONFIG }}
   # TODO: maybe add deploy to aws step
