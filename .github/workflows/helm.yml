@@ -12,8 +12,6 @@ jobs:
 
       - name: Set up kubectl
         uses: azure/setup-kubectl@v3
-        with:
-          version: 'latest'
 
       - name: Set up Helm
         uses: azure/setup-helm@v3
@@ -31,21 +29,16 @@ jobs:
 
       - name: Debug kubeconfig decoding
         run: |
-          echo "$KUBECONFIG_64" | base64 --decode || echo "Failed to decode KUBECONFIG secret."
+          echo "${{ secrets.KUBECONFIG }}" | base64 --decode || echo "Failed to decode KUBECONFIG secret."
 
       - name: Set up kubeconfig
         run: |
           mkdir -p ~/.kube
-          echo "${{ secrets.KUBECONFIG }}" | base64 --decode > ~/.kube/config
+          echo $KUBECONFIG_64 | base64 --decode > ~/.kube/config
           chmod 600 ~/.kube/config
           echo "KUBECONFIG=~/.kube/config" >> $GITHUB_ENV
-
-      - name: Verify cluster access
-        run: |
-          kubectl version
-          kubectl get nodes
         env:
-          KUBECONFIG: ~/.kube/config
+          KUBECONFIG_64: ${{ secrets.KUBECONFIG }}
 
       - name: Deploy using Helm
         run: |
