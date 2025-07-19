@@ -25,7 +25,7 @@ jobs:
 
       - name: Set up kubeconfig
         run: |
-          echo "${{ secrets.STUDENTKUBECONFIG }}" | base64 -d > $HOME/.kube/config
+          echo "${{ secrets.KUBECONFIG }}" | base64 -d > $HOME/.kube/config
 
       - name: Test Kubernetes connectivity
         run: kubectl get nodes
