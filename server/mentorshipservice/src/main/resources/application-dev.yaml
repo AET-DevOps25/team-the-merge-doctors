@@ -2,6 +2,7 @@ postgres:
   ip: localhost
 
 genai:
+  http-secured: false
   host: localhost
 
 spring:
