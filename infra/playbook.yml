@@ -203,3 +203,11 @@
       become_user: ubuntu
       args:
         chdir: /home/ubuntu/scripts/mock_mentor_profiles
+
+    - name: Copy monitoring directory to remote
+      ansible.builtin.copy:
+        src: ../monitoring/
+        dest: /home/ubuntu/monitoring/
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
