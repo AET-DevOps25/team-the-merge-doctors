@@ -6,28 +6,25 @@ provider "aws" {
   region = var.aws_region
 }
 
-data "aws_ami" "debian" {
-  most_recent = true
-  owners      = ["amazon"]
-
-  filter {
-    name   = "architecture"
-    values = ["x86_64"]
-  }
-
-  filter {
-    name   = "name"
-    values = ["debian-12-amd64*"]
-  }
-}
-
 
 resource "aws_security_group" "ssh" {
-  name        = "allow-ssh"
-  description = "Allow SSH inbound traffic"
+  name        = "allow-ssh-and-web"
+  description = "Allow SSH and Web inbound traffic"
   ingress {
     from_port   = 22
     to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 443
+    to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -40,7 +37,7 @@ resource "aws_security_group" "ssh" {
 }
 
 resource "aws_instance" "debian" {
-  ami           = data.aws_ami.debian.id
+  ami           = "ami-0c7217cdde317cfec"
   instance_type = var.instance_type
 
   # the key and security group are automatically generated when starting a lab

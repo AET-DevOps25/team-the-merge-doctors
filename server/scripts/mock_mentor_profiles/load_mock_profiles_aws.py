@@ -3,7 +3,6 @@ import json
 import requests
 from pathlib import Path
 
-# Change the endpoint if it will be used for production
 BASE_URL = "http://localhost:8310/api/mentorship"
 BASE_URL
 ENDPOINTS = {
@@ -24,21 +23,21 @@ def load_json(filepath: str):
 
 def post_skill(skill):
     payload = {"id": skill["id"], "skill": skill["name"]}
-    return requests.post(ENDPOINTS["skill"], json=payload, headers=HEADERS, verify=False)
+    return requests.post(ENDPOINTS["skill"], json=payload, headers=HEADERS)
 
 
 def post_category(category):
     payload = {"id": category["id"], "category": category["name"]}
-    return requests.post(ENDPOINTS["category"], json=payload, headers=HEADERS, verify=False)
+    return requests.post(ENDPOINTS["category"], json=payload, headers=HEADERS)
 
 
 def post_profile(profile):
     payload = {"mentorProfile": profile}
-    return requests.post(ENDPOINTS["profile"], json=payload, headers=HEADERS, verify=False)
+    return requests.post(ENDPOINTS["profile"], json=payload, headers=HEADERS)
 
 def post_application(application):
     payload = {"mentorId": application["mentorId"], "menteeId": application["menteeId"], "applicationMessage": application["applicationMessage"]}
-    return requests.post(ENDPOINTS["application"], json=payload, headers=HEADERS, verify=False)
+    return requests.post(ENDPOINTS["application"], json=payload, headers=HEADERS)
 
 
 if __name__ == "__main__":
@@ -63,8 +62,3 @@ if __name__ == "__main__":
         mid = p["mentorId"]
         r = post_profile(p)
         print(f"Mentor {mid}: {r.status_code} {r.text}")
-
-    print("\n=== Creating Applications ===")
-    for application in applications:
-        r = post_application(application)
-        print(f"Mentor {application["mentorId"]}, Mentee {application["menteeId"]}: {r.status_code} {r.text}")

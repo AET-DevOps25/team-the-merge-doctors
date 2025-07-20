@@ -291,6 +291,8 @@ celerybeat.pid
 
 # Environments
 .secrets.env
+.env
+!docker/backend_config_files/.env
 .venv
 env/
 venv/
@@ -377,3 +379,8 @@ sketch
 # gitignore template for Vue.js projects
 #
 # Recommended template: Node.gitignore
+
+
+token.yml
+# Helm
+values.yaml

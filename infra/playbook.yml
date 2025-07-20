@@ -1,0 +1,221 @@
+---
+- name: Setup ec2 for app with docker & docker compose
+  hosts: all # Target all hosts in the inventory file for this playbook run.
+  become: true # Elevate privilege using sudo or the appropriate privilege escalation method.
+  vars:
+    compose_dir: /home/ubuntu
+  vars_files:
+    - packages.yml
+    - keys.yml
+    - token.yml
+  tasks:
+    - name: Add repositories
+      ansible.builtin.deb822_repository:
+        name: "{{ item.name }}"
+        types: [deb]
+        uris: "{{ item.uri }}"
+        signed_by: "{{ item.key }}"
+        suites: ["{{ item.suite }}"]
+        components: ["{{ item.component }}"]
+        state: present
+        enabled: true
+      loop: "{{ key_list }}" # from keys.yml
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+        force_apt_get: true
+
+    - name: Install packages
+      ansible.builtin.apt:
+        name: "{{ packages }}"
+        state: present
+        update_cache: true
+        force_apt_get: true
+
+    - name: Login to CR 
+      community.docker.docker_login:
+        registry: "ghcr.io"
+        username: "{{ cr_username }}"
+        password: "{{ token }}"
+        state: present
+
+    - name: Copy compose file to remote
+      ansible.builtin.copy:
+        src: ./compose.aws.yml
+        dest: "/home/ubuntu/compose.aws.yml"
+        owner: ubuntu
+        group: ubuntu
+        mode: '0644'
+
+    - name: Write public IP to .env.production
+      ansible.builtin.lineinfile:
+        path: "{{ compose_dir }}/.env.production"
+        line: "PUBLIC_IP={{ hostvars[inventory_hostname]['ansible_host'] }}"
+        create: yes
+        mode: '0644'
+
+    - name: Create docker backend config files directory
+      ansible.builtin.file:
+        path: /home/ubuntu/docker/backend_config_files
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+
+    - name: Copy backend config .env to remote
+      ansible.builtin.copy:
+        src: ../docker/backend_config_files/.env
+        dest: /home/ubuntu/docker/backend_config_files/.env
+        owner: ubuntu
+        group: ubuntu
+        mode: '0644'
+
+    - name: Copy postgres-init.sh to remote
+      ansible.builtin.copy:
+        src: ../docker/backend_config_files/postgres-init.sh
+        dest: /home/ubuntu/docker/backend_config_files/postgres-init.sh
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+
+    - name: Copy pg-hba.conf to remote
+      ansible.builtin.copy:
+        src: ../docker/backend_config_files/pg-hba.conf
+        dest: /home/ubuntu/docker/backend_config_files/pg-hba.conf
+        owner: ubuntu
+        group: ubuntu
+        mode: '0644'
+
+    - name: Copy jwk-key-generator.sh to remote
+      ansible.builtin.copy:
+        src: ../docker/backend_config_files/jwk-key-generator.sh
+        dest: /home/ubuntu/docker/backend_config_files/jwk-key-generator.sh
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+
+    - name: Run jwk-key-generator.sh script
+      ansible.builtin.shell: bash /home/ubuntu/docker/backend_config_files/jwk-key-generator.sh
+      args:
+        chdir: /home/ubuntu/docker/backend_config_files
+      become: true
+      become_user: ubuntu
+
+    - name: Create monitoring directory on remote
+      ansible.builtin.file:
+        path: /home/ubuntu/monitoring
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+
+    - name: Copy monitoring directory to remote
+      ansible.builtin.copy:
+        src: ../monitoring/
+        dest: /home/ubuntu/monitoring/
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+
+    - name: Clean images
+      community.docker.docker_compose_v2:
+        project_src: "{{ compose_dir }}"
+        files:
+          - compose.aws.yml
+        state: absent
+        remove_images: local
+        remove_volumes: true
+        remove_orphans: true
+
+    - name: Run application
+      community.docker.docker_compose_v2:
+        project_src: "{{ compose_dir }}"
+        files:
+          - compose.aws.yml
+        state: present
+        env_files:
+          - "{{ compose_dir }}/.env.production"
+
+    - name: Install Python3 and pip
+      ansible.builtin.apt:
+        name: 
+          - python3
+          - python3-pip
+          - python3-venv
+        state: present
+        update_cache: true
+
+    - name: Create virtual environment directory
+      ansible.builtin.file:
+        path: /home/ubuntu/venv
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+
+    - name: Create Python virtual environment
+      ansible.builtin.command: python3 -m venv /home/ubuntu/venv
+      become: true
+      become_user: ubuntu
+
+    - name: Copy requirements.txt to remote
+      ansible.builtin.copy:
+        src: ../server/scripts/requirements.txt
+        dest: /home/ubuntu/requirements.txt
+        owner: ubuntu
+        group: ubuntu
+        mode: '0644'
+
+    - name: Install Python dependencies in virtual environment
+      ansible.builtin.pip:
+        requirements: /home/ubuntu/requirements.txt
+        virtualenv: /home/ubuntu/venv
+        virtualenv_command: python3 -m venv
+        state: present
+
+    - name: Copy mock user scripts to remote
+      ansible.builtin.copy:
+        src: ../server/scripts/mock_users/
+        dest: /home/ubuntu/scripts/
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+
+    - name: Generate mock users
+      ansible.builtin.command: /home/ubuntu/venv/bin/python /home/ubuntu/scripts/generate_mock_users.py
+      become: true
+      become_user: ubuntu
+      args:
+        chdir: /home/ubuntu/scripts
+
+    - name: Wait for Traefik HTTPS port to be listening
+      ansible.builtin.wait_for:
+        port: 443
+        host: localhost
+        delay: 10
+        timeout: 300
+
+    - name: Load mock users to API
+      ansible.builtin.command: /home/ubuntu/venv/bin/python /home/ubuntu/scripts/load_mock_users.py localhost --file /home/ubuntu/scripts/resources/mock_users.json
+      become: true
+      become_user: ubuntu
+      args:
+        chdir: /home/ubuntu/scripts
+
+    - name: Copy mock profile scripts to remote
+      ansible.builtin.copy:
+        src: ../server/scripts/mock_mentor_profiles/
+        dest: /home/ubuntu/scripts/mock_mentor_profiles/
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+        
+    - name: Load mock profiles to API
+      ansible.builtin.command: /home/ubuntu/venv/bin/python /home/ubuntu/scripts/mock_mentor_profiles/load_mock_profiles_aws.py
+      become: true
+      become_user: ubuntu
+      args:
+        chdir: /home/ubuntu/scripts/mock_mentor_profiles
