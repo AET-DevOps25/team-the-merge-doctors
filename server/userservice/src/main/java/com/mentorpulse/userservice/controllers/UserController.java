@@ -72,6 +72,7 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(Map.of("valid", false));
+    }
     @Autowired private MeterRegistry meterRegistry;
 
     private Counter userCreationCounter;
