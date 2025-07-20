@@ -23,14 +23,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Debug secret access
-        run: |
-          echo "${{ secrets.KUBECONFIG }}" || echo "Failed to access KUBECONFIG secret."
-
-      - name: Debug kubeconfig decoding
-        run: |
-          echo "${{ secrets.KUBECONFIG }}" | base64 --decode || echo "Failed to decode KUBECONFIG secret."
-
       - name: Set up kubeconfig
         run: |
           mkdir -p $HOME/.kube
