@@ -3,7 +3,7 @@ import json
 import requests
 from pathlib import Path
 
-BASE_URL = "http://localhost/api/mentorship"
+BASE_URL = "http://localhost:8310/api/mentorship"
 BASE_URL
 ENDPOINTS = {
     "skill":    f"{BASE_URL}/createSkill",
