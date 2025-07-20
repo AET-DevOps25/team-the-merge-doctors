@@ -106,9 +106,7 @@ services:
       - "traefik.http.routers.mentorship-service.tls.certresolver=myresolver"
       - "traefik.http.routers.mentorship-service.middlewares=auth-middleware"
       - "traefik.http.routers.mentorship-service.service=mentorship-service"
-
       - "traefik.http.services.mentorship-service.loadbalancer.server.port=8310"
-
     networks:
       - internal
     environment:
@@ -117,6 +115,56 @@ services:
       - postgres-db
     restart: on-failure:3
 
+  prometheus:
+    platform: linux/amd64
+    image: prom/prometheus:latest
+    container_name: prometheus
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.prometheus.rule=Host(`${PUBLIC_IP}`) && PathPrefix(`/prometheus`)"
+      - "traefik.http.routers.prometheus.entrypoints=websecure"
+      - "traefik.http.routers.prometheus.tls.certresolver=myresolver"
+      - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
+    volumes:
+      - ../monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ../monitoring/prometheus/rules.yml:/etc/prometheus/rules.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      # Path to Prometheus configuration file
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      # Directory to store time series data
+      - '--storage.tsdb.path=/prometheus'
+      # Path to console libraries for web UI
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      # Path to console templates for web UI
+      - '--web.console.templates=/etc/prometheus/consoles'
+      # Enable HTTP endpoints for graceful shutdown and reload
+      - '--web.enable-lifecycle'
+    networks:
+      - internal
+    restart: unless-stopped
+
+  grafana:
+    platform: linux/amd64
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3001:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ../monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ../monitoring/grafana/provisioning/notifiers:/etc/grafana/provisioning/notifiers:ro
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_ALERTING_ENABLED=true  
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+    networks:
+      - internal
+
 networks:
   internal:
     driver: bridge
@@ -124,3 +172,5 @@ networks:
 volumes:
   db_data:
   letsencrypt:
+  prometheus_data:
+  grafana_data:
