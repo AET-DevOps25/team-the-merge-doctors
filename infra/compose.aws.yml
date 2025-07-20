@@ -121,10 +121,12 @@ services:
     container_name: prometheus
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.prometheus.rule=Host(`${PUBLIC_IP}`) && PathPrefix(`/prometheus`)"
+      - "traefik.http.routers.prometheus.rule=PathPrefix(`/prometheus`)"
       - "traefik.http.routers.prometheus.entrypoints=websecure"
       - "traefik.http.routers.prometheus.tls.certresolver=myresolver"
       - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
+      - "traefik.http.middlewares.prometheus-stripprefix.stripPrefix.prefixes=/prometheus"
+      - "traefik.http.routers.prometheus.middlewares=prometheus-stripprefix"
     volumes:
       - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - ./monitoring/prometheus/rules.yml:/etc/prometheus/rules.yml:ro
