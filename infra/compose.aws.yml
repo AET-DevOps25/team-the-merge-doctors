@@ -109,11 +109,26 @@ services:
       - "traefik.http.services.mentorship-service.loadbalancer.server.port=8310"
     networks:
       - internal
-    environment:
-      - AUTHORIZATION_ENABLED=true
     depends_on:
       - postgres-db
     restart: on-failure:3
+
+  rating-service:
+    platform: linux/amd64
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/rating-service:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.rating-service.rule=Host(`${PUBLIC_IP}`) && PathPrefix(`/api/rating`)"
+      - "traefik.http.routers.rating-service.entrypoints=websecure"
+      - "traefik.http.routers.rating-service.tls.certresolver=myresolver"
+      - "traefik.http.routers.rating-service.middlewares=auth-middleware"
+      - "traefik.http.routers.rating-service.service=rating-service"
+      - "traefik.http.services.rating-service.loadbalancer.server.port=8410"
+    depends_on:
+      - postgres-db
+    restart: on-failure:3
+    networks:
+      - internal
 
   prometheus:
     platform: linux/amd64
