@@ -15,18 +15,14 @@ spec:
     spec:
       containers:
         - name: genai-microservice-container
-          image: "{{ .Values.genaiMicroservice.image.repository }}:{{ .Values.genaiMicroservice.image.tag }}"
+          image: "{{ .Values.genaiMicroservice.image.repository }}:{{ .Values.tag }}"
           imagePullPolicy: {{ .Values.genaiMicroservice.image.pullPolicy }}
-          resources:
-            limits:
-              cpu: "500m"
-              memory: "256Mi"
-            requests:
-              cpu: "50m"
-              memory: "50Mi"
           ports:
             - containerPort:
                 {{ .Values.genaiMicroservice.service.targetPort }}
+          env:
+            - name: OLLAMA_BASE_URL
+              value: "http://{{ .Values.ollama.service.name }}:11434"
           envFrom:
             - configMapRef:
                 name: {{ .Values.backendEnvironmentConfigMapName }}

@@ -38,9 +38,8 @@ services:
     platform: linux/amd64
     image: ghcr.io/aet-devops25/team-the-merge-doctors/ollama:latest
     build:
-      context: ./genai/ollama
+      context: genai/ollama
       dockerfile: Dockerfile
-    container_name: ollama
     ports:
       - "11434:11434"
     volumes:

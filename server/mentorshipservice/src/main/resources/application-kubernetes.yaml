@@ -1,0 +1,4 @@
+genai:
+  http-secured: true
+  host: mentor-pulse-devops25.student.k8s.aet.cit.tum.de
+

@@ -30,45 +30,55 @@ jobs:
         with:
           context: ./client
           push: true
-          tags: ghcr.io/aet-devops25/team-the-merge-doctors/client:latest
+          tags: ghcr.io/aet-devops25/team-the-merge-doctors/client:${{ github.sha }}
+
+      - name: Build & push Client image (Kubernetes Production)
+        uses: docker/build-push-action@v4
+        with:
+          context: ./client
+          push: true
+          tags: ghcr.io/aet-devops25/team-the-merge-doctors/client-kubernetes-production:${{ github.sha }}
+          build-args: |
+            NODE_ENV=production-kubernetes
 
       - name: Build & push GenAI image
         uses: docker/build-push-action@v4
         with:
           context: ./genai
           push: true
-          tags: ghcr.io/aet-devops25/team-the-merge-doctors/genai:latest
+          tags: ghcr.io/aet-devops25/team-the-merge-doctors/genai:${{ github.sha }}
 
       - name: Build & push Ollama image
         uses: docker/build-push-action@v4
         with:
           context: ./genai/ollama
           push: true
-          tags: ghcr.io/aet-devops25/team-the-merge-doctors/ollama:latest
+          tags: ghcr.io/aet-devops25/team-the-merge-doctors/ollama:${{ github.sha }}
 
       - name: Build & push User Service image
         uses: docker/build-push-action@v4
         with:
           context: ./server/userservice
           push: true
-          tags: ghcr.io/aet-devops25/team-the-merge-doctors/server/user-service:latest
+          tags: ghcr.io/aet-devops25/team-the-merge-doctors/server/user-service:${{ github.sha }}
 
       - name: Build & push Mentorship Service image
         uses: docker/build-push-action@v4
         with:
           context: ./server/mentorshipservice
           push: true
-          tags: ghcr.io/aet-devops25/team-the-merge-doctors/server/mentorship-service:latest
+          tags: ghcr.io/aet-devops25/team-the-merge-doctors/server/mentorship-service:${{ github.sha }}
 
       - name: Build & push Rating Service image
         uses: docker/build-push-action@v4
         with:
           context: ./server/ratingservice
           push: true
-          tags: ghcr.io/aet-devops25/team-the-merge-doctors/server/rating-service:latest
+          tags: ghcr.io/aet-devops25/team-the-merge-doctors/server/rating-service:${{ github.sha }}
+
       - name: Build & push Gateway Service image
         uses: docker/build-push-action@v4
         with:
           context: ./server/gateway
           push: true
-          tags: ghcr.io/aet-devops25/team-the-merge-doctors/server/gateway-service:latest
+          tags: ghcr.io/aet-devops25/team-the-merge-doctors/server/gateway-service:${{ github.sha }}

@@ -17,4 +17,9 @@ jobs:
       - e2e-tests
       - backend-tests
     uses: ./.github/workflows/docker.yml
-# TODO: add deployment as step
+  deploy-to-kubernetes:
+    needs:
+      - build-publish-images
+    uses: ./.github/workflows/helm.yml
+    secrets:
+      KUBECONF: ${{ secrets.KUBECONF }}

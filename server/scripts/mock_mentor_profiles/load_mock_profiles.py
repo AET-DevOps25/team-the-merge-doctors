@@ -4,7 +4,7 @@ import requests
 from pathlib import Path
 
 # Change the endpoint if it will be used for production
-BASE_URL = "http://localhost:8310/api/mentorship"
+BASE_URL = "http://localhost/api/mentorship"
 BASE_URL
 ENDPOINTS = {
     "skill":    f"{BASE_URL}/createSkill",

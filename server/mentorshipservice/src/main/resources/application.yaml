@@ -6,6 +6,7 @@ postgres:
   db-name: mentorship_backend
 
 genai:
+  http-secured: false
   host: genai
   port: 5001
 

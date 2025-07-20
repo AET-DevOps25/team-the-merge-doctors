@@ -1,1 +1,63 @@
-# TODO: add ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mentor-pulse-ingress
+  namespace: {{ .Values.namespace }}
+  {{- $annotations := .Values.ingress.annotations | default dict }}
+  {{- if $annotations }}
+  annotations:
+    {{- toYaml $annotations | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.ingress.tls }}
+  tls:
+    - hosts:
+        - {{ .Values.ingress.host }}
+      secretName: "mentor-pulse-tls"
+  {{- end }}
+  rules:
+    - host: {{ .Values.ingress.host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.client.service.name }}
+                port:
+                  number: {{ .Values.client.service.port }}
+          - path: /api/mentorship
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.mentorshipMicroservice.service.name }}
+                port:
+                  number: {{ .Values.mentorshipMicroservice.service.port }}
+          - path: /api/user
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.userMicroservice.service.name }}
+                port:
+                  number: {{ .Values.userMicroservice.service.port }}
+          - path: /api/rating
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.ratingMicroservice.service.name }}
+                port:
+                  number: {{ .Values.ratingMicroservice.service.port }}
+          - path: /api/genai
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.genaiMicroservice.service.name }}
+                port:
+                  number: {{ .Values.genaiMicroservice.service.port }}
+          - path: /api/generate
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.ollama.service.name }}
+                port:
+                  number: {{ .Values.ollama.service.port }}

@@ -1,0 +1,97 @@
+namespace: team-the-merge-doctors
+
+userMicroservice:
+  image:
+    repository: ghcr.io/aet-devops25/team-the-merge-doctors/server/user-service
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    port: 8210
+    targetPort: 8210
+    name: user-microservice-service
+  selector: user-microservice-selector
+  replicaCount: 1
+
+mentorshipMicroservice:
+  image:
+    repository: ghcr.io/aet-devops25/team-the-merge-doctors/server/mentorship-service
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    port: 8310
+    targetPort: 8310
+    name: mentorship-microservice-service
+  selector: mentorship-microservice-selector
+  replicaCount: 1
+
+ratingMicroservice:
+  image:
+    repository: ghcr.io/aet-devops25/team-the-merge-doctors/server/rating-service
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    port: 8410
+    targetPort: 8410
+    name: rating-microservice-service
+  selector: rating-microservice-selector
+  replicaCount: 1
+
+genaiMicroservice:
+  image:
+    repository: ghcr.io/aet-devops25/team-the-merge-doctors/genai
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    port: 5001
+    targetPort: 5001
+    name: genai
+  selector: genai-microservice-selector
+  replicaCount: 1
+
+client:
+  image:
+    repository: ghcr.io/aet-devops25/team-the-merge-doctors/client-kubernetes-production
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    port: 3000
+    targetPort: 3000
+    name: client-microservice-service
+  replicaCount: 1
+  selector: client-selector
+
+postgresDb:
+  selector: postgres-db
+  persistentVolume: postgres-persistent-volume
+  replicaCount: 1
+  port: 5432
+  dataVolumeName: postgresdata
+
+ingress:
+  enabled: true
+  className: "nginx"
+  host: mentor-pulse-devops25.student.k8s.aet.cit.tum.de
+  tls: true
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+
+ollama:
+  image:
+    repository: ghcr.io/aet-devops25/team-the-merge-doctors/ollama
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    port: 11434
+    targetPort: 11434
+    name: ollama-service
+  selector: ollama-selector
+  replicaCount: 1
+
+tag: latest
+
+secrets:
+  postgresUser: postgres
+  postgresPassword: postgres_password
+
+backendEnvironmentConfigMapName: backend-environment-config-map
+secretsName: secrets
