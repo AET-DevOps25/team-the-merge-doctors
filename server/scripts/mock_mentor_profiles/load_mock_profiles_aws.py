@@ -62,8 +62,3 @@ if __name__ == "__main__":
         mid = p["mentorId"]
         r = post_profile(p)
         print(f"Mentor {mid}: {r.status_code} {r.text}")
-
-    print("\n=== Creating Applications ===")
-    for application in applications:
-        r = post_application(application)
-        print(f"Mentor {application['mentorId']}, Mentee {application['menteeId']}: {r.status_code} {r.text}")
