@@ -121,37 +121,39 @@ services:
     container_name: prometheus
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.prometheus.rule=PathPrefix(`/prometheus`)"
+      - "traefik.http.routers.prometheus.rule=Host(`${PUBLIC_IP}`) && PathPrefix(`/prometheus`)"
       - "traefik.http.routers.prometheus.entrypoints=websecure"
       - "traefik.http.routers.prometheus.tls.certresolver=myresolver"
       - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
-      - "traefik.http.middlewares.prometheus-stripprefix.stripPrefix.prefixes=/prometheus"
+      # Add middleware to strip the /prometheus prefix
       - "traefik.http.routers.prometheus.middlewares=prometheus-stripprefix"
+      - "traefik.http.middlewares.prometheus-stripprefix.stripprefix.prefixes=/prometheus"
     volumes:
       - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - ./monitoring/prometheus/rules.yml:/etc/prometheus/rules.yml:ro
       - prometheus_data:/prometheus
     command:
-      # Path to Prometheus configuration file
       - '--config.file=/etc/prometheus/prometheus.yml'
-      # Directory to store time series data
       - '--storage.tsdb.path=/prometheus'
-      # Path to console libraries for web UI
       - '--web.console.libraries=/etc/prometheus/console_libraries'
-      # Path to console templates for web UI
       - '--web.console.templates=/etc/prometheus/consoles'
-      # Enable HTTP endpoints for graceful shutdown and reload
       - '--web.enable-lifecycle'
+      # Add external URL configuration for proper links
+      - '--web.external-url=https://${PUBLIC_IP}/prometheus'
+      - '--web.route-prefix=/'
     networks:
       - internal
     restart: unless-stopped
-
   grafana:
     platform: linux/amd64
     image: grafana/grafana:latest
     container_name: grafana
-    ports:
-      - "3001:3000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.grafana.rule=Host(`${PUBLIC_IP}`) && PathPrefix(`/grafana`)"
+      - "traefik.http.routers.grafana.entrypoints=websecure"
+      - "traefik.http.routers.grafana.tls.certresolver=myresolver"
+      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
     volumes:
       - grafana_data:/var/lib/grafana
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
@@ -160,7 +162,10 @@ services:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
-      - GF_ALERTING_ENABLED=true  
+      - GF_ALERTING_ENABLED=true
+      # Configure Grafana to work under /grafana path
+      - GF_SERVER_ROOT_URL=https://${PUBLIC_IP}/grafana
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
     depends_on:
       - prometheus
     restart: unless-stopped
