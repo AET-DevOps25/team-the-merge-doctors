@@ -96,6 +96,65 @@ services:
       - postgres-db
     restart: on-failure:3
 
+  ollama:
+    platform: linux/amd64
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/ollama:latest
+    container_name: ollama
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ollama.rule=Host(`${PUBLIC_IP}`) && PathPrefix(`/ollama`)"
+      - "traefik.http.routers.ollama.entrypoints=websecure"
+      - "traefik.http.routers.ollama.tls.certresolver=myresolver"
+      - "traefik.http.services.ollama.loadbalancer.server.port=11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: always
+    networks:
+      - internal
+
+  genai:
+    platform: linux/amd64
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/genai:latest
+    container_name: genai
+    command: gunicorn -b 0.0.0.0:5001 --config gunicorn.conf.py app:app
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.genai.rule=Host(`${PUBLIC_IP}`) && PathPrefix(`/genai`)"
+      - "traefik.http.routers.genai.entrypoints=websecure"
+      - "traefik.http.routers.genai.tls.certresolver=myresolver"
+      - "traefik.http.services.genai.loadbalancer.server.port=5001"
+    volumes:
+      - ../genai:/app
+    environment:
+      - POSTGRES_HOST=postgres-db
+      - OLLAMA_BASE_URL=http://ollama:11434
+    networks:
+      - internal
+    env_file:
+      - ./docker/backend_config_files/.env
+    depends_on:
+      - postgres-db
+      - ollama
+    restart: always
+
+  rating-service:
+    platform: linux/amd64
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/rating-service:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.rating-service.rule=Host(`${PUBLIC_IP}`) && PathPrefix(`/api/rating`)"
+      - "traefik.http.routers.rating-service.entrypoints=websecure"
+      - "traefik.http.routers.rating-service.tls.certresolver=myresolver"
+      - "traefik.http.routers.rating-service.middlewares=auth-middleware"
+      - "traefik.http.routers.rating-service.service=rating-service"
+      - "traefik.http.services.rating-service.loadbalancer.server.port=8410"
+    depends_on:
+      - postgres-db
+    restart: on-failure:3
+    networks:
+      - internal
+
+    
   mentorship-service:
     platform: linux/amd64
     image: ghcr.io/aet-devops25/team-the-merge-doctors/server/mentorship-service:latest
@@ -181,3 +240,4 @@ volumes:
   letsencrypt:
   prometheus_data:
   grafana_data:
+  ollama_data:
