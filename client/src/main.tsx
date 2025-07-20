@@ -24,8 +24,16 @@ declare module '@tanstack/react-router' {
   }
 }
 
+if (process.env.NODE_ENV === 'production-kubernetes') {
+  axios.defaults.baseURL =
+    'https://mentor-pulse-devops25.student.k8s.aet.cit.tum.de';
+} else {
+  axios.defaults.baseURL = 'http://localhost:80';
+}
+
 axios.interceptors.request.use(
   (config) => {
+    console.log('Base URL:', axios.defaults.baseURL);
     const token = localStorage.getItem('token');
     if (token) {
       const parsedToken = JSON.parse(token);

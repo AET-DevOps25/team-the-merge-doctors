@@ -377,6 +377,3 @@ sketch
 # gitignore template for Vue.js projects
 #
 # Recommended template: Node.gitignore
-
-# Helm
-values.yaml

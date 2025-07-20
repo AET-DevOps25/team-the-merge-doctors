@@ -5,6 +5,6 @@ metadata:
 data:
   FLASK_ENV: development
   FLASK_APP: app.py
-  POSTGRES_HOST: db
+  POSTGRES_HOST: postgres-db
   POSTGRES_PORT: "5432"
   POSTGRES_GEN_AI_DB: genai_backend

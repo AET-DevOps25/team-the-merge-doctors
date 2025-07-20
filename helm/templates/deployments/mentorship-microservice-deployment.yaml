@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mentorship-microservice-deployment
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.mentorshipMicroservice.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.mentorshipMicroservice.selector }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.mentorshipMicroservice.selector }}
+    spec:
+      containers:
+        - name: user-microservice-container
+          image: "{{ .Values.mentorshipMicroservice.image.repository }}:{{ .Values.tag }}"
+          imagePullPolicy: {{ .Values.mentorshipMicroservice.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.mentorshipMicroservice.service.targetPort }}
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: kubernetes
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.backendEnvironmentConfigMapName }}
+            - secretRef:
+                name: {{ .Values.secretsName }}

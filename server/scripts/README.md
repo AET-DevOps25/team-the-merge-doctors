@@ -1,5 +1,9 @@
 # Generate Users and Load Users Script
 
+TODO: give overview of scripts
+
+TODO: use same mock data as in [client tests](../../client/tests/resources/)
+
 ## Installation
 
 1. Create a virtual environment 

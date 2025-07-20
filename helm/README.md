@@ -5,14 +5,51 @@
 1. Download kube config file from cluster.
 2. Place it at `~/.kube/config`
 
-## Project Setup
-
-1. Copy `values.yaml.template` and rename it to `values.yaml`.
-
 ## Deploy
 
-Run the following command in this directory to deploy the application to the cluster.
+Run the following commands in this directory to deploy the application to the cluster.
+The first two commands only need to be executed once.
+
+1. Generate JWT secret key
 
 ```
-helm upgrade --install mentor-pulse . --namespace team-the-merge-doctors
+../docker/backend_config_files/jwk-key-generator.sh
+```
+
+2. Create Secret in Kubernetes
+
+```
+kubectl create secret generic jwt-secret \
+  --from-file=jwt-secret.key=</path/to/local>/jwt-secret.key \
+  -n <namespace>
+```
+
+3. Deploy to cluster
+
+```
+helm upgrade --install mentor-pulse . --namespace team-the-merge-doctors --set tag=<branch_name>
+```
+
+## Remove Deployment
+
+To remove the deployment and delete everything from cluster (expect secrets and configs), execute the following command.
+
+```
+kubectl delete all --all -n team-the-merge-doctors
+```
+
+## Debugging
+
+Some helpful commands for debugging.
+
+Inspect the logs of a pod.
+
+```
+kubectl logs <deployment name (see rancher)> -n team-the-merge-doctors
+```
+
+ssh into a pod.
+
+```
+kubectl exec -it <deployment name (see rancher)> -n team-the-merge-doctors -- /bin/sh
 ```

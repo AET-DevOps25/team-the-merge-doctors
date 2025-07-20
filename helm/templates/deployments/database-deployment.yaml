@@ -1,1 +1,44 @@
-# TODO: add database deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-db-deployment
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.postgresDb.selector }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.postgresDb.selector }}
+    spec:
+      containers:
+        - name: postgres-db-container
+          image: postgres:15
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: {{ .Values.backendEnvironmentConfigMapName }}
+            - secretRef:
+                name: {{ .Values.secretsName }}
+          volumeMounts:
+            # - name: {{ .Values.postgresDb.dataVolumeName }}
+            #   mountPath: /var/lib/postgresql/data
+            - name: postgres-init-script
+              mountPath: /docker-entrypoint-initdb.d/init.sh
+              subPath: init.sh
+            - name: postgres-hba-config
+              mountPath: /etc/postgresql/pg_hba.conf
+              subPath: pg_hba.conf
+      volumes:
+        # - name: {{ .Values.postgresDb.dataVolumeName }}
+        #   persistentVolumeClaim:
+        #     claimName: {{ .Values.postgresDb.persistentVolume }}
+        - name: postgres-init-script
+          configMap:
+            name: postgres-init-script
+        - name: postgres-hba-config
+          configMap:
+            name: postgres-hba-config
