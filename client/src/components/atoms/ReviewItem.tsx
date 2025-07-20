@@ -1,39 +1,41 @@
+import type { Rating } from '@/api/rating';
+import { useGetUser } from '@/api/user';
 import { Avatar, Rate, Space, Typography } from 'antd';
 
 const { Text } = Typography;
 
 interface ReviewItemProps {
-  name: string;
-  rating: number;
-  date: string;
-  text: string;
-  avatar: string;
+  rating: Rating;
 }
 
-export const ReviewItem = ({
-  name,
-  rating,
-  date,
-  text,
-  avatar,
-}: ReviewItemProps) => {
+export const ReviewItem = ({ rating }: ReviewItemProps) => {
+  const { data: getUserData } = useGetUser(
+    { userId: rating?.menteeId! },
+    {
+      query: { enabled: !!rating?.menteeId },
+    },
+  );
+
+  const reviewer = getUserData?.data.user;
+
   return (
     <div style={{ marginBottom: 24 }}>
       <Space align="start" size={12}>
-        <Avatar src={avatar} size={48} />
+        <Avatar size={48} />
         <div>
           <Space direction="vertical" size={4} style={{ width: '100%' }}>
             <Space size={8}>
               <Text strong style={{ fontSize: 16 }}>
-                {name}
+                {reviewer?.name?.firstName}
               </Text>
-              <Rate disabled defaultValue={rating} style={{ fontSize: 14 }} />
-              <Text type="secondary" style={{ fontSize: 14 }}>
-                {date}
-              </Text>
+              <Rate
+                disabled
+                defaultValue={rating.rating}
+                style={{ fontSize: 14 }}
+              />
             </Space>
             <Text style={{ fontSize: 15, lineHeight: 1.6, color: '#595959' }}>
-              {text}
+              {rating?.message}
             </Text>
           </Space>
         </div>

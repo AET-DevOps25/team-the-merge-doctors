@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: gateway
+server:
+  port: 8610
+
+services:
+  user:
+    url: http://localhost:8210
+
+info:
+  title: Gateway Service.
+  description: Gateway Service for Mentorpulse microservices (dev).
+  version: 1.0.0

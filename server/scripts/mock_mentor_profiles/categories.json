@@ -4,16 +4,8 @@
     "name": "Technical"
   },
   {
-    "id": "a5f5c6d7-8e9f-4b1a-9b2c-3d4e5f6a7b8c",
-    "name": "Leadership"
-  },
-  {
     "id": "f1e2d3c4-b5a6-7f8e-9d0c-1b2a3c4d5e6f",
     "name": "Career Development"
-  },
-  {
-    "id": "b8c9d0e1-f2a3-4b5c-6d7e-8f9a0b1c2d3e",
-    "name": "Product Management"
   },
   {
     "id": "c9d0e1f2-a3b4-5c6d-7e8f-9a0b1c2d3e4f",
@@ -26,10 +18,6 @@
   {
     "id": "e1f2a3b4-c5d6-7e8f-9a0b-1c2d3e4f5a6b",
     "name": "Cloud Architecture"
-  },
-  {
-    "id": "f2a3b4c5-d6e7-8f9a-0b1c-2d3e4f5a6b7c",
-    "name": "DevOps"
   },
   {
     "id": "a6b7c8d9-e0f1-2a3b-4c5d-6e7f8a9b0c1d",

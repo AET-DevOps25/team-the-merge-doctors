@@ -21,3 +21,15 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 ```
 pip install -r requirements.txt
 ```
+
+## Generate Swagger Specification
+
+To generate the swagger schema for the GenAI service follow the following steps:
+
+1. Start docker compose
+
+```
+docker compose up --build
+```
+
+2. Go to `http://localhost:5001/swagger.json`

@@ -1,1 +1,0 @@
-// TODO: add tests for mentor applications view

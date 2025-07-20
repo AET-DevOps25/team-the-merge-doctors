@@ -1,16 +1,9 @@
-import {
-  SolutionOutlined,
-  // GlobalOutlined,
-  TrophyOutlined,
-  // UserOutlined,
-} from '@ant-design/icons';
+import { SolutionOutlined, TrophyOutlined } from '@ant-design/icons';
 import { Card, Col, Flex, Statistic } from 'antd';
 
 interface MentorStatsProps {
-  // totalMentees: number;
   experience: string;
   category: string;
-  // languages: string[];
 }
 
 export const MentorStats = (props: MentorStatsProps) => {

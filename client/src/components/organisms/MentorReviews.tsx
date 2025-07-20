@@ -1,18 +1,18 @@
 import { Card, Typography } from 'antd';
 import { ReviewsList } from '@/components/molecules/ReviewsList';
-import type { Review } from '@/types/review';
+import type { Rating } from '@/api/rating';
 
 const { Title } = Typography;
 
 interface MentorReviewsProps {
-  reviews: Review[];
+  ratings: Rating[];
 }
 
-export const MentorReviews = ({ reviews }: MentorReviewsProps) => {
+export const MentorReviews = ({ ratings }: MentorReviewsProps) => {
   return (
     <Card>
-      <Title level={4}>What Mentees Say ({reviews.length} Reviews)</Title>
-      <ReviewsList reviews={reviews} />
+      <Title level={4}>What Mentees Say ({ratings.length} Reviews)</Title>
+      <ReviewsList ratings={ratings} />
     </Card>
   );
 };

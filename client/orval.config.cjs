@@ -1,9 +1,5 @@
 const SHARED_CONFIG = {
   client: 'react-query',
-  baseUrl: {
-    // TODO: update base url for deployment
-    getBaseUrlFromSpecification: true,
-  },
   mock: false,
 };
 

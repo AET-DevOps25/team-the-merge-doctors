@@ -210,27 +210,6 @@
     "roleType": "MENTEE"
   },
   {
-    "id": "452cd8fd-506f-4f95-b2b2-12e97137cb44",
-    "userName": "miguel31",
-    "password": "*zjLlM+Vm5",
-    "name": {
-      "title": "Dr.",
-      "firstName": "Heidi",
-      "middleName": "Joshua",
-      "lastName": "Watson"
-    },
-    "contact": {
-      "email": "nicole08@example.org",
-      "phoneNumber": "(319)396-5160",
-      "mobileNumber": "+1-351-278-1957x389"
-    },
-    "address": {
-      "city": "Tylerport",
-      "country": "Indonesia"
-    },
-    "roleType": "MENTEE"
-  },
-  {
     "id": "7b8e4c9f-12a3-4d5e-8f90-1a2b3c4d5e6f",
     "userName": "sarah_jones",
     "password": "Kp9#mN2xR@",

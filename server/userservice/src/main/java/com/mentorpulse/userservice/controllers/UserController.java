@@ -1,6 +1,9 @@
 package com.mentorpulse.userservice.controllers;
 
-import com.mentorpulse.userservice.dto.*;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.management.InvalidAttributeValueException;
 import com.mentorpulse.userservice.models.RoleType;
 import com.mentorpulse.userservice.services.UserService;
 import io.micrometer.core.instrument.Counter;
@@ -12,10 +15,24 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.management.InvalidAttributeValueException;
+import com.mentorpulse.userservice.dto.CreateUserRequest;
+import com.mentorpulse.userservice.dto.CreateUserResponse;
+import com.mentorpulse.userservice.dto.DeleteUserRequest;
+import com.mentorpulse.userservice.dto.DeleteUserResponse;
+import com.mentorpulse.userservice.dto.GetUserResponse;
+import com.mentorpulse.userservice.dto.ListUsersResponse;
+import com.mentorpulse.userservice.dto.LoginUserRequest;
+import com.mentorpulse.userservice.dto.LoginUserResponse;
+import com.mentorpulse.userservice.dto.UpdateUserRequest;
+import com.mentorpulse.userservice.dto.UpdateUserResponse;
+import com.mentorpulse.userservice.services.AuthenticationService;
+
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.UUID;
 
 @RestController
@@ -35,6 +52,36 @@ public class UserController {
         this.userCreationCounter = Counter.builder("custom_user_registrations_total")
                 .description("Custom counter for user registrations total number")
                 .register(meterRegistry);
+    @Autowired
+    private AuthenticationService authenticationService;
+
+
+    @GetMapping("/auth/status")
+    public ResponseEntity<Map<String, Object>> getAuthStatus(Authentication authentication, HttpServletRequest request) {
+        // The JwtAuthenticationFilter already validated the token and set the Authentication
+        if (authentication != null && authentication.isAuthenticated()) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("valid", true);
+            response.put("username", userDetails.getUsername());
+
+            // Extract role and userId from the JWT token (already validated by filter)
+            String authHeader = request.getHeader("Authorization");
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                String token = authHeader.substring(7);
+                // Reuse existing AuthenticationService methods
+                String userId = authenticationService.extractClaim(token, claims -> claims.get("userId", String.class));
+                String role = authenticationService.extractClaim(token, claims -> claims.get("role", String.class));
+                response.put("userId", userId);
+                response.put("role", role);
+            }
+
+            return ResponseEntity.ok(response);
+        }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("valid", false));
     }
 
     @PostMapping("/createUser")
