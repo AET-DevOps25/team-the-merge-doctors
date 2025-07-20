@@ -19,6 +19,9 @@ spec:
           imagePullPolicy: {{ .Values.mentorshipMicroservice.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.mentorshipMicroservice.service.targetPort }}
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: kubernetes
           envFrom:
             - configMapRef:
                 name: {{ .Values.backendEnvironmentConfigMapName }}
