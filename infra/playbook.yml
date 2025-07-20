@@ -122,3 +122,91 @@
         state: present
         env_files:
           - "{{ compose_dir }}/.env.production"
+
+    - name: Install Python3 and pip
+      ansible.builtin.apt:
+        name: 
+          - python3
+          - python3-pip
+          - python3-venv
+        state: present
+        update_cache: true
+
+    - name: Create virtual environment directory
+      ansible.builtin.file:
+        path: /home/ubuntu/venv
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+
+    - name: Create Python virtual environment
+      ansible.builtin.command: python3 -m venv /home/ubuntu/venv
+      become: true
+      become_user: ubuntu
+
+    - name: Copy requirements.txt to remote
+      ansible.builtin.copy:
+        src: ../server/scripts/requirements.txt
+        dest: /home/ubuntu/requirements.txt
+        owner: ubuntu
+        group: ubuntu
+        mode: '0644'
+
+    - name: Install Python dependencies in virtual environment
+      ansible.builtin.pip:
+        requirements: /home/ubuntu/requirements.txt
+        virtualenv: /home/ubuntu/venv
+        virtualenv_command: python3 -m venv
+        state: present
+
+    - name: Copy mock user scripts to remote
+      ansible.builtin.copy:
+        src: ../server/scripts/mock_users/
+        dest: /home/ubuntu/scripts/
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+
+    - name: Generate mock users
+      ansible.builtin.command: /home/ubuntu/venv/bin/python /home/ubuntu/scripts/generate_mock_users.py
+      become: true
+      become_user: ubuntu
+      args:
+        chdir: /home/ubuntu/scripts
+
+    - name: Wait for user service port to be listening
+      ansible.builtin.wait_for:
+      port: 8210
+      host: localhost
+      delay: 10
+      timeout: 300
+
+    - name: Load mock users to API
+      ansible.builtin.command: /home/ubuntu/venv/bin/python /home/ubuntu/scripts/load_mock_users.py localhost --file /home/ubuntu/scripts/resources/mock_users.json
+      become: true
+      become_user: ubuntu
+      args:
+        chdir: /home/ubuntu/scripts
+
+    - name: Copy mock profile scripts to remote
+      ansible.builtin.copy:
+        src: ../server/scripts/mock_mentor_profiles/
+        dest: /home/ubuntu/scripts/mock_mentor_profiles/
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+
+    - name: Wait for mentorship service port to be listening
+      ansible.builtin.wait_for:
+        port: 8310
+        host: localhost
+        delay: 10
+        timeout: 300
+
+    - name: Load mock profiles to API
+      ansible.builtin.command: /home/ubuntu/venv/bin/python /home/ubuntu/scripts/mock_mentor_profiles/load_mock_profiles.py
+      become: true
+      become_user: ubuntu
+      args:
+        chdir: /home/ubuntu/scripts/mock_mentor_profiles
