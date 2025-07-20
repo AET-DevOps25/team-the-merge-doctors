@@ -1,6 +1,5 @@
 package com.mentorpulse.mentorshipservice.config;
 
-import org.gradle.internal.impldep.com.google.api.client.util.Value;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
