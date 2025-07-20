@@ -39,6 +39,7 @@ We have two types of deployments Kubernetes and ec2.
 
 Kubernetes deployment can be found [under](./helm/README.md).
 For pushes on main we automatically deploy to Kubernetes cluster (see [workflow](.github/workflows/ci-main.yml)).
+You can find the Kubernetes deployment at https://mentor-pulse-devops25.student.k8s.aet.cit.tum.de.
 
 ### EC2
 
