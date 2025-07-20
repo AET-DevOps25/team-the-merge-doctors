@@ -24,21 +24,21 @@ def load_json(filepath: str):
 
 def post_skill(skill):
     payload = {"id": skill["id"], "skill": skill["name"]}
-    return requests.post(ENDPOINTS["skill"], json=payload, headers=HEADERS)
+    return requests.post(ENDPOINTS["skill"], json=payload, headers=HEADERS, verify=False)
 
 
 def post_category(category):
     payload = {"id": category["id"], "category": category["name"]}
-    return requests.post(ENDPOINTS["category"], json=payload, headers=HEADERS)
+    return requests.post(ENDPOINTS["category"], json=payload, headers=HEADERS, verify=False)
 
 
 def post_profile(profile):
     payload = {"mentorProfile": profile}
-    return requests.post(ENDPOINTS["profile"], json=payload, headers=HEADERS)
+    return requests.post(ENDPOINTS["profile"], json=payload, headers=HEADERS, verify=False)
 
 def post_application(application):
     payload = {"mentorId": application["mentorId"], "menteeId": application["menteeId"], "applicationMessage": application["applicationMessage"]}
-    return requests.post(ENDPOINTS["application"], json=payload, headers=HEADERS)
+    return requests.post(ENDPOINTS["application"], json=payload, headers=HEADERS, verify=False)
 
 
 if __name__ == "__main__":
