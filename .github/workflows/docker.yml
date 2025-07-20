@@ -66,3 +66,9 @@ jobs:
           context: ./server/ratingservice
           push: true
           tags: ghcr.io/aet-devops25/team-the-merge-doctors/server/rating-service:latest
+      - name: Build & push Gateway Service image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./server/gateway
+          push: true
+          tags: ghcr.io/aet-devops25/team-the-merge-doctors/server/gateway-service:latest
