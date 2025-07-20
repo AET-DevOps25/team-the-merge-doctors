@@ -104,6 +104,22 @@
       become: true
       become_user: ubuntu
 
+    - name: Create monitoring directory on remote
+      ansible.builtin.file:
+        path: /home/ubuntu/monitoring
+        state: directory
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+
+    - name: Copy monitoring directory to remote
+      ansible.builtin.copy:
+        src: ../monitoring/
+        dest: /home/ubuntu/monitoring/
+        owner: ubuntu
+        group: ubuntu
+        mode: '0755'
+
     - name: Clean images
       community.docker.docker_compose_v2:
         project_src: "{{ compose_dir }}"
@@ -203,19 +219,3 @@
       become_user: ubuntu
       args:
         chdir: /home/ubuntu/scripts/mock_mentor_profiles
-
-    - name: Create monitoring directory on remote
-      ansible.builtin.file:
-        path: /home/ubuntu/monitoring
-        state: directory
-        owner: ubuntu
-        group: ubuntu
-        mode: '0755'
-
-    - name: Copy monitoring directory to remote
-      ansible.builtin.copy:
-        src: ../monitoring/
-        dest: /home/ubuntu/monitoring/
-        owner: ubuntu
-        group: ubuntu
-        mode: '0755'
