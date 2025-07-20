@@ -4,7 +4,7 @@ import requests
 from pathlib import Path
 
 # Change the endpoint if it will be used for production
-BASE_URL = "https://mentor-pulse-devops25.student.k8s.aet.cit.tum.de/api/mentorship"
+BASE_URL = "http://localhost/api/mentorship"
 BASE_URL
 ENDPOINTS = {
     "skill":    f"{BASE_URL}/createSkill",
@@ -64,7 +64,7 @@ if __name__ == "__main__":
         r = post_profile(p)
         print(f"Mentor {mid}: {r.status_code} {r.text}")
 
-    # print("\n=== Creating Applications ===")
-    # for application in applications:
-    #     r = post_application(application)
-    #     print(f"Mentor {application["mentorId"]}, Mentee {application["menteeId"]}: {r.status_code} {r.text}")
+    print("\n=== Creating Applications ===")
+    for application in applications:
+        r = post_application(application)
+        print(f"Mentor {application["mentorId"]}, Mentee {application["menteeId"]}: {r.status_code} {r.text}")
