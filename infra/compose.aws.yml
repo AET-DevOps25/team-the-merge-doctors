@@ -98,7 +98,7 @@ services:
 
   mentorship-service:
     platform: linux/amd64
-    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/mentorship-service:e50b16b51bb53f83754fa12ccbcbad7d326b2e3e
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/mentorship-service:latest
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.mentorship-service.rule=Host(`${PUBLIC_IP}`) && PathPrefix(`/api/mentorship`)"
