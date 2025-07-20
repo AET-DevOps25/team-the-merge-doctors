@@ -8,7 +8,7 @@ scrape_configs:
   # Prometheus itself
   - job_name: 'prometheus'
     static_configs:
-      - targets: ['localhost:9090']
+      - targets: ['prometheus:9090']
 
   # Mentorship Service
   - job_name: 'mentorship-service'
