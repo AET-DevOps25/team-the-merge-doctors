@@ -20,7 +20,7 @@ public class SecurityConfig {
                         .requestMatchers(
                             "/api/mentorship/createSkill",
                             "/api/mentorship/createCategory",
-                            "/api/mentorship/createMentorProfile",
+                            "/api/mentorship/createMentorProfile"
                         ).permitAll()
                         .requestMatchers("/api/mentorship/**").hasAnyRole("MENTOR", "MENTEE")
                         .anyRequest().authenticated());
