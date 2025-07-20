@@ -23,8 +23,6 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers("/api/mentorship/listApplications/**", "/api/mentorship/application/**", "/api/mentorship/listSkills", "/api/mentorship/getMentorProfile", "/api/mentorship/scheduleSession", "/api/mentorship/listCategories", "/api/mentorship/listMentorProfiles").hasAnyRole("MENTOR", "MENTEE")
                         .anyRequest().authenticated()
-                        .requestMatchers("/api/mentorship/acceptApplication/**", "/api/mentorship/rejectApplication/**", "/api/mentorship/deleteMentorProfile", "/api/mentorship/updateMentorProfile", "/api/mentorship/createMentorProfile").hasAnyRole("MENTOR").anyRequest().authenticated()
-                        .requestMatchers("/api/mentorship/createApplication").hasAnyRole("MENTEE").anyRequest().authenticated()
                         );
         } else {
             http.csrf(CsrfConfigurer::disable)
