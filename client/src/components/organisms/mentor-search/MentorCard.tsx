@@ -75,7 +75,7 @@ function ViewProfileButton({ mentor }: ViewProfileButtonProps) {
 
   return (
     <Button
-      data-testid={`view-mentor-profile-${mentor.id}`}
+      data-testid={`view-mentor-profile-${mentor?.mentorId}`}
       type="primary"
       onClick={() => {
         if (mentor.mentorId !== undefined) {

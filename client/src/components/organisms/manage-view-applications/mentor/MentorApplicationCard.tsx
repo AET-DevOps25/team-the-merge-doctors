@@ -20,8 +20,8 @@ export function MentorApplicationCard({
   application,
 }: MentorApplicationCardProps) {
   const { data: getUserData } = useGetUser(
-    { userId: application.mentorId! },
-    { query: { enabled: !!application.mentorId } },
+    { userId: application.menteeId! },
+    { query: { enabled: !!application.menteeId } },
   );
   const queryClient = useQueryClient();
 

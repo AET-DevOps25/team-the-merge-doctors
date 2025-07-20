@@ -24,6 +24,8 @@ docker compose down -v
 docker compose up --build
 ```
 
+3. In your browser access the app under `localhost:80`
+
 ### Loading Mock Data
 
 Then you might want to load mock data, to make the application useable. Especially, loading skills and categories is important.

@@ -65,6 +65,7 @@ export function MenteeApplicationCard({
               Contact Mentor
             </Button>
             <Button
+              data-testid={`rate-mentor-button-${mentorUser?.id}`}
               type="primary"
               onClick={() => {
                 setRateMentorModalIsOpen(true);
@@ -138,6 +139,7 @@ function RateMentorModal({
           rules={[{ required: true, message: 'Please provide a rating!' }]}
         >
           <Input
+            data-testid="rating-input"
             type="number"
             min={1}
             max={5}
@@ -150,7 +152,10 @@ function RateMentorModal({
           required={true}
           rules={[{ required: true, message: 'Please provide a review!' }]}
         >
-          <Input.TextArea placeholder="Write your review here..." />
+          <Input.TextArea
+            data-testid="review-text-area"
+            placeholder="Write your review here..."
+          />
         </Form.Item>
       </Form>
     </Modal>

@@ -34,11 +34,11 @@ cd mock_users
 python3 load_mock_users.py --file resources/mock_users.json localhost
 ```
 
-2. Load skills, categories, mentor profiles:
+2. Load skills, categories, mentor profiles, applications, etc.:
 
-``
+```
 cd mock_mentor_profiles
-``
+```
 
 ```
 python3 load_mock_profiles.py

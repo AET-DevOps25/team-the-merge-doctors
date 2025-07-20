@@ -1,7 +1,7 @@
 import { test as teardown } from '@playwright/test';
 import { Client } from 'pg';
 
-teardown('delete values from database table', async ({}) => {
+teardown('delete all values from database tables', async ({}) => {
   await deleteTables('user_backend', ['user_table']);
   await deleteTables('mentorship_backend', [
     'applications_table',
