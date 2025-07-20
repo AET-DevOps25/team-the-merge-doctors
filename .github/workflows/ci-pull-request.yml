@@ -20,3 +20,5 @@ jobs:
     needs:
       - build-publish-images
     uses: ./.github/workflows/helm.yml
+    secrets:
+      KUBECONF: ${{ secrets.KUBECONF }}
