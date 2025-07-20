@@ -17,8 +17,11 @@ public class SecurityConfig {
             http.csrf(CsrfConfigurer::disable)
                 .authorizeHttpRequests(
                     authorizeRequests -> authorizeRequests
-                        .requestMatchers("/api/mentorship/**")
-                        .hasAnyRole("MENTOR", "MENTEE")
+                        .requestMatchers(
+                            "/api/mentorship/createSkill",
+                            "/api/mentorship/createMentorProfile",
+                        ).permitAll()
+                        .requestMatchers("/api/mentorship/**").hasAnyRole("MENTOR", "MENTEE")
                         .anyRequest().authenticated());
         } else {
             http.csrf(CsrfConfigurer::disable)
