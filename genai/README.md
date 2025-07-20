@@ -1,6 +1,6 @@
 # GenAI Service
 
-This service uses [langchain](https://www.langchain.com) to enable communication with a LLM via the endpoints defined in [api_controller.py](controllers/api_controller.py). This service then calls [ollama](https://ollama.com), which is running in a separate container (see [Dockerfile](ollama/Dockerfile)).
+This service uses [langchain](https://www.langchain.com) to enable communication with a LLM via the endpoints defined in [api_controller.py](controllers/api_controller.py). This service then calls [ollama](https://ollama.com), which is running in a separate container (see [Dockerfile](ollama/Dockerfile)). The main use case of the GenAI service is summarization of application texts.
 
 ## Setup Local Environment
 

@@ -194,6 +194,7 @@ function CreateApplicationModal({
             ]}
           >
             <TextArea
+              data-testid="application-modal-text-area"
               rows={15}
               placeholder="Write your application to the mentor ..."
             />

@@ -1,1 +1,0 @@
-// TODO: add test for the mentor profile, check that correct sections are displayed. add test that applies for a mentorship
