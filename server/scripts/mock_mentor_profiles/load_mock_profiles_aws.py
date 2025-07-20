@@ -66,4 +66,4 @@ if __name__ == "__main__":
     print("\n=== Creating Applications ===")
     for application in applications:
         r = post_application(application)
-        print(f"Mentor {application["mentorId"]}, Mentee {application["menteeId"]}: {r.status_code} {r.text}")
+        print(f"Mentor {application['mentorId']}, Mentee {application['menteeId']}: {r.status_code} {r.text}")

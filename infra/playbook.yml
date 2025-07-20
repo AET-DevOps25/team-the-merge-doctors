@@ -196,19 +196,6 @@
         owner: ubuntu
         group: ubuntu
         mode: '0755'
-
-    - name: Copy mock profile data files to remote
-      ansible.builtin.copy:
-        src: ../server/scripts/mock_mentor_profiles/{{ item }}
-        dest: /home/ubuntu/scripts/mock_mentor_profiles/{{ item }}
-        owner: ubuntu
-        group: ubuntu
-        mode: '0644'
-      loop:
-        - applications.json
-        - categories.json
-        - profiles.json
-        - skills.json
         
     - name: Load mock profiles to API
       ansible.builtin.command: /home/ubuntu/venv/bin/python /home/ubuntu/scripts/mock_mentor_profiles/load_mock_profiles_aws.py
