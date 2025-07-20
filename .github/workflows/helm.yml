@@ -49,5 +49,5 @@ jobs:
         run: |
           helm upgrade --install mentor-pulse ./helm/ \
             --namespace team-the-merge-doctors \
-            --set tag=latest \
+            --set tag=${{ github.sha }}} \
             --debug
