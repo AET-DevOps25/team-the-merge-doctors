@@ -175,9 +175,9 @@
       args:
         chdir: /home/ubuntu/scripts
 
-    - name: Wait for user service port to be listening
+    - name: Wait for Traefik HTTPS port to be listening
       ansible.builtin.wait_for:
-        port: 8210
+        port: 443
         host: localhost
         delay: 10
         timeout: 300
@@ -196,14 +196,7 @@
         owner: ubuntu
         group: ubuntu
         mode: '0755'
-
-    - name: Wait for mentorship service port to be listening
-      ansible.builtin.wait_for:
-        port: 8310
-        host: localhost
-        delay: 10
-        timeout: 300
-
+        
     - name: Load mock profiles to API
       ansible.builtin.command: /home/ubuntu/venv/bin/python /home/ubuntu/scripts/mock_mentor_profiles/load_mock_profiles.py
       become: true
