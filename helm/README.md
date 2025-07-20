@@ -32,7 +32,7 @@ helm upgrade --install mentor-pulse . --namespace team-the-merge-doctors --set t
 
 ## Remove Deployment
 
-To remove the deployment and delete everything from cluster, execute the following command.
+To remove the deployment and delete everything from cluster (expect secrets and configs), execute the following command.
 
 ```
 kubectl delete all --all -n team-the-merge-doctors
