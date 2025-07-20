@@ -52,6 +52,7 @@ public class UserController {
         this.userCreationCounter = Counter.builder("custom_user_registrations_total")
                 .description("Custom counter for user registrations total number")
                 .register(meterRegistry);
+    }
     @Autowired
     private AuthenticationService authenticationService;
 
