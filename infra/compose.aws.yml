@@ -90,6 +90,8 @@ services:
       - "traefik.http.middlewares.auth-middleware.forwardauth.authResponseHeaders=X-User-Id,X-Username,X-User-Role"
     networks:
       - internal
+    ports:
+      - 8210:8210
     volumes:
       - /home/ubuntu/mentorpulse-certificates/jwt-secret.key:/home/cnf/mentorpulse-certificates/jwt-secret.key:ro
     depends_on:
@@ -109,6 +111,8 @@ services:
       - "traefik.http.services.mentorship-service.loadbalancer.server.port=8310"
     networks:
       - internal
+    ports:
+      - 8310:8310
     depends_on:
       - postgres-db
     restart: on-failure:3
@@ -127,6 +131,8 @@ services:
     depends_on:
       - postgres-db
     restart: on-failure:3
+    ports:
+      - 8410:8410
     networks:
       - internal
 
