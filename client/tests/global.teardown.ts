@@ -10,8 +10,6 @@ teardown('delete values from database table', async ({}) => {
     'categories_table',
   ]);
   await deleteTables('rating_backend', ['ratings_table']);
-  // TODO: fix teardown (genai, no permission)
-  // await deleteTables('genai_backend', ['summarization_logs']);
 });
 
 function getClient(database: string): Client {

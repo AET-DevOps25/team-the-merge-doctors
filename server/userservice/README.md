@@ -1,3 +1,3 @@
 # User Service
 
-TODO: give overview of user service
+The User Service is responsible for managing user login and authentication, ensuring secure access to the platform's features and services.

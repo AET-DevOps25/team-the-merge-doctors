@@ -76,6 +76,7 @@ export function MentorApplicationCard({
               Reject Application
             </Button>
             <Button
+              data-testid={`accept-application-button-${menteeUser?.id}`}
               type="primary"
               style={{ backgroundColor: '#52c41a', borderColor: '#52c41a' }}
               onClick={() =>

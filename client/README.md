@@ -1,6 +1,6 @@
-# MentorPulse Client
+# Mentor Pulse Client
 
-TODO: give overview of client
+The Mentor Pulse client is a React application using Antd, TanstackQuery, TanstackRouter and others.
 
 ## Docker
 
