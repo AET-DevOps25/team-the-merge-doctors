@@ -44,7 +44,7 @@ genaiMicroservice:
     type: ClusterIP
     port: 5001
     targetPort: 5001
-    name: genai-microservice-service
+    name: genai
   selector: genai-microservice-selector
   replicaCount: 1
 
