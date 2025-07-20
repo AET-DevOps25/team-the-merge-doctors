@@ -126,8 +126,8 @@ services:
       - "traefik.http.routers.prometheus.tls.certresolver=myresolver"
       - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
     volumes:
-      - ../monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - ../monitoring/prometheus/rules.yml:/etc/prometheus/rules.yml:ro
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus/rules.yml:/etc/prometheus/rules.yml:ro
       - prometheus_data:/prometheus
     command:
       # Path to Prometheus configuration file
@@ -152,8 +152,8 @@ services:
       - "3001:3000"
     volumes:
       - grafana_data:/var/lib/grafana
-      - ../monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
-      - ../monitoring/grafana/provisioning/notifiers:/etc/grafana/provisioning/notifiers:ro
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/provisioning/notifiers:/etc/grafana/provisioning/notifiers:ro
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
