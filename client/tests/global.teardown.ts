@@ -1,7 +1,7 @@
 import { test as teardown } from '@playwright/test';
 import { Client } from 'pg';
 
-teardown('delete values from database table', async ({}) => {
+teardown('delete all values from database tables', async ({}) => {
   await deleteTables('user_backend', ['user_table']);
   await deleteTables('mentorship_backend', [
     'applications_table',
@@ -10,8 +10,6 @@ teardown('delete values from database table', async ({}) => {
     'categories_table',
   ]);
   await deleteTables('rating_backend', ['ratings_table']);
-  // TODO: fix teardown (genai, no permission)
-  // await deleteTables('genai_backend', ['summarization_logs']);
 });
 
 function getClient(database: string): Client {

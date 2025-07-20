@@ -1,6 +1,6 @@
-# MentorPulse Client
+# Mentor Pulse Client
 
-TODO: give overview of client
+The Mentor Pulse client is a React application using Antd, TanstackQuery, TanstackRouter and others.
 
 ## Docker
 
@@ -23,8 +23,10 @@ Or use the docker compose file in the root directory to build the entire applica
 ## Testing (E2E/UI tests)
 
 The client is tested using E2E/UI tests. We use playwright as the framework for testing.
+Tests are executed automatically for every [pull request](../.github/workflows/ci-pull-request.yml)
+and every [push on main](../.github/workflows/ci-main.yml).
 
-### Execute tests
+### Execute tests locally
 
 1. Start Services: Start docker with `docker compose up --build`.
 2. Configure Node: Execute `nvm use` to use the correct node version.

@@ -13,7 +13,7 @@ def load_users_from_json(filename: str) -> List[Dict]:
 def send_users_to_api(api_url: str, users: List):
     for i, user in enumerate(users):
         try:
-            response = requests.post(api_url, json=user)
+            response = requests.post(api_url, json=user, verify=False)  # Disable SSL verification
             print(f"User {i + 1}: {user['userName']}")
             print(f"Response Status: {response.status_code}")
             print(f"Response Body: {response.text}\n")

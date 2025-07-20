@@ -36,6 +36,25 @@ spring:
     init:
       platform: postgres
 
+# Actuator and Prometheus configuration
+management:
+  server:
+    port: 8211 # add a custom port for the actuator for better security.
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus, metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
 jwt:
   secret:
     file: ${JWT_SECRET_DIR:/home/cnf/mentorpulse-certificates}/jwt-secret.key

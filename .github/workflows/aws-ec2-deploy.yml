@@ -3,8 +3,8 @@ name: Manual Aws Ec2 deployment
 on:
   workflow_dispatch:
     inputs:
-      private_key:
-        description: 'aws ssh key in a pem file'
+      SSH_PRIVATE_KEY_B64:
+        description: "Base64-encoded private SSH key"
         required: true
       AWS_ACCESS_KEY_ID:
         description: 'aws access key id'
@@ -14,6 +14,9 @@ on:
         required: true
       AWS_SESSION_TOKEN:
         description: 'running aws session token'
+        required: true
+      GHCR_TOKEN:
+        description: 'Personal Access Token for the GHCR'
         required: true
 
 jobs:
@@ -30,16 +33,24 @@ jobs:
           echo "::add-mask::${{ github.event.inputs.AWS_ACCESS_KEY_ID }}"
           echo "::add-mask::${{ github.event.inputs.AWS_SECRET_ACCESS_KEY }}"
           echo "::add-mask::${{ github.event.inputs.AWS_SESSION_TOKEN }}"
+          echo "::add-mask::${{ github.event.inputs.GHCR_TOKEN }}"
 
-      - name: Write ssh key to infra/priv.pem
+
+      - name: Decode and write SSH private key
         run: |
-          echo "${{ github.event.inputs.private_key }}" > infra/priv.pem
+          mkdir -p infra
+          echo "${{ github.event.inputs.SSH_PRIVATE_KEY_B64 }}" | base64 -d > infra/priv.pem
           chmod 400 infra/priv.pem
 
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.12.1
+
+      - name: Install Ansible
+        uses: alex-oleshkevich/setup-ansible@v1.0.1
+        with:
+          version: "11.6.0"
 
       - name: Create EC2
         env:
@@ -49,3 +60,49 @@ jobs:
         run: |
           cd infra
           make deploy
+
+      - name: Wait for EC2 to be ready
+        run: |
+          cd infra
+          IP=$(terraform output -raw ip)
+          echo "$IP" > instance_ip.txt
+          echo "Waiting for SSH on $IP..."
+          for i in {1..5}; do
+            nc -z -v -w5 $IP 22 && echo "SSH is ready!" && exit 0
+            echo "Retry $i: SSH not up yet"
+            sleep 10
+          done
+          echo "SSH never became available"
+          exit 1
+          
+      - name: Inject IP into Ansible inventory
+        run: |
+          cd infra
+          ip=$(cat instance_ip.txt)
+          sed -i "s|\${ip}|$ip|g" inventory.ini
+
+      # - name: Test ssh connection
+      #   run: |
+      #     echo "${{ github.event.inputs.private_key }}" > infra/priv.pem
+      #     chmod 400 infra/priv.pem
+      #     ssh -o StrictHostKeyChecking=no -i infra/priv.pem admin@$(cat instance_ip.txt) 'echo SSH connection successful'
+
+      - name: Test SSH connection with debugging
+        run: |
+          ls -la infra/
+          cd infra
+          IP=$(terraform output -raw ip)
+          echo "Testing SSH connection to $IP..."
+          echo "Key file permissions:"
+          ls -l priv.pem
+          echo "Key file content (first line):"
+          head -n 1 priv.pem
+          echo "Attempting SSH connection..."
+          ssh -v -o StrictHostKeyChecking=no -i priv.pem ubuntu@$IP 'echo "SSH connection successful!"'
+          
+      - name: Provision EC2
+        run: |
+          cd infra
+          echo "cr_username: ${{ github.actor }}" >> token.yml
+          echo "token: ${{ github.event.inputs.GHCR_TOKEN }}" >> token.yml
+          make ansible

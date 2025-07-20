@@ -1,0 +1,204 @@
+services:
+  traefik:
+    image: traefik:v3.0
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false" # prevent docker containers from being exposed by default(label needed to be added per service).
+      - "--entrypoints.websecure.address=:443"
+      # certificate resolve (myresolver).
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=devops@aet.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json" # place where to store certificate data.
+      # redirect http to https.
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--accesslog=true"
+      - "--log.level=DEBUG"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8081:8080" # Traefik dashboard
+    volumes:
+      - /letsencrypt:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - internal
+
+  gateway:
+    platform: linux/amd64
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/gateway-service:latest
+    depends_on:
+      - user-service
+    restart: on-failure:3
+    labels:
+      - "traefik.enable=true" # needed cuz default exposure is disabled.
+      - "traefik.http.routers.gateway.rule=Host(`${PUBLIC_IP}`) && Path(`/api/auth`)"
+      - "traefik.http.routers.gateway.entrypoints=websecure"
+      - "traefik.http.routers.gateway.tls.certresolver=myresolver"
+      - "traefik.http.services.gateway.loadbalancer.server.port=8610"
+    networks:
+      - internal
+
+  client:
+    platform: linux/amd64
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/client:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.client.rule=Host(`${PUBLIC_IP}`) && PathPrefix(`/`)"
+      - "traefik.http.routers.client.entrypoints=websecure"
+      - "traefik.http.routers.client.tls.certresolver=myresolver"
+      - "traefik.http.services.client.loadbalancer.server.port=3000"
+    networks:
+      - internal
+
+  postgres-db:
+    platform: linux/amd64
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./docker/backend_config_files/.env
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./docker/backend_config_files/postgres-init.sh:/docker-entrypoint-initdb.d/init.sh:ro
+      - ./docker/backend_config_files/pg-hba.conf:/etc/postgresql/pg_hba.conf:ro
+    networks:
+      - internal
+
+  user-service:
+    platform: linux/amd64
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/user-service:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.user-public.rule=Host(`${PUBLIC_IP}`) && (Path(`/api/user/login`) || Path(`/api/user/createUser`))"
+      - "traefik.http.routers.user-public.entrypoints=websecure"
+      - "traefik.http.routers.user-public.tls.certresolver=myresolver"
+      - "traefik.http.routers.user-public.service=user-service"
+
+      # Protected routes (auth required) - for future use
+      - "traefik.http.routers.user-protected.rule=Host(`${PUBLIC_IP}`) && PathPrefix(`/api/user/`) && !Path(`/api/user/login`) && !Path(`/api/user/createUser`)"
+      - "traefik.http.routers.user-protected.entrypoints=websecure"
+      - "traefik.http.routers.user-protected.tls.certresolver=myresolver"
+      - "traefik.http.routers.user-protected.middlewares=auth-middleware"
+      - "traefik.http.routers.user-protected.service=user-service"
+
+      - "traefik.http.services.user-service.loadbalancer.server.port=8210"
+      - "traefik.http.middlewares.auth-middleware.forwardauth.address=http://gateway:8610/api/auth"
+      # Forward these headers to downstream services.
+      - "traefik.http.middlewares.auth-middleware.forwardauth.authResponseHeaders=X-User-Id,X-Username,X-User-Role"
+    networks:
+      - internal
+    ports:
+      - 8210:8210
+    volumes:
+      - /home/ubuntu/mentorpulse-certificates/jwt-secret.key:/home/cnf/mentorpulse-certificates/jwt-secret.key:ro
+    depends_on:
+      - postgres-db
+    restart: on-failure:3
+
+  mentorship-service:
+    platform: linux/amd64
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/mentorship-service:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mentorship-service.rule=Host(`${PUBLIC_IP}`) && PathPrefix(`/api/mentorship`)"
+      - "traefik.http.routers.mentorship-service.entrypoints=websecure"
+      - "traefik.http.routers.mentorship-service.tls.certresolver=myresolver"
+      - "traefik.http.routers.mentorship-service.middlewares=auth-middleware"
+      - "traefik.http.routers.mentorship-service.service=mentorship-service"
+      - "traefik.http.services.mentorship-service.loadbalancer.server.port=8310"
+    networks:
+      - internal
+    ports:
+      - 8310:8310
+    depends_on:
+      - postgres-db
+    restart: on-failure:3
+
+  rating-service:
+    platform: linux/amd64
+    image: ghcr.io/aet-devops25/team-the-merge-doctors/server/rating-service:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.rating-service.rule=Host(`${PUBLIC_IP}`) && PathPrefix(`/api/rating`)"
+      - "traefik.http.routers.rating-service.entrypoints=websecure"
+      - "traefik.http.routers.rating-service.tls.certresolver=myresolver"
+      - "traefik.http.routers.rating-service.middlewares=auth-middleware"
+      - "traefik.http.routers.rating-service.service=rating-service"
+      - "traefik.http.services.rating-service.loadbalancer.server.port=8410"
+    depends_on:
+      - postgres-db
+    restart: on-failure:3
+    ports:
+      - 8410:8410
+    networks:
+      - internal
+
+  prometheus:
+    platform: linux/amd64
+    image: prom/prometheus:latest
+    container_name: prometheus
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.prometheus.rule=Host(`${PUBLIC_IP}`) && PathPrefix(`/prometheus`)"
+      - "traefik.http.routers.prometheus.entrypoints=websecure"
+      - "traefik.http.routers.prometheus.tls.certresolver=myresolver"
+      - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
+      # Add middleware to strip the /prometheus prefix
+      - "traefik.http.routers.prometheus.middlewares=prometheus-stripprefix"
+      - "traefik.http.middlewares.prometheus-stripprefix.stripprefix.prefixes=/prometheus"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus/rules.yml:/etc/prometheus/rules.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+      # Add external URL configuration for proper links
+      - '--web.external-url=https://${PUBLIC_IP}/prometheus'
+      - '--web.route-prefix=/'
+    networks:
+      - internal
+    restart: unless-stopped
+  grafana:
+    platform: linux/amd64
+    image: grafana/grafana:latest
+    container_name: grafana
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.grafana.rule=Host(`${PUBLIC_IP}`) && PathPrefix(`/grafana`)"
+      - "traefik.http.routers.grafana.entrypoints=websecure"
+      - "traefik.http.routers.grafana.tls.certresolver=myresolver"
+      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/provisioning/notifiers:/etc/grafana/provisioning/notifiers:ro
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_ALERTING_ENABLED=true
+      # Configure Grafana to work under /grafana path
+      - GF_SERVER_ROOT_URL=https://${PUBLIC_IP}/grafana
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+    networks:
+      - internal
+
+networks:
+  internal:
+    driver: bridge
+
+volumes:
+  db_data:
+  letsencrypt:
+  prometheus_data:
+  grafana_data:

@@ -1,30 +1,44 @@
 # Mentor Pulse
 
-TODO: short introduction what mentor pulse is
+Mentor Pulse is a dynamic platform designed to bridge the gap between mentors and mentees, fostering meaningful connections that drive personal and professional growth. Whether you're a mentor looking to share your expertise or a mentee seeking guidance, Mentor Pulse makes it easy to find the right match. With features like skill-based pairing and category-specific mentorship, the platform ensures tailored, impactful relationships. Empower your journey with Mentor Pulse—where mentorship meets opportunity.
+
+The application has multiple components:
+
+- [User service](./server/userservice/README.md)
+- [Mentorships service](./server/mentorshipservice/README.md)
+- [Rating service](./server/ratingservice/README.md)
+- [GenAI service](./genai/README.md)
+- [Client](./client/README.md)
 
 ## Local Development Setup
 
-TODO: documentation to add for project setup (e.g. how to start with docker)
-
-```
-docker compose up --build
-```
+1. Stop any remaining containers and delete images
 
 ```
 docker compose down -v
 ```
 
+2. Start docker compose for local development
+
+```
+docker compose up --build
+```
+
+3. In your browser access the app under `localhost:80`
+
 ### Loading Mock Data
 
-TODO: add link to mock data scripts
+Then you might want to load mock data, to make the application useable. Especially, loading skills and categories is important.
+To load mock data for local dev setup go to [server/scripts README](./server/scripts/README.md) and follow instructions.
 
 ## Deployment
 
-TODO: add documentation about deployments
+We have two types of deployments Kubernetes and ec2.
 
 ### Kubernetes
 
-TODO: add link to kubernetes
+Kubernetes deployment can be found [under](./helm/README.md).
+For pushes on main we automatically deploy to Kubernetes cluster (see [workflow](.github/workflows/ci-main.yml)).
 
 ### EC2
 
@@ -46,27 +60,27 @@ You provide:
 
 #### Workflow Steps
 
-a. **Checkout & Secrets**
+1. **Checkout & Secrets**
 Repo is checked out.
 Secrets are masked for safety.
 SSH key is decoded and saved as infra/priv.pem.
 
-b. **Tooling Setup**
+2. **Tooling Setup**
 Installs Terraform (v1.12.1) and Ansible (v11.6.0).
 
-c. **Deploying EC2 (Terraform)**
+3. **Deploying EC2 (Terraform)**
 Runs make deploy in infra/:
 Applies main.tf to create a new EC2 instance (Debian, public IP, SSH open, HTTP/HTTPS open).
 Security group allows ports 22, 80, 443 from anywhere.
 Waits for the instance to be reachable via SSH.
 
-d. **Inventory Update**
+4. **Inventory Update**
 Extracts the new EC2 public IP and injects it into the Ansible inventory (inventory.ini).
 
-e. **SSH Test**
+5. **SSH Test**
 Verifies SSH connectivity to the new instance using the provided key.
 
-f. **Provisioning (Ansible)**
+6. **Provisioning (Ansible)**
 Runs make ansible in infra/:
 Executes playbook.yml against the new EC2 instance.
 Installs Docker, Docker Compose, Python, pip, etc.
