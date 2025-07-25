@@ -28,6 +28,7 @@ public class UserServiceApplication {
 	public AuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider(userDetailsService());
 		authenticationProvider.setPasswordEncoder(passwordEncoder());
+
 		return authenticationProvider;
 	}
 
